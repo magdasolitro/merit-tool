@@ -1,10 +1,10 @@
 const agonMetaModel = {
     phaseOne: [
         {
-            id: "acceptance-context",
+            id: "compliance-context",
             type: "circle",
             position: {x: 2200, y: -200},
-            data: {label: "Acceptance Context", top: "no"},
+            data: {label: "Compliance Context", top: "no"},
             draggable: false
         },
 
@@ -17,604 +17,268 @@ const agonMetaModel = {
             draggable: false
         },
         {
-            id: "acceptance-subject",
+            id: "compliance-subject",
             type: "circle",
             position: {x: 700, y: 200},
-            data: {label: "Acceptance Subject", background: "black"},
+            data: {label: "Compliance Subject", background: "black"},
             draggable: false
         },
         {
-            id: "acceptance-goal",
+            id: "compliance-goal",
             type: "circle",
             position: {x: 2200, y: 200},
-            data: {label: "Acceptance Goal", background: "black"},
+            data: {label: "Compliance Goal", background: "black"},
             draggable: false
         },
         {
-            id: "acceptance-task",
+            id: "compliance-task",
             type: "circle",
             position: {x: 4250, y: 200},
-            data: {label: "Acceptance Task", background: "black"},
-            draggable: false
-        },
-        {
-            id: "social-structure",
-            type: "circle",
-            position: {x: 5200, y: 200},
-            data: {label: "Social Structure", background: "black"},
-            draggable: false
-        },
-        {
-            id: "nature-of-good",
-            type: "circle",
-            position: {x: 5595, y: 200},
-            data: {label: "Nature of good being produced", background: "black"},
+            data: {label: "Compliance Task", background: "black"},
             draggable: false
         },
 
         // 3rd layer
         {
-            id: "human",
-            type: "circle",
-            position: {x: -1500, y: 500},
-            data: {label: "Human"},
-            draggable: false
-        },
-        {
-            id: "player",
+            id: "user-role",
             type: "circle",
             position: {x: -700, y: 500},
-            data: {label: "Player"},
+            data: {label: "User Role"},
             draggable: false
         },
         {
-            id: "worker",
-            type: "circle",
-            position: {x: -100, y: 500},
-            data: {label: "Worker"},
-            draggable: false
-        },
-        {
-            id: "subject-awareness",
-            type: "circle",
-            position: {x: 300, y: 500},
-            data: {label: "Subject Awareness"},
-            draggable: false
-        },
-        {
-            id: "acceptance-voluntariness",
+            id: "ai-system",
             type: "circle",
             position: {x: 700, y: 500},
-            data: {label: "Subject Voluntariness"},
+            data: {label: "AI System", isConnectable: true, isChosen: true,},
             draggable: false
         },
         {
-            id: "precursor-subject",
-            type: "circle",
-            position: {x: 1100, y: 500},
-            data: {label: "Precursor Subject"},
-            draggable: false
-        },
-        {
-            id: "goal-communication",
-            type: "circle",
-            position: {x: 1600, y: 500},
-            data: {label: "Goal Communication"},
-            draggable: false
-        },
-        {
-            id: "goal-participation",
+            id: "goal-regulation",
             type: "circle",
             position: {x: 2185, y: 500},
-            data: {label: "Goal participation(in defining the goal)", size: 130},
+            data: {label: "Goal Regulation", size: 130},
             draggable: false
         },
         {
-            id: "goal-clarity",
-            type: "circle",
-            position: {x: 2800, y: 500},
-            data: {label: "Goal Clarity"},
-            draggable: false
-        },
-        {
-            id: "task-variety",
+            id: "task-analysis",
             type: "circle",
             position: {x: 3400, y: 500},
-            data: {label: "Task Variety"},
+            data: {label: "Task Analysis"},
             draggable: false
         },
         {
-            id: "task-specificity",
+            id: "task-design",
             type: "circle",
             position: {x: 4000, y: 500},
-            data: {label: "Task Specificity"},
+            data: {label: "Task Design"},
             draggable: false
         },
         {
-            id: "task-identification",
+            id: "task-development",
             type: "circle",
             position: {x: 4500, y: 500},
-            data: {label: "Task Identification"},
+            data: {label: "Task Development"},
             draggable: false
         },
         {
-            id: "required-skills",
+            id: "task-deployment",
             type: "circle",
             position: {x: 4900, y: 500},
-            data: {label: "Required Skills"},
+            data: {label: "Task Deployment"},
             draggable: false
         },
         {
-            id: "social-structure-xor",
-            type: "operator",
-            position: {x: 5225, y: 400},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "hierarchy-neutral-xor14",
-            type: "circle",
-            position: {x: 5100, y: 500},
-            data: {label: "Hierarchy-Neutral", isConnectable: true},
-            draggable: false
-        },
-        {
-            id: "hierarchy-xor14",
-            type: "circle",
-            position: {x: 5300, y: 500},
-            data: {label: "Hierarchical", isConnectable: true},
-            draggable: false
-        },
-        {
-            id: "nature-of-good-xor",
-            type: "operator",
-            position: {x: 5620, y: 400},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "public-good-non-rival-non-exclusive-xor15",
+            id: "task-maintenance",
             type: "circle",
             position: {x: 5500, y: 500},
-            data: {label: "Public Good(Non Rival, Non Exclusive)", size: 140, isConnectable: true},
-            draggable: false
-        },
-        {
-            id: "private-good-rival-exclusive-xor15",
-            type: "circle",
-            position: {x: 5700, y: 500},
-            data: {label: "Private Good(Rival, Exclusive)", isConnectable: true},
-            draggable: false
-        },
-
-        // 3rd layer
-        {
-            id: "gender",
-            type: "circle",
-            position: {x: -1700, y: 700},
-            data: {label: "Gender", background: "black"},
-            draggable: false
-        },
-        {
-            id: "age",
-            type: "circle",
-            position: {x: -1300, y: 700},
-            data: {label: "Age", background: "black"},
-            draggable: false
-        },
-        {
-            id: "player-type",
-            type: "circle",
-            position: {x: -700, y: 700},
-            data: {label: "Player Type", background: "black"},
-            draggable: false
-        },
-        {
-            id: "employed",
-            type: "circle",
-            position: {x: -100, y: 700},
-            data: {label: "Employed", background: "black"},
-            draggable: false
-        },
-        {
-            id: "expertise-level",
-            type: "circle",
-            position: {x: 300, y: 700},
-            data: {label: "Expertise Level", background: "black"},
-            draggable: false
-        },
-        {
-            id: "mandatory",
-            type: "circle",
-            position: {x: 700, y: 700},
-            data: {label: "Mandatory", background: "black"},
-            draggable: false
-        },
-        {
-            id: "existing",
-            type: "circle",
-            position: {x: 1100, y: 700},
-            data: {label: "Existing", background: "black"},
-            draggable: false
-        },
-        {
-            id: "communication-level",
-            type: "circle",
-            position: {x: 1600, y: 700},
-            data: {label: "Communication Level", background: "black"},
-            draggable: false
-        },
-        {
-            id: "participation-level",
-            type: "circle",
-            position: {x: 2200, y: 700},
-            data: {label: "Participation Level", background: "black"},
-            draggable: false
-        },
-        {
-            id: "clarity-level",
-            type: "circle",
-            position: {x: 2800, y: 700},
-            data: {label: "Clarity Level", background: "black"},
-            draggable: false
-        },
-        {
-            id: "variety-level",
-            type: "circle",
-            position: {x: 3400, y: 700},
-            data: {label: "Variety Level", background: "black"},
-            draggable: false
-        },
-        {
-            id: "specificity-level",
-            type: "circle",
-            position: {x: 4000, y: 700},
-            data: {label: "Specificity Level", background: "black"},
-            draggable: false
-        },
-        {
-            id: "identification-level",
-            type: "circle",
-            position: {x: 4500, y: 700},
-            data: {label: "Identification Level", background: "black"},
-            draggable: false
-        },
-        {
-            id: "skill-kind",
-            type: "circle",
-            position: {x: 4900, y: 700},
-            data: {label: "Skill Kind", background: "black"},
+            data: {label: "Task Maintenance"},
             draggable: false
         },
 
         // 4th layer
         {
-            id: "gender-xor",
-            type: "operator",
-            position: {x: -1675, y: 900},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "female-xor1",
+            id: "researcher",
             type: "circle",
-            position: {x: -1800, y: 1000},
-            data: {label: "Female", isConnectable: true},
+            position: {x: -1000, y: 800},
+            data: {label: "Researcher", background: "black", isConnectable: true, isChosen: true,},
             draggable: false
         },
         {
-            id: "male-xor1",
+            id: "developer",
             type: "circle",
-            position: {x: -1600, y: 1000},
-            data: {label: "Male", isConnectable: true},
+            position: {x: -700, y: 800},
+            data: {label: "Developer", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
-            id: "age-xor",
-            type: "operator",
-            position: {x: -1275, y: 900},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "young-xor2",
+            id: "deployer",
             type: "circle",
-            position: {x: -1400, y: 1000},
-            data: {label: "Young", isConnectable: true},
+            position: {x: -400, y: 800},
+            data: {label: "Deployer", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
+
         {
-            id: "senior-xor2",
+            id: "ai-act",
             type: "circle",
-            position: {x: -1200, y: 1000},
-            data: {label: "Senior", isConnectable: true},
+            position: {x: 1900, y: 800},
+            data: {label: "EU AI Act", background: "black", isConnectable: true, isChosen: true,},
             draggable: false
         },
         {
-            id: "socializer",
+            id: "ehds",
             type: "circle",
-            position: {x: -1000, y: 1000},
-            data: {label: "Socializer", isConnectable: true},
+            position: {x: 2200, y: 800},
+            data: {label: "EHDS", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
-            id: "achiever",
+            id: "mdr",
             type: "circle",
-            position: {x: -800, y: 1000},
-            data: {label: "Achiever", isConnectable: true},
+            position: {x: 2500, y: 800},
+            data: {label: "MDR", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
+
         {
-            id: "explorer",
+            id: "purpose-and-scope",
             type: "circle",
-            position: {x: -600, y: 1000},
-            data: {label: "Explorer", isConnectable: true},
+            position: {x: 3200, y: 800},
+            data: {label: "Definition of AI Purpose and Scope", background: "black", isConnectable: true, isChosen: true,},
             draggable: false
         },
         {
-            id: "killer",
+            id: "risk-assessment",
             type: "circle",
-            position: {x: -400, y: 1000},
-            data: {label: "Killer", isConnectable: true},
+            position: {x: 3350, y: 800},
+            data: {label: "Risk Assessment", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
-            id: "employed-xor",
-            type: "operator",
-            position: {x: -75, y: 900},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "employed-yes-xor3",
+            id: "trustworthiness-requirements",
             type: "circle",
-            position: {x: -200, y: 1000},
-            data: {label: "Yes", isConnectable: true},
+            position: {x: 3500, y: 800},
+            data: {label: "Definition of Trustworthiness Requirements", background: "black", isConnectable: true, isChosen: true,},
             draggable: false
         },
         {
-            id: "employed-no-xor3",
+            id: "stakeholder-engagement",
             type: "circle",
-            position: {x: 0, y: 1000},
-            data: {label: "No", isConnectable: true},
+            position: {x: 3650, y: 800},
+            data: {label: "Stakeholder Engagement", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
-            id: "expertise-level-xor",
-            type: "operator",
-            position: {x: 325, y: 900},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "junior-xor4",
+            id: "data-collection",
             type: "circle",
-            position: {x: 200, y: 1000},
-            data: {label: "Junior", isConnectable: true},
+            position: {x: 3800, y: 800},
+            data: {label: "Data Collection", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
-            id: "senior-xor4",
+            id: "architectural-design",
             type: "circle",
-            position: {x: 400, y: 1000},
-            data: {label: "Senior", isConnectable: true},
+            position: {x: 3950, y: 800},
+            data: {label: "Architectural Design", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
-            id: "mandatory-xor",
-            type: "operator",
-            position: {x: 725, y: 900},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "mandatory-yes-xor5",
+            id: "threat-modeling",
             type: "circle",
-            position: {x: 600, y: 1000},
-            data: {label: "Yes", isConnectable: true},
+            position: {x: 4200, y: 800},
+            data: {label: "Threat Modeling", background: "black", isConnectable: true, isChosen: true,},
             draggable: false
         },
         {
-            id: "mandatory-no-xor5",
+            id: "model-selection",
             type: "circle",
-            position: {x: 800, y: 1000},
-            data: {label: "No", isConnectable: true},
+            position: {x: 4350, y: 800},
+            data: {label: "Model Selection", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
-            id: "existing-xor",
-            type: "operator",
-            position: {x: 1125, y: 900},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "existing-yes-xor6",
+            id: "secure-coding",
             type: "circle",
-            position: {x: 1000, y: 1000},
-            data: {label: "Yes", isConnectable: true},
+            position: {x: 4500, y: 800},
+            data: {label: "Secure Coding", background: "black", isConnectable: true, isChosen: true,},
             draggable: false
         },
         {
-            id: "existing-no-xor6",
+            id: "model-training",
             type: "circle",
-            position: {x: 1200, y: 1000},
-            data: {label: "No", isConnectable: true},
+            position: {x: 4650, y: 800},
+            data: {label: "Model Training", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
-            id: "communication-xor",
-            type: "operator",
-            position: {x: 1625, y: 900},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "communication-low-xor7",
+            id: "testing",
             type: "circle",
-            position: {x: 1400, y: 1000},
-            data: {label: "Low", isConnectable: true},
+            position: {x: 4800, y: 800},
+            data: {label: "Testing", background: "black", isConnectable: true, isChosen: true,},
             draggable: false
         },
         {
-            id: "communication-medium-xor7",
+            id: "model-improv",
             type: "circle",
-            position: {x: 1600, y: 1000},
-            data: {label: "Medium", isConnectable: true},
+            position: {x: 4950, y: 800},
+            data: {label: "Model Improvement", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
-            id: "communication-high-xor7",
+            id: "model-validation",
             type: "circle",
-            position: {x: 1800, y: 1000},
-            data: {label: "High", isConnectable: true},
+            position: {x: 5200, y: 800},
+            data: {label: "Model Validation", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
-            id: "participation-xor",
-            type: "operator",
-            position: {x: 2225, y: 900},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "participation-low-xor8",
+            id: "documentation",
             type: "circle",
-            position: {x: 2000, y: 1000},
-            data: {label: "Low", isConnectable: true},
+            position: {x: 5350, y: 800},
+            data: {label: "Documentation", background: "black", isConnectable: true, isChosen: true,},
             draggable: false
         },
         {
-            id: "participation-medium-xor8",
+            id: "controlled-rollout",
             type: "circle",
-            position: {x: 2200, y: 1000},
-            data: {label: "Medium", isConnectable: true},
+            position: {x: 5500, y: 800},
+            data: {label: "Controlled Rollout", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
-            id: "participation-high-xor8",
+            id: "security-hardening",
             type: "circle",
-            position: {x: 2400, y: 1000},
-            data: {label: "High", isConnectable: true},
+            position: {x: 5650, y: 800},
+            data: {label: "Security Hardening", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
-            id: "clarity-xor",
-            type: "operator",
-            position: {x: 2825, y: 900},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "clarity-low-xor9",
+            id: "continuous monitoring",
             type: "circle",
-            position: {x: 2700, y: 1000},
-            data: {label: "Low", isConnectable: true},
+            position: {x: 5800, y: 800},
+            data: {label: "Continuous Monitoring", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
-            id: "clarity-high-xor9",
+            id: "feedback",
             type: "circle",
-            position: {x: 2900, y: 1000},
-            data: {label: "High", isConnectable: true},
+            position: {x: 5950, y: 800},
+            data: {label: "Feedback-Mechanism", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
-            id: "variety-xor",
-            type: "operator",
-            position: {x: 3425, y: 900},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "variety-low-xor10",
+            id: "model-updates",
             type: "circle",
-            position: {x: 3200, y: 1000},
-            data: {label: "Low", isConnectable: true},
+            position: {x: 6200, y: 800},
+            data: {label: "Model Updates & Retraining", background: "black", isConnectable: true, isChosen: true,},
             draggable: false
         },
         {
-            id: "variety-medium-xor10",
+            id: "auditing",
             type: "circle",
-            position: {x: 3400, y: 1000},
-            data: {label: "Medium", isConnectable: true},
-            draggable: false
-        },
-        {
-            id: "variety-high-xor10",
-            type: "circle",
-            position: {x: 3600, y: 1000},
-            data: {label: "High", isConnectable: true},
-            draggable: false
-        },
-        {
-            id: "specificity-xor",
-            type: "operator",
-            position: {x: 4025, y: 900},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "specificity-low-xor11",
-            type: "circle",
-            position: {x: 3800, y: 1000},
-            data: {label: "Low", isConnectable: true},
-            draggable: false
-        },
-        {
-            id: "specificity-medium-xor11",
-            type: "circle",
-            position: {x: 4000, y: 1000},
-            data: {label: "Medium", isConnectable: true},
-            draggable: false
-        },
-        {
-            id: "specificity-high-xor11",
-            type: "circle",
-            position: {x: 4200, y: 1000},
-            data: {label: "High", isConnectable: true},
-            draggable: false
-        },
-        {
-            id: "identification-xor",
-            type: "operator",
-            position: {x: 4525, y: 900},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "identification-low-xor12",
-            type: "circle",
-            position: {x: 4400, y: 1000},
-            data: {label: "Low", isConnectable: true},
-            draggable: false
-        },
-        {
-            id: "identification-high-xor12",
-            type: "circle",
-            position: {x: 4600, y: 1000},
-            data: {label: "High", isConnectable: true},
-            draggable: false
-        },
-        {
-            id: "skill-kind-xor",
-            type: "operator",
-            position: {x: 4925, y: 900},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "trivial-common-xor13",
-            type: "circle",
-            position: {x: 4800, y: 1000},
-            data: {label: "Trivial Common", isConnectable: true},
-            draggable: false
-        },
-        {
-            id: "highly-specific-xor13",
-            type: "circle",
-            position: {x: 5000, y: 1000},
-            data: {label: "Highly Specific", isConnectable: true},
+            position: {x: 6350, y: 800},
+            data: {label: "Incident Response & Auditing", background: "black", isConnectable: true, isChosen: true,},
             draggable: false
         },
 
@@ -627,7 +291,7 @@ const agonMetaModel = {
         },
     ],
     phaseTwo: [],
-    phaseThree: [
-
-    ],
+    phaseThree: [],
 }
+
+export default agonMetaModel;

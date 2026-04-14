@@ -6,6 +6,7 @@ import CircleNode from "../../components/Shapes/CircleNode.jsx";
 import OperatorNode from "../../components/Shapes/OperatorNode.jsx";
 import HexagonNode from "../../components/Shapes/HexagonNode.jsx";
 import FloatingEdge from "../../components/FloatingEdge";
+import StraightEdge from "../../components/StraightEdge";
 import ConnectionLine from "../../components/ConnectionLine";
 import {useDispatch, useSelector} from "react-redux";
 import {connectEdge, setPhaseOneState, updateNodes} from "../../redux/slices/phaseOneSlice.js";
@@ -13,6 +14,9 @@ import {setCurrentPhase, setNextPhaseEnabled} from "../../redux/slices/phaseStat
 import {resetPhaseTwo} from "../../redux/slices/phaseTwoSlice.js";
 import {resetPhaseThree} from "../../redux/slices/phaseThreeSlice.js";
 import {templateOne} from "../../data/Phase1_template.js";
+import DottedEdge from "../../components/DottedEdge";
+import agonMetaModel from "../../data/AgonMetaModel.js";
+import { initialEdges } from "../../redux/slices/phaseOneSlice.js";
 
 const nodeTypes = {circle: CircleNode, operator: OperatorNode, hexagon: HexagonNode};
 
@@ -23,7 +27,7 @@ export default function PhaseOne() {
     const {edgeState, nodeState} = phaseOneState;
     const [nodes, setNodes, onNodesChange] = useNodesState(nodeState);
     const [edges, setEdges, onEdgesChange] = useEdgesState(edgeState);
-    const edgeTypes = {floating: FloatingEdge};
+    const edgeTypes = {floating: FloatingEdge, straight: StraightEdge, dotted: DottedEdge};
     const dispatch = useDispatch()
     const {nextPhaseEnabled, currentPhase} = useSelector((state) => state.phaseStatus);
 
@@ -48,7 +52,13 @@ export default function PhaseOne() {
     }, [edges]);
 
     useEffect(() => {
-        dispatch(setPhaseOneState(templateOne))
+        dispatch(setPhaseOneState({
+            edgeState: initialEdges,
+            nodeState: agonMetaModel.phaseOne,
+            resultName: "",
+            selectedNodes: [],
+            uploaded: 0
+        }))
     }, []);
 
     useEffect(() => {

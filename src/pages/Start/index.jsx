@@ -37,7 +37,7 @@ export default function Home() {
                         {/*    }}/>*/}
                         <h1 className={"font-semibold text-5xl"}>
                             <Text manager="decipher" easing="outSine" fixed>
-                                WEB-AGON
+                                REG-AGON
                             </Text>
                         </h1>
                     </Animator>
@@ -48,7 +48,7 @@ export default function Home() {
                         {/*    }}/>*/}
                         <div className={"font-medium text-lg"}>
                             <Text manager="decipher" easing="outSine" fixed>
-                                A Tool for the Gamification of Software Systems
+                                A Tool for the Gamification of Regulatory Comliance Analysis
                             </Text>
                         </div>
                     </Animator>
