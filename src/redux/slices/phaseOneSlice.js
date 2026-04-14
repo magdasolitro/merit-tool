@@ -13,50 +13,45 @@ const initialEdges = [
     {id: "e2-1", source: "user", target: "user-role", type: "straight"},
     {id: "e2-2", source: "compliance-subject", target: "ai-system", type: "straight"},
     {id: "e2-3", source: "compliance-goal", target: "goal-regulation", type: "straight"},
-    // {id: "e2-4", source: "compliance-task", target: "task-analysis", type: "straight"},
-    // {id: "e2-5", source: "compliance-task", target: "task-design", type: "straight"},
-    // {id: "e2-6", source: "compliance-task", target: "task-development", type: "straight"},
-    // {id: "e2-7", source: "compliance-task", target: "task-deployment", type: "straight"},
-    // {id: "e2-8", source: "compliance-task", target: "task-maintenance", type: "straight"},    
 
     // 3rd edge
-    {id: "e3-1", source: "user-role", target: "researcher", type: "straight"},
-    {id: "e3-2", source: "user-role", target: "developer", type: "straight"},
-    {id: "e3-3", source: "user-role", target: "deployer", type: "straight"},
+    {id: "e3-0", source: "user-role",  target: "user-role-xor", type: "straight"},
+    {id: "e3-1", source: "user-role-xor", sourceHandle: "operator_left",  target: "researcher", type: "straight"},
+    {id: "e3-2", source: "user-role-xor", sourceHandle: "operator_bottom", target: "developer", type: "straight"},
+    {id: "e3-3", source: "user-role-xor", sourceHandle: "operator_right", target: "deployer", type: "straight"},
     {id: "e3-4", source: "goal-regulation", target: "ai-act", type: "straight"},
     {id: "e3-5", source: "goal-regulation", target: "ehds", type: "straight"},
     {id: "e3-6", source: "goal-regulation", target: "mdr", type: "straight"},
-    // {id: "e3-7", source: "task-analysis", target: "purpose-and-scope", type: "straight"},
-    // {id: "e3-8", source: "task-analysis", target: "risk-assessment", type: "straight"},
-    // {id: "e3-9", source: "task-analysis", target: "trustworthiness-requirements", type: "straight"},
-    // {id: "e3-10", source: "task-analysis", target: "stakeholder-engagement", type: "straight"},
-    // {id: "e3-11", source: "task-design", target: "data-collection", type: "straight"},
-    // {id: "e3-12", source: "task-design", target: "architectural-design", type: "straight"},
-    // {id: "e3-13", source: "task-design", target: "threat-modeling", type: "straight"},
-    // {id: "e3-14", source: "task-design", target: "model-selection", type: "straight"},
-    // {id: "e3-15", source: "task-development", target: "secure-coding", type: "straight"},
-    // {id: "e3-16", source: "task-development", target: "model-training", type: "straight"},
-    // {id: "e3-17", source: "task-development", target: "testing", type: "straight"},
-    // {id: "e3-18", source: "task-development", target: "model-improv", type: "straight"},
-    // {id: "e3-19", source: "task-deployment", target: "model-validation", type: "straight"},
-    // {id: "e3-20", source: "task-deployment", target: "documentation", type: "straight"},
-    // {id: "e3-21", source: "task-deployment", target: "controlled-rollout", type: "straight"},
-    // {id: "e3-22", source: "task-deployment", target: "security-hardening", type: "straight"},
-    // {id: "e3-23", source: "task-maintenance", target: "continuous-monitoring", type: "straight"},
-    // {id: "e3-24", source: "task-maintenance", target: "feedback", type: "straight"},
-    // {id: "e3-25", source: "task-maintenance", target: "model-updates", type: "straight"},
-    // {id: "e3-26", source: "task-maintenance", target: "auditing", type: "straight"},
-    // Dotted edges to phase-one-result
-    {id: "d1", source: "researcher", target: "phase-one-result", type: "dotted"},
-    {id: "d2", source: "ai-act", target: "phase-one-result", type: "dotted"},
-    {id: "d3", source: "purpose-and-scope", target: "phase-one-result", type: "dotted"},
-    {id: "d4", source: "trustworthiness-requirements", target: "phase-one-result", type: "dotted"},
-    {id: "d5", source: "threat-modeling", target: "phase-one-result", type: "dotted"},
-    {id: "d6", source: "secure-coding", target: "phase-one-result", type: "dotted"},
-    {id: "d7", source: "testing", target: "phase-one-result", type: "dotted"},
-    {id: "d8", source: "documentation", target: "phase-one-result", type: "dotted"},
-    {id: "d9", source: "model-updates", target: "phase-one-result", type: "dotted"},
-    {id: "d10", source: "auditing", target: "phase-one-result", type: "dotted"},];
+
+    // 4th edge
+    {id: "ed4-0", source: "ai-act", target: "risk-xor-aiact", type: "straight"},
+    {id: "ed4-1", source: "mdr", target: "risk-xor-mdr", type: "straight"},
+
+    //5th edge
+    {id: "ed5-0", source: "risk-xor-aiact", sourceHandle: "operator_left", target: "unacceptable-risk", type: "straight"},
+    {id: "ed5-1", source: "risk-xor-aiact", target: "high-risk", sourceHandle: "operator_bottom", type: "straight"},
+    {id: "ed5-2", source: "risk-xor-aiact", target: "medium-risk", sourceHandle: "operator_bottom", type: "straight"},
+    {id: "ed5-3", source: "risk-xor-aiact", target: "minimal-risk", sourceHandle: "operator_right", type: "straight"},
+    {id: "ed5-4", source: "risk-xor-mdr", sourceHandle: "operator_left", target: "III-risk", type: "straight"},
+    {id: "ed5-5", source: "risk-xor-mdr", target: "IIb-risk", sourceHandle: "operator_bottom", type: "straight"},
+    {id: "ed5-6", source: "risk-xor-mdr", target: "IIa-risk", sourceHandle: "operator_bottom", type: "straight"},
+    {id: "ed5-7", source: "risk-xor-mdr", target: "I-risk", sourceHandle: "operator_right", type: "straight"},
+
+    // final edges
+    {id: "ed6-0", source: "researcher", target: "phase-one-result", type: "dotted"},
+    {id: "ed6-1", source: "developer", target: "phase-one-result", type: "dotted"},
+    {id: "ed6-2", source: "deployer", target: "phase-one-result", type: "dotted"},
+    {id: "ed6-3", source: "unacceptable-risk", target: "phase-one-result", type: "dotted"},
+    {id: "ed6-4", source: "high-risk", target: "phase-one-result", type: "dotted"},
+    {id: "ed6-5", source: "limited-risk", target: "phase-one-result", type: "dotted"},
+    {id: "ed6-6", source: "minimal-risk", target: "phase-one-result", type: "dotted"},
+    {id: "ed6-7", source: "III-risk", target: "phase-one-result", type: "dotted"},
+    {id: "ed6-8", source: "IIb-risk", target: "phase-one-result", type: "dotted"},
+    {id: "ed6-9", source: "IIa-risk", target: "phase-one-result", type: "dotted"},
+    {id: "ed6-10", source: "I-risk", target: "phase-one-result", type: "dotted"},
+];
+
+    
 export { initialEdges };
 const initialNodes = agonMetaModel.phaseOne;
 const initialState = {
