@@ -24,31 +24,39 @@ const initialEdges = [
     {id: "e3-6", source: "goal-regulation", target: "mdr", type: "straight"},
 
     // 4th edge
-    {id: "ed4-0", source: "ai-act", target: "risk-xor-aiact", type: "straight"},
-    {id: "ed4-1", source: "mdr", target: "risk-xor-mdr", type: "straight"},
+    {id: "ed4-0", source: "ai-act", target: "risk-aiact-xor", type: "straight"},
+    {id: "ed4-1", source: "mdr", target: "risk-mdr-xor", type: "straight"},
 
     //5th edge
-    {id: "ed5-0", source: "risk-xor-aiact", sourceHandle: "operator_left", target: "unacceptable-risk", type: "straight"},
-    {id: "ed5-1", source: "risk-xor-aiact", target: "high-risk", sourceHandle: "operator_bottom", type: "straight"},
-    {id: "ed5-2", source: "risk-xor-aiact", target: "medium-risk", sourceHandle: "operator_bottom", type: "straight"},
-    {id: "ed5-3", source: "risk-xor-aiact", target: "minimal-risk", sourceHandle: "operator_right", type: "straight"},
-    {id: "ed5-4", source: "risk-xor-mdr", sourceHandle: "operator_left", target: "III-risk", type: "straight"},
-    {id: "ed5-5", source: "risk-xor-mdr", target: "IIb-risk", sourceHandle: "operator_bottom", type: "straight"},
-    {id: "ed5-6", source: "risk-xor-mdr", target: "IIa-risk", sourceHandle: "operator_bottom", type: "straight"},
-    {id: "ed5-7", source: "risk-xor-mdr", target: "I-risk", sourceHandle: "operator_right", type: "straight"},
+    {id: "ed5-0", source: "risk-aiact-xor", sourceHandle: "operator_left", target: "unacceptable-risk", type: "straight"},
+    {id: "ed5-1", source: "risk-aiact-xor", target: "high-risk", sourceHandle: "operator_bottom", type: "straight"},
+    {id: "ed5-2", source: "risk-aiact-xor", target: "medium-risk", sourceHandle: "operator_bottom", type: "straight"},
+    {id: "ed5-3", source: "risk-aiact-xor", target: "minimal-risk", sourceHandle: "operator_right", type: "straight"},
+    {id: "ed5-4", source: "risk-mdr-xor", sourceHandle: "operator_left", target: "III-risk", type: "straight"},
+    {id: "ed5-5", source: "risk-mdr-xor", target: "IIb-risk", sourceHandle: "operator_bottom", type: "straight"},
+    {id: "ed5-6", source: "risk-mdr-xor", target: "IIa-risk", sourceHandle: "operator_bottom", type: "straight"},
+    {id: "ed5-7", source: "risk-mdr-xor", target: "I-risk", sourceHandle: "operator_right", type: "straight"},
 
-    // final edges
-    {id: "ed6-0", source: "researcher", target: "phase-one-result", type: "dotted"},
-    {id: "ed6-1", source: "developer", target: "phase-one-result", type: "dotted"},
-    {id: "ed6-2", source: "deployer", target: "phase-one-result", type: "dotted"},
-    {id: "ed6-3", source: "unacceptable-risk", target: "phase-one-result", type: "dotted"},
-    {id: "ed6-4", source: "high-risk", target: "phase-one-result", type: "dotted"},
-    {id: "ed6-5", source: "limited-risk", target: "phase-one-result", type: "dotted"},
-    {id: "ed6-6", source: "minimal-risk", target: "phase-one-result", type: "dotted"},
-    {id: "ed6-7", source: "III-risk", target: "phase-one-result", type: "dotted"},
-    {id: "ed6-8", source: "IIb-risk", target: "phase-one-result", type: "dotted"},
-    {id: "ed6-9", source: "IIa-risk", target: "phase-one-result", type: "dotted"},
-    {id: "ed6-10", source: "I-risk", target: "phase-one-result", type: "dotted"},
+    // // final edges
+    // {id: "ed6-0", source: "researcher", target: "phase-one-result", type: "dotted"},
+    // {id: "ed6-1", source: "developer", target: "phase-one-result", type: "dotted"},
+    // {id: "ed6-2", source: "deployer", target: "phase-one-result", type: "dotted"},
+    // {id: "ed6-3", source: "unacceptable-risk", target: "phase-one-result", type: "dotted"},
+    // {id: "ed6-4", source: "high-risk", target: "phase-one-result", type: "dotted"},
+    // {id: "ed6-5", source: "limited-risk", target: "phase-one-result", type: "dotted"},
+    // {id: "ed6-6", source: "minimal-risk", target: "phase-one-result", type: "dotted"},
+    // {id: "ed6-7", source: "III-risk", target: "phase-one-result", type: "dotted"},
+    // {id: "ed6-8", source: "IIb-risk", target: "phase-one-result", type: "dotted"},
+    // {id: "ed6-9", source: "IIa-risk", target: "phase-one-result", type: "dotted"},
+    // {id: "ed6-10", source: "I-risk", target: "phase-one-result", type: "dotted"},
+
+    // final layer
+    {
+        id: "phase-one-result",
+        type: "hexagon",
+        position: {x: 2125, y: 1500},
+        draggable: true,
+    },
 ];
 
     
@@ -91,12 +99,6 @@ export const phaseOneSlice = createSlice({
                     node.data.isChosen = !node.data.isChosen;
                 }
             })
-            // state.nodeState.map(node => {
-            //         if (node.id === action.payload) {
-            //             node.data.isChosen = !node.data.isChosen;
-            //         }
-            //     }
-            // )
         },
         updateResultName: (state, action) => {
             state.resultName = action.payload

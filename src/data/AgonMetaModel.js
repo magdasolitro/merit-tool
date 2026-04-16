@@ -73,21 +73,21 @@ const agonMetaModel = {
             id: "researcher",
             type: "circle",
             position: {x: 300, y: 800},
-            data: {label: "Researcher", background: "black", isConnectable: true, isChosen: true,},
+            data: {label: "Researcher", background: "black",},
             draggable: false
         },
         {
             id: "developer",
             type: "circle",
             position: {x: 500, y: 800},
-            data: {label: "Developer", background: "black", isConnectable: true, isChosen: false,},
+            data: {label: "Developer", background: "black",},
             draggable: false
         },
         {
             id: "deployer",
             type: "circle",
             position: {x: 700, y: 800},
-            data: {label: "Deployer", backgrounsourceHandle: "operator_bottom",d: "black", isConnectable: true, isChosen: false,},
+            data: {label: "Deployer", backgrounsourceHandle: "operator_bottom",d: "black",},
             draggable: false
         },
 
@@ -95,27 +95,27 @@ const agonMetaModel = {
             id: "ai-act",
             type: "circle",
             position: {x: 1900, y: 800},
-            data: {label: "EU AI Act", background: "black", isConnectable: true, isChosen: true,},
+            data: {label: "EU AI Act", background: "black",},
             draggable: false
         },
         {
             id: "ehds",
             type: "circle",
             position: {x: 2200, y: 800},
-            data: {label: "EHDS", background: "black", isConnectable: true, isChosen: false,},
+            data: {label: "EHDS", background: "black",},
             draggable: false
         },
         {
             id: "mdr",
             type: "circle",
             position: {x: 2500, y: 800},
-            data: {label: "MDR", background: "black", isConnectable: true, isChosen: false,},
+            data: {label: "MDR", background: "black",},
             draggable: false
         },
 
         // 5th layer
         {
-            id: "risk-xor-aiact",
+            id: "risk-aiact-xor",
             type: "operator",
             position: {x: 1900, y: 950},
             data: {label: "XOR"},
@@ -125,33 +125,33 @@ const agonMetaModel = {
             id: "unacceptable-risk",
             type: "circle",
             position: {x: 1750, y: 1000},
-            data: {label: "Unacceptable Risk"},
+            data: {label: "Unacceptable Risk", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
             id: "high-risk",
             type: "circle",
             position: {x: 1850, y: 1000},
-            data: {label: "High Risk"},
+            data: {label: "High Risk", isConnectable: true, isChosen: true,},
             draggable: false
         },
         {
             id: "medium-risk",
             type: "circle",
             position: {x: 1950, y: 1000},
-            data: {label: "Medium Risk"},
+            data: {label: "Medium Risk", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
             id: "minimal-risk",
             type: "circle",
             position: {x: 2050, y: 1000},
-            data: {label: "Minimal Risk"},
+            data: {label: "Minimal Risk", isConnectable: true, isChosen: false,},
             draggable: false
         },
 
         {
-            id: "risk-xor-mdr",
+            id: "risk-mdr-xor",
             type: "operator",
             position: {x: 2500, y: 950},
             data: {label: "XOR"},
@@ -161,28 +161,28 @@ const agonMetaModel = {
             id: "III-risk",
             type: "circle",
             position: {x: 2600, y: 1000},
-            data: {label: "III Class"},
+            data: {label: "III Class", isConnectable: true, isChosen: true,},
             draggable: false
         },
         {
             id: "IIb-risk",
             type: "circle",
             position: {x: 2500, y: 1000},
-            data: {label: "IIb Class"},
+            data: {label: "IIb Class", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
             id: "IIa-risk",
             type: "circle",
             position: {x: 2400, y: 1000},
-            data: {label: "IIa Class"},
+            data: {label: "IIa Class", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
             id: "I-risk",
             type: "circle",
             position: {x: 2300, y: 1000},
-            data: {label: "I Class"},
+            data: {label: "I Class", isConnectable: true, isChosen: false,},
             draggable: false
         },
 
