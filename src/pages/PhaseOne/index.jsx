@@ -70,8 +70,6 @@ export default function PhaseOne() {
     }, [phaseOneState.uploaded])
 
 
-    const regexForXor = /xor(\d+)$/;
-
     const defaultEdgeOptions = {
         style: {strokeWidth: 2, stroke: 'white'},
         type: 'floating',
@@ -103,7 +101,8 @@ export default function PhaseOne() {
     // }, [setEdges]);
 
     const connectToBase = useCallback((event, element) => {
-        const xorNode = element.id.match(regexForXor);
+        const xorEdge = edges.find(edge => edge.target === element.id && edge.source.includes('xor'));
+        const xorNode = xorEdge ? xorEdge.source : null;
         const clickedNode = nodes.find(node => node.id === element.id);
         if (!clickedNode.data.isConnectable) {
             return;
@@ -112,8 +111,10 @@ export default function PhaseOne() {
             setEdges((edges) => edges.filter(edge => edge.id !== element.id + "-edge"));
         } else {
             setEdges((edges) => {
+                let updatedEdges = edges;
                 if (xorNode) {
-                    edges = edges.filter((edge) => !edge.source.includes(xorNode[0]));
+                    const xorTargets = edges.filter(edge => edge.source === xorNode).map(edge => edge.target);
+                    updatedEdges = edges.filter(edge => !(xorTargets.includes(edge.source) && edge.source !== element.id));
                 }
                 const updatedEdge = {
                     id: element.id + "-edge",
@@ -122,12 +123,12 @@ export default function PhaseOne() {
                     animated: true,
                     ...defaultEdgeOptions
                 };
-                return addEdge(updatedEdge, edges);
+                return addEdge(updatedEdge, updatedEdges);
             });
 
         }
         dispatch(updateNodes(element.id))
-    }, [setEdges, nodes, setNodes]);
+    }, [setEdges, nodes, setNodes, edges]);
 
     return (
         <div style={{width: "100vw", height: "93vh"}}>

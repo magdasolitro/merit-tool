@@ -63,7 +63,7 @@ const agonMetaModel = {
 
         // 4th layer
         {
-            id: "user-role-xor",
+            id: "xor-user-role",
             type: "operator",
             position: {x: 500, y: 650},
             data: {label: "XOR"},
@@ -73,21 +73,21 @@ const agonMetaModel = {
             id: "researcher",
             type: "circle",
             position: {x: 300, y: 800},
-            data: {label: "Researcher", background: "black",},
+            data: {label: "Researcher", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
             id: "developer",
             type: "circle",
             position: {x: 500, y: 800},
-            data: {label: "Developer", background: "black",},
+            data: {label: "Developer", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
             id: "deployer",
             type: "circle",
             position: {x: 700, y: 800},
-            data: {label: "Deployer", backgrounsourceHandle: "operator_bottom",d: "black",},
+            data: {label: "Deployer", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
 
@@ -115,7 +115,7 @@ const agonMetaModel = {
 
         // 5th layer
         {
-            id: "risk-aiact-xor",
+            id: "xor-risk-aiact",
             type: "operator",
             position: {x: 1900, y: 950},
             data: {label: "XOR"},
@@ -151,7 +151,7 @@ const agonMetaModel = {
         },
 
         {
-            id: "risk-mdr-xor",
+            id: "xor-risk-mdr",
             type: "operator",
             position: {x: 2500, y: 950},
             data: {label: "XOR"},

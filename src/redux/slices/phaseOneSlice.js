@@ -15,27 +15,27 @@ const initialEdges = [
     {id: "e2-3", source: "compliance-goal", target: "goal-regulation", type: "straight"},
 
     // 3rd edge
-    {id: "e3-0", source: "user-role",  target: "user-role-xor", type: "straight"},
-    {id: "e3-1", source: "user-role-xor", sourceHandle: "operator_left",  target: "researcher", type: "straight"},
-    {id: "e3-2", source: "user-role-xor", sourceHandle: "operator_bottom", target: "developer", type: "straight"},
-    {id: "e3-3", source: "user-role-xor", sourceHandle: "operator_right", target: "deployer", type: "straight"},
+    {id: "e3-0", source: "user-role",  target: "xor-user-role", type: "straight"},
+    {id: "e3-1", source: "xor-user-role", sourceHandle: "operator_left",  target: "researcher", type: "straight"},
+    {id: "e3-2", source: "xor-user-role", sourceHandle: "operator_bottom", target: "developer", type: "straight"},
+    {id: "e3-3", source: "xor-user-role", sourceHandle: "operator_right", target: "deployer", type: "straight"},
     {id: "e3-4", source: "goal-regulation", target: "ai-act", type: "straight"},
     {id: "e3-5", source: "goal-regulation", target: "ehds", type: "straight"},
     {id: "e3-6", source: "goal-regulation", target: "mdr", type: "straight"},
 
     // 4th edge
-    {id: "ed4-0", source: "ai-act", target: "risk-aiact-xor", type: "straight"},
-    {id: "ed4-1", source: "mdr", target: "risk-mdr-xor", type: "straight"},
+    {id: "ed4-0", source: "ai-act", target: "xor-risk-aiact", type: "straight"},
+    {id: "ed4-1", source: "mdr", target: "xor-risk-mdr", type: "straight"},
 
     //5th edge
-    {id: "ed5-0", source: "risk-aiact-xor", sourceHandle: "operator_left", target: "unacceptable-risk", type: "straight"},
-    {id: "ed5-1", source: "risk-aiact-xor", target: "high-risk", sourceHandle: "operator_bottom", type: "straight"},
-    {id: "ed5-2", source: "risk-aiact-xor", target: "medium-risk", sourceHandle: "operator_bottom", type: "straight"},
-    {id: "ed5-3", source: "risk-aiact-xor", target: "minimal-risk", sourceHandle: "operator_right", type: "straight"},
-    {id: "ed5-4", source: "risk-mdr-xor", sourceHandle: "operator_left", target: "III-risk", type: "straight"},
-    {id: "ed5-5", source: "risk-mdr-xor", target: "IIb-risk", sourceHandle: "operator_bottom", type: "straight"},
-    {id: "ed5-6", source: "risk-mdr-xor", target: "IIa-risk", sourceHandle: "operator_bottom", type: "straight"},
-    {id: "ed5-7", source: "risk-mdr-xor", target: "I-risk", sourceHandle: "operator_right", type: "straight"},
+    {id: "ed5-0", source: "xor-risk-aiact", sourceHandle: "operator_left", target: "unacceptable-risk", type: "straight"},
+    {id: "ed5-1", source: "xor-risk-aiact", target: "high-risk", sourceHandle: "operator_bottom", type: "straight"},
+    {id: "ed5-2", source: "xor-risk-aiact", target: "medium-risk", sourceHandle: "operator_bottom", type: "straight"},
+    {id: "ed5-3", source: "xor-risk-aiact", target: "minimal-risk", sourceHandle: "operator_right", type: "straight"},
+    {id: "ed5-4", source: "xor-risk-mdr", sourceHandle: "operator_left", target: "III-risk", type: "straight"},
+    {id: "ed5-5", source: "xor-risk-mdr", target: "IIb-risk", sourceHandle: "operator_bottom", type: "straight"},
+    {id: "ed5-6", source: "xor-risk-mdr", target: "IIa-risk", sourceHandle: "operator_bottom", type: "straight"},
+    {id: "ed5-7", source: "xor-risk-mdr", target: "I-risk", sourceHandle: "operator_right", type: "straight"},
 
     // // final edges
     // {id: "ed6-0", source: "researcher", target: "phase-one-result", type: "dotted"},
@@ -89,11 +89,15 @@ export const phaseOneSlice = createSlice({
             }
         },
         updateNodes: (state, action) => {
-            const xorNode = action.payload.match(/xor(\d+)$/);
+            const xorEdge = state.edgeState.find(edge => edge.target === action.payload && edge.source.includes('xor'));
+            const xorNode = xorEdge ? xorEdge.source : null;
 
             state.nodeState.map(node => {
-                if (xorNode && node.id.includes(xorNode[0]) && node.id !== action.payload) {
-                    node.data.isChosen = false;
+                if (xorNode) {
+                    const xorTargets = state.edgeState.filter(edge => edge.source === xorNode).map(edge => edge.target);
+                    if (xorTargets.includes(node.id) && node.id !== action.payload) {
+                        node.data.isChosen = false;
+                    }
                 }
                 if (node.id === action.payload) {
                     node.data.isChosen = !node.data.isChosen;
