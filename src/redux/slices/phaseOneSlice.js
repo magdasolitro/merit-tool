@@ -37,19 +37,6 @@ const initialEdges = [
     {id: "ed5-6", source: "xor-risk-mdr", target: "IIa-risk", sourceHandle: "operator_bottom", type: "straight"},
     {id: "ed5-7", source: "xor-risk-mdr", target: "I-risk", sourceHandle: "operator_right", type: "straight"},
 
-    // // final edges
-    // {id: "ed6-0", source: "researcher", target: "phase-one-result", type: "dotted"},
-    // {id: "ed6-1", source: "developer", target: "phase-one-result", type: "dotted"},
-    // {id: "ed6-2", source: "deployer", target: "phase-one-result", type: "dotted"},
-    // {id: "ed6-3", source: "unacceptable-risk", target: "phase-one-result", type: "dotted"},
-    // {id: "ed6-4", source: "high-risk", target: "phase-one-result", type: "dotted"},
-    // {id: "ed6-5", source: "limited-risk", target: "phase-one-result", type: "dotted"},
-    // {id: "ed6-6", source: "minimal-risk", target: "phase-one-result", type: "dotted"},
-    // {id: "ed6-7", source: "III-risk", target: "phase-one-result", type: "dotted"},
-    // {id: "ed6-8", source: "IIb-risk", target: "phase-one-result", type: "dotted"},
-    // {id: "ed6-9", source: "IIa-risk", target: "phase-one-result", type: "dotted"},
-    // {id: "ed6-10", source: "I-risk", target: "phase-one-result", type: "dotted"},
-
     // final layer
     {
         id: "phase-one-result",
@@ -77,7 +64,9 @@ export const phaseOneSlice = createSlice({
         connectEdge: (state, action) => {
             state.edgeState = action.payload
             state.selectedNodes = [] // reset selected nodes
-            const result = state.edgeState.slice(50)
+            const result = state.edgeState.filter(edge =>
+                state.nodeState.some(node => node.id === edge.source && node.data?.isConnectable && node.data?.isChosen)
+            )
             for (const edge of result) {
                 PhaseOneKeyValue[edge.source] && state.selectedNodes.push(PhaseOneKeyValue[edge.source]);
             }

@@ -73,7 +73,7 @@ const agonMetaModel = {
             id: "researcher",
             type: "circle",
             position: {x: 300, y: 800},
-            data: {label: "Researcher", background: "black", isConnectable: true, isChosen: false,},
+            data: {label: "Researcher", background: "black", isConnectable: true, isChosen: true,},
             draggable: false
         },
         {
@@ -102,7 +102,7 @@ const agonMetaModel = {
             id: "ehds",
             type: "circle",
             position: {x: 2200, y: 800},
-            data: {label: "EHDS", background: "black",},
+            data: {label: "EHDS", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
