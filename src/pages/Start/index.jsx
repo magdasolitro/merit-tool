@@ -48,7 +48,7 @@ export default function Home() {
                         {/*    }}/>*/}
                         <div className={"font-medium text-lg"}>
                             <Text manager="decipher" easing="outSine" fixed>
-                                A Tool for the Gamification of Regulatory Comliance Analysis
+                                A Tool for the Gamification of Regulatory Compliance Analysis
                             </Text>
                         </div>
                     </Animator>

@@ -30,13 +30,6 @@ const agonMetaModel = {
             data: {label: "Compliance Goal", background: "black"},
             draggable: false
         },
-        {
-            id: "compliance-principles",
-            type: "circle",
-            position: {x: 3700, y: 200},
-            data: {label: "Compliance Principles", background: "black"},
-            draggable: false
-        },
 
         // 3rd layer
         {
@@ -65,7 +58,7 @@ const agonMetaModel = {
         {
             id: "xor-user-role",
             type: "operator",
-            position: {x: 500, y: 650},
+            position: {x: 525, y: 650},
             data: {label: "XOR"},
             draggable: false
         },
@@ -90,12 +83,19 @@ const agonMetaModel = {
             data: {label: "Deployer", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
+        {
+            id: "xor-ai-system",
+            type: "operator",
+            position: {x: 1325, y: 650},
+            data: {label: "XOR"},
+            draggable: false
+        },
 
         {
             id: "ai-act",
             type: "circle",
             position: {x: 1900, y: 800},
-            data: {label: "EU AI Act", background: "black",},
+            data: {label: "EU AI Act", background: "black", isConnectable: true, isChosen: false},
             draggable: false
         },
         {
@@ -109,82 +109,82 @@ const agonMetaModel = {
             id: "mdr",
             type: "circle",
             position: {x: 2500, y: 800},
-            data: {label: "MDR", background: "black",},
+            data: {label: "MDR", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
 
         // 5th layer
-        {
-            id: "xor-risk-aiact",
-            type: "operator",
-            position: {x: 1900, y: 950},
-            data: {label: "XOR"},
-            draggable: false
-        },
+        // {
+        //     id: "xor-risk-aiact",
+        //     type: "operator",
+        //     position: {x: 1925, y: 950},
+        //     data: {label: "XOR"},
+        //     draggable: false
+        // },
         {
             id: "unacceptable-risk",
             type: "circle",
-            position: {x: 1750, y: 1000},
+            position: {x: 1000, y: 800},
             data: {label: "Unacceptable Risk", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
             id: "high-risk",
             type: "circle",
-            position: {x: 1850, y: 1000},
+            position: {x: 1200, y: 800},
             data: {label: "High Risk", isConnectable: true, isChosen: true,},
             draggable: false
         },
         {
             id: "medium-risk",
             type: "circle",
-            position: {x: 1950, y: 1000},
+            position: {x: 1400, y: 800},
             data: {label: "Medium Risk", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
             id: "minimal-risk",
             type: "circle",
-            position: {x: 2050, y: 1000},
+            position: {x: 1600, y: 800},
             data: {label: "Minimal Risk", isConnectable: true, isChosen: false,},
             draggable: false
         },
 
-        {
-            id: "xor-risk-mdr",
-            type: "operator",
-            position: {x: 2500, y: 950},
-            data: {label: "XOR"},
-            draggable: false
-        },
-        {
-            id: "III-risk",
-            type: "circle",
-            position: {x: 2600, y: 1000},
-            data: {label: "III Class", isConnectable: true, isChosen: true,},
-            draggable: false
-        },
-        {
-            id: "IIb-risk",
-            type: "circle",
-            position: {x: 2500, y: 1000},
-            data: {label: "IIb Class", isConnectable: true, isChosen: false,},
-            draggable: false
-        },
-        {
-            id: "IIa-risk",
-            type: "circle",
-            position: {x: 2400, y: 1000},
-            data: {label: "IIa Class", isConnectable: true, isChosen: false,},
-            draggable: false
-        },
-        {
-            id: "I-risk",
-            type: "circle",
-            position: {x: 2300, y: 1000},
-            data: {label: "I Class", isConnectable: true, isChosen: false,},
-            draggable: false
-        },
+        // {
+        //     id: "xor-risk-mdr",
+        //     type: "operator",
+        //     position: {x: 2525, y: 950},
+        //     data: {label: "XOR"},
+        //     draggable: false
+        // },
+        // {
+        //     id: "III-risk",
+        //     type: "circle",
+        //     position: {x: 2350, y: 1050},
+        //     data: {label: "III Class", isConnectable: true, isChosen: true,},
+        //     draggable: false
+        // },
+        // {
+        //     id: "IIb-risk",
+        //     type: "circle",
+        //     position: {x: 2450, y: 1050},
+        //     data: {label: "IIb Class", isConnectable: true, isChosen: false,},
+        //     draggable: false
+        // },
+        // {
+        //     id: "IIa-risk",
+        //     type: "circle",
+        //     position: {x: 2550, y: 1050},
+        //     data: {label: "IIa Class", isConnectable: true, isChosen: false,},
+        //     draggable: false
+        // },
+        // {
+        //     id: "I-risk",
+        //     type: "circle",
+        //     position: {x: 2650, y: 1050},
+        //     data: {label: "I Class", isConnectable: true, isChosen: false,},
+        //     draggable: false
+        // },
 
         // final layer
         {

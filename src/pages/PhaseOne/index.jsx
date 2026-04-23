@@ -42,9 +42,9 @@ export default function PhaseOne() {
     }, [currentPhase]);
 
     useEffect(() => {
-        if (edges.length >= 28 
-            && edges.some(edge => edge.source === "ai-system" && edge.target === "phase-one-result")
-            && ["researcher", "developer", "deployer"].some(nodeId => edges.some(edge => edge.source === nodeId && edge.target === "phase-one-result"))) {
+        if (["unacceptable-risk", "high-risk", "medium-risk", "minimal-risk"].some(nodeId => edges.some(edge => edge.source === nodeId && edge.target === "phase-one-result"))
+            && ["researcher", "developer", "deployer"].some(nodeId => edges.some(edge => edge.source === nodeId && edge.target === "phase-one-result"))
+            && ["ai-act", "mdr", "ehds"].some(nodeId => edges.some(edge => edge.source === nodeId && edge.target === "phase-one-result"))) {
             !nextPhaseEnabled && dispatch(setNextPhaseEnabled(true));
         }
         else {

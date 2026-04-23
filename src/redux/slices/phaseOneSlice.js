@@ -23,19 +23,29 @@ const initialEdges = [
     {id: "e3-5", source: "goal-regulation", target: "ehds", type: "straight"},
     {id: "e3-6", source: "goal-regulation", target: "mdr", type: "straight"},
 
-    // 4th edge
-    {id: "ed4-0", source: "ai-act", target: "xor-risk-aiact", type: "straight"},
-    {id: "ed4-1", source: "mdr", target: "xor-risk-mdr", type: "straight"},
+    {id: "e3-0", source: "ai-system",  target: "xor-ai-system", type: "straight"},
+    {id: "e3-1", source: "xor-ai-system", sourceHandle: "operator_left",  target: "unacceptable-risk", type: "straight"},
+    {id: "e3-2", source: "xor-ai-system", sourceHandle: "operator_bottom", target: "high-risk", type: "straight"},
+    {id: "e3-3", source: "xor-ai-system", sourceHandle: "operator_bottom", target: "medium-risk", type: "straight"},
+    {id: "e3-4", source: "xor-ai-system", sourceHandle: "operator_right", target: "minimal-risk", type: "straight"},
 
-    //5th edge
-    {id: "ed5-0", source: "xor-risk-aiact", sourceHandle: "operator_left", target: "unacceptable-risk", type: "straight"},
-    {id: "ed5-1", source: "xor-risk-aiact", target: "high-risk", sourceHandle: "operator_bottom", type: "straight"},
-    {id: "ed5-2", source: "xor-risk-aiact", target: "medium-risk", sourceHandle: "operator_bottom", type: "straight"},
-    {id: "ed5-3", source: "xor-risk-aiact", target: "minimal-risk", sourceHandle: "operator_right", type: "straight"},
-    {id: "ed5-4", source: "xor-risk-mdr", sourceHandle: "operator_left", target: "III-risk", type: "straight"},
-    {id: "ed5-5", source: "xor-risk-mdr", target: "IIb-risk", sourceHandle: "operator_bottom", type: "straight"},
-    {id: "ed5-6", source: "xor-risk-mdr", target: "IIa-risk", sourceHandle: "operator_bottom", type: "straight"},
-    {id: "ed5-7", source: "xor-risk-mdr", target: "I-risk", sourceHandle: "operator_right", type: "straight"},
+    {id: "e3-4", source: "goal-regulation", target: "ai-act", type: "straight"},
+    {id: "e3-5", source: "goal-regulation", target: "ehds", type: "straight"},
+    {id: "e3-6", source: "goal-regulation", target: "mdr", type: "straight"},
+
+    // // 4th edge
+    // {id: "ed4-0", source: "ai-act", target: "xor-risk-aiact", type: "straight"},
+    // {id: "ed4-1", source: "mdr", target: "xor-risk-mdr", type: "straight"},
+
+    // //5th edge
+    // {id: "ed5-0", source: "xor-risk-aiact", sourceHandle: "operator_left", target: "unacceptable-risk", type: "straight"},
+    // {id: "ed5-1", source: "xor-risk-aiact", target: "high-risk", sourceHandle: "operator_bottom", type: "straight"},
+    // {id: "ed5-2", source: "xor-risk-aiact", target: "medium-risk", sourceHandle: "operator_bottom", type: "straight"},
+    // {id: "ed5-3", source: "xor-risk-aiact", target: "minimal-risk", sourceHandle: "operator_right", type: "straight"},
+    // {id: "ed5-4", source: "xor-risk-mdr", sourceHandle: "operator_left", target: "III-risk", type: "straight"},
+    // {id: "ed5-5", source: "xor-risk-mdr", sourceHandle: "operator_bottom", target: "IIb-risk", type: "straight"},
+    // {id: "ed5-6", source: "xor-risk-mdr", sourceHandle: "operator_bottom", target: "IIa-risk",type: "straight"},
+    // {id: "ed5-7", source: "xor-risk-mdr", sourceHandle: "operator_right", target: "I-risk",type: "straight"},
 
     // final layer
     {
