@@ -12,7 +12,9 @@ const initialEdges = [
     // 2nd edge
     {id: "e2-1", source: "user", target: "user-role", type: "straight"},
     {id: "e2-2", source: "compliance-subject", target: "ai-system", type: "straight"},
+    {id: "e2-2", source: "compliance-subject", target: "med-device", type: "straight"},
     {id: "e2-3", source: "compliance-goal", target: "goal-regulation", type: "straight"},
+    
 
     // 3rd edge
     {id: "e3-0", source: "user-role",  target: "xor-user-role", type: "straight"},
@@ -32,6 +34,8 @@ const initialEdges = [
     {id: "e3-4", source: "goal-regulation", target: "ai-act", type: "straight"},
     {id: "e3-5", source: "goal-regulation", target: "ehds", type: "straight"},
     {id: "e3-6", source: "goal-regulation", target: "mdr", type: "straight"},
+
+
 
     // // 4th edge
     // {id: "ed4-0", source: "ai-act", target: "xor-risk-aiact", type: "straight"},
