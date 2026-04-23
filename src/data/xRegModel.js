@@ -1,4 +1,4 @@
-const agonMetaModel = {
+const xRegModel = {
     phaseOne: [
         {
             id: "compliance-context",
@@ -19,21 +19,21 @@ const agonMetaModel = {
         {
             id: "compliance-subject",
             type: "circle",
-            position: {x: 1500, y: 200},
+            position: {x: 1600, y: 200},
             data: {label: "Compliance Subject", background: "black"},
             draggable: false
         },
         {
             id: "compliance-goal",
             type: "circle",
-            position: {x: 2200, y: 200},
+            position: {x: 2800, y: 200},
             data: {label: "Compliance Goal", background: "black"},
             draggable: false
         },
         {
             id: "compliance-task",
             type: "circle",
-            position: {x: 3200, y: 200},
+            position: {x: 3800, y: 200},
             data: {label: "Compliance Task", background: "black"},
             draggable: false
         },
@@ -63,7 +63,7 @@ const agonMetaModel = {
         {
             id: "goal-regulation",
             type: "circle",
-            position: {x: 2185, y: 500},
+            position: {x: 2800, y: 500},
             data: {label: "Goal Regulation", size: 130},
             draggable: false
         },
@@ -109,21 +109,21 @@ const agonMetaModel = {
         {
             id: "ai-act",
             type: "circle",
-            position: {x: 1900, y: 800},
+            position: {x: 2500, y: 800},
             data: {label: "EU AI Act", background: "black", isConnectable: true, isChosen: false},
             draggable: false
         },
         {
             id: "ehds",
             type: "circle",
-            position: {x: 2200, y: 800},
+            position: {x: 2800, y: 800},
             data: {label: "EHDS", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
             id: "mdr",
             type: "circle",
-            position: {x: 2500, y: 800},
+            position: {x: 3130, y: 800},
             data: {label: "MDR", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
@@ -210,8 +210,74 @@ const agonMetaModel = {
             draggable: true,
         },
     ],
-    phaseTwo: [],
+    phaseTwo: [
+                {
+            id: "Principles",
+            type: "circle",
+            position: {x: 2200, y: -200},
+            data: {label: "Compliance Context", top: "no"},
+            draggable: false
+        },
+
+        // 2nd layer
+        {
+            id: "ethical-design",
+            type: "circle",
+            position: {x: 600, y: 200},
+            data: {label: "Ethical Design", background: "black"},
+            draggable: false
+        },
+        {
+            id: "fairness",
+            type: "circle",
+            position: {x: 1200, y: 200},
+            data: {label: "Fairness & Non-Discrimination", background: "black"},
+            draggable: false
+        },
+        {
+            id: "transparency",
+            type: "circle",
+            position: {x: 1600, y: 200},
+            data: {label: "Transparency & Explainability", background: "black"},
+            draggable: false
+        },
+        {
+            id: "robustness",
+            type: "circle",
+            position: {x: 2000, y: 200},
+            data: {label: "Robustness & Reliability", background: "black"},
+            draggable: false
+        },
+        {
+            id: "privacy",
+            type: "circle",
+            position: {x: 2400, y: 200},
+            data: {label: "Privacy & Data Protection", background: "black"},
+            draggable: false
+        },
+        {
+            id: "security",
+            type: "circle",
+            position: {x: 2800, y: 200},
+            data: {label: "Security & Technical Resilience", background: "black"},
+            draggable: false
+        },
+        {
+            id: "accountability",
+            type: "circle",
+            position: {x: 3400, y: 200},
+            data: {label: "Accountability & Governance", background: "black"},
+            draggable: false
+        },
+        {
+            id: "data-quality",
+            type: "circle",
+            position: {x: 3800, y: 200},
+            data: {label: "Data Quality, Integrity & Provenance", background: "black"},
+            draggable: false
+        },
+    ],
     phaseThree: [],
 }
 
-export default agonMetaModel;
+export default xRegModel;

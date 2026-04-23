@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {PhaseTwoTreeDS} from "../../data/PhaseTwoTreeDS.js";
+import xRegModel from "../../data/xRegModel.js";
 import {initialEdges} from "../../pages/PhaseTwo/initial-edges.js";
 
 
@@ -9,7 +9,7 @@ const initialState = {
     hiddenEdges: [],
     hiddenNodes: [],
     hiddenTactics: [],
-    nodeTree: PhaseTwoTreeDS,
+    nodeTree: xRegModel.phaseTwo,
     uploaded: 0,
 }
 

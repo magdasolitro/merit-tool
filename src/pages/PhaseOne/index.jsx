@@ -15,7 +15,7 @@ import {resetPhaseTwo} from "../../redux/slices/phaseTwoSlice.js";
 import {resetPhaseThree} from "../../redux/slices/phaseThreeSlice.js";
 import {templateOne} from "../../data/Phase1_template.js";
 import DottedEdge from "../../components/DottedEdge";
-import agonMetaModel from "../../data/AgonMetaModel.js";
+import xRegModel from "../../data/xRegModel.js";
 import { initialEdges } from "../../redux/slices/phaseOneSlice.js";
 
 const nodeTypes = {circle: CircleNode, operator: OperatorNode, hexagon: HexagonNode};
@@ -56,7 +56,7 @@ export default function PhaseOne() {
     useEffect(() => {
         dispatch(setPhaseOneState({
             edgeState: initialEdges,
-            nodeState: agonMetaModel.phaseOne,
+            nodeState: xRegModel.phaseOne,
             resultName: "",
             selectedNodes: [],
             uploaded: 0

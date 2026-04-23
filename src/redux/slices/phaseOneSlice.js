@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 import {PhaseOneKeyValue, PhaseOneSecondaryLogic} from "../../data/PhaseOneKeyValue.js";
-import agonMetaModel from "../../data/AgonMetaModel.js";
+import xRegModel from "../../data/xRegModel.js";
 
 const initialEdges = [
     // 1st edge
@@ -14,7 +14,7 @@ const initialEdges = [
     {id: "e2-2", source: "compliance-subject", target: "ai-system", type: "straight"},
     {id: "e2-2", source: "compliance-subject", target: "med-device", type: "straight"},
     {id: "e2-3", source: "compliance-goal", target: "goal-regulation", type: "straight"},
-    
+
 
     // 3rd edge
     {id: "e3-0", source: "user-role",  target: "xor-user-role", type: "straight"},
@@ -62,7 +62,7 @@ const initialEdges = [
 
     
 export { initialEdges };
-const initialNodes = agonMetaModel.phaseOne;
+const initialNodes = xRegModel.phaseOne;
 const initialState = {
     edgeState: initialEdges,
     nodeState: initialNodes,
