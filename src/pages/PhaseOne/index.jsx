@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from "react";
+import {useCallback, useEffect} from "react";
 import ReactFlow, {addEdge, Background, Controls, MiniMap, useEdgesState, useNodesState,} from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -13,10 +13,9 @@ import {connectEdge, setPhaseOneState, updateNodes} from "../../redux/slices/pha
 import {setCurrentPhase, setNextPhaseEnabled} from "../../redux/slices/phaseStatusSlice.js";
 import {resetPhaseTwo} from "../../redux/slices/phaseTwoSlice.js";
 import {resetPhaseThree} from "../../redux/slices/phaseThreeSlice.js";
-import {templateOne} from "../../data/Phase1_template.js";
 import DottedEdge from "../../components/DottedEdge";
-import xRegModel from "../../data/xRegModel.js";
-import { initialEdges } from "../../redux/slices/phaseOneSlice.js";
+import {initialNodes} from "./phaseOne_nodes.js";
+import {initialEdges} from "./phaseOne_edges.js";
 
 const nodeTypes = {circle: CircleNode, operator: OperatorNode, hexagon: HexagonNode};
 
@@ -56,7 +55,7 @@ export default function PhaseOne() {
     useEffect(() => {
         dispatch(setPhaseOneState({
             edgeState: initialEdges,
-            nodeState: xRegModel.phaseOne,
+            nodeState: initialNodes,
             resultName: "",
             selectedNodes: [],
             uploaded: 0
@@ -76,31 +75,6 @@ export default function PhaseOne() {
         style: {strokeWidth: 2, stroke: 'white'},
         type: 'floating',
     };
-
-    // const onConnect = useCallback((params) => {
-    //     const {source} = params;
-    //     const xorNode = source.match(regexForXor);
-    //         setEdges((edges) => {
-    //             if (xorNode) {
-    //                 edges = edges.filter((edge) => !edge.source.includes(xorNode[0]));
-    //             }
-    //             const updatedEdge = {
-    //                 ...params,
-    //                 id: source + "-edge",
-    //                 animated: true
-    //             };
-    //             return addEdge(updatedEdge, edges);
-    //         });
-    //         setNodes((nodes) => {
-    //             return nodes.map((node) => {
-    //                 if (node.id === source) {
-    //                     node.data.isChosen = true;
-    //                 }
-    //                 return node;
-    //             })
-    //         });
-    //
-    // }, [setEdges]);
 
     const connectToBase = useCallback((event, element) => {
         const xorEdge = edges.find(edge => edge.target === element.id && edge.source.includes('xor'));

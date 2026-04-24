@@ -1,5 +1,4 @@
-const xRegModel = {
-    phaseOne: [
+export const initialNodes = [
         {
             id: "compliance-context",
             type: "circle",
@@ -128,15 +127,6 @@ const xRegModel = {
             draggable: false
         },
         
-
-        // 5th layer
-        // {
-        //     id: "xor-risk-aiact",
-        //     type: "operator",
-        //     position: {x: 1925, y: 950},
-        //     data: {label: "XOR"},
-        //     draggable: false
-        // },
         {
             id: "unacceptable-risk",
             type: "circle",
@@ -166,42 +156,6 @@ const xRegModel = {
             draggable: false
         },
 
-        // {
-        //     id: "xor-risk-mdr",
-        //     type: "operator",
-        //     position: {x: 2525, y: 950},
-        //     data: {label: "XOR"},
-        //     draggable: false
-        // },
-        // {
-        //     id: "III-risk",
-        //     type: "circle",
-        //     position: {x: 2350, y: 1050},
-        //     data: {label: "III Class", isConnectable: true, isChosen: true,},
-        //     draggable: false
-        // },
-        // {
-        //     id: "IIb-risk",
-        //     type: "circle",
-        //     position: {x: 2450, y: 1050},
-        //     data: {label: "IIb Class", isConnectable: true, isChosen: false,},
-        //     draggable: false
-        // },
-        // {
-        //     id: "IIa-risk",
-        //     type: "circle",
-        //     position: {x: 2550, y: 1050},
-        //     data: {label: "IIa Class", isConnectable: true, isChosen: false,},
-        //     draggable: false
-        // },
-        // {
-        //     id: "I-risk",
-        //     type: "circle",
-        //     position: {x: 2650, y: 1050},
-        //     data: {label: "I Class", isConnectable: true, isChosen: false,},
-        //     draggable: false
-        // },
-
         // final layer
         {
             id: "phase-one-result",
@@ -209,75 +163,6 @@ const xRegModel = {
             position: {x: 2125, y: 1500},
             draggable: true,
         },
-    ],
-    phaseTwo: [
-                {
-            id: "Principles",
-            type: "circle",
-            position: {x: 2200, y: -200},
-            data: {label: "Compliance Context", top: "no"},
-            draggable: false
-        },
+    ]
 
-        // 2nd layer
-        {
-            id: "ethical-design",
-            type: "circle",
-            position: {x: 600, y: 200},
-            data: {label: "Ethical Design", background: "black"},
-            draggable: false
-        },
-        {
-            id: "fairness",
-            type: "circle",
-            position: {x: 1200, y: 200},
-            data: {label: "Fairness & Non-Discrimination", background: "black"},
-            draggable: false
-        },
-        {
-            id: "transparency",
-            type: "circle",
-            position: {x: 1600, y: 200},
-            data: {label: "Transparency & Explainability", background: "black"},
-            draggable: false
-        },
-        {
-            id: "robustness",
-            type: "circle",
-            position: {x: 2000, y: 200},
-            data: {label: "Robustness & Reliability", background: "black"},
-            draggable: false
-        },
-        {
-            id: "privacy",
-            type: "circle",
-            position: {x: 2400, y: 200},
-            data: {label: "Privacy & Data Protection", background: "black"},
-            draggable: false
-        },
-        {
-            id: "security",
-            type: "circle",
-            position: {x: 2800, y: 200},
-            data: {label: "Security & Technical Resilience", background: "black"},
-            draggable: false
-        },
-        {
-            id: "accountability",
-            type: "circle",
-            position: {x: 3400, y: 200},
-            data: {label: "Accountability & Governance", background: "black"},
-            draggable: false
-        },
-        {
-            id: "data-quality",
-            type: "circle",
-            position: {x: 3800, y: 200},
-            data: {label: "Data Quality, Integrity & Provenance", background: "black"},
-            draggable: false
-        },
-    ],
-    phaseThree: [],
-}
-
-export default xRegModel;
+export default initialNodes;

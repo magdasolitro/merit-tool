@@ -1,131 +1,121 @@
-import React, {useEffect} from "react";
-import ReactFlow, {Background, Controls, MiniMap, useEdgesState, useNodesState,} from "reactflow";
+import {useCallback, useEffect} from "react";
+import ReactFlow, {addEdge, Background, Controls, MiniMap, useEdgesState, useNodesState,} from "reactflow";
+
 import "reactflow/dist/style.css";
+import CircleNode from "../../components/Shapes/CircleNode.jsx";
 import OperatorNode from "../../components/Shapes/OperatorNode.jsx";
+import HexagonNode from "../../components/Shapes/HexagonNode.jsx";
+import FloatingEdge from "../../components/FloatingEdge";
+import StraightEdge from "../../components/StraightEdge";
+import ConnectionLine from "../../components/ConnectionLine";
 import {useDispatch, useSelector} from "react-redux";
+import {connectEdge2, setPhaseTwoState, updateNodes2} from "../../redux/slices/phaseTwoSlice.js";
 import {setCurrentPhase, setNextPhaseEnabled} from "../../redux/slices/phaseStatusSlice.js";
-import OvalNode from "../../components/Shapes/OvalNode.jsx";
+import {resetPhaseTwo} from "../../redux/slices/phaseTwoSlice.js";
+import {resetPhaseThree} from "../../redux/slices/phaseThreeSlice.js";
 import DottedEdge from "../../components/DottedEdge";
-import {
-    addEdges,
-    filterEdges,
-    hideEdges,
-    setHiddenNodes,
-    toggleHidden,
-    updateNodes
-} from "../../redux/slices/phaseTwoSlice.js";
-import {flattenNodes} from "../../utils/flattenNodes.js";
-import {removeAndFlattenNodes} from "../../utils/removeAndFlattenNodes.js";
-import {findNodeById} from "../../utils/findNodeById.js";
-import {getAllChildrenIds} from "../../utils/getAllChildrenIds.js";
-import {buildTree} from "../../utils/buildTree.js";
-import {searchNode} from "../../utils/searchNode.js";
-import getTacticNodes from "../../utils/getTacticNodes.js";
-import {evalAndRegexConditions} from "../../utils/evalAndRegexConditions.js";
+import {initialNodes} from "./phaseTwo_nodes.js";
+import {initialEdges} from "./phaseTwo_edges.js";
 
-
-const nodeTypes = {oval: OvalNode, operator: OperatorNode};
-const edgeTypes = {dotted: DottedEdge};
-
+const nodeTypes = {circle: CircleNode, operator: OperatorNode, hexagon: HexagonNode};
 
 export default function PhaseTwo() {
-    const {nodeState, edgeState, hiddenNodes, uploaded, nodeTree} = useSelector((state) => state.phaseTwo);
-    const {currentPhase} = useSelector((state) => state.phaseStatus);
-    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+    const phaseTwoState = useSelector((state) => state.phaseTwo.nodeState);
+    const {initialPhase3aTacticNodes, initialPhase3cTacticNodes} = useSelector((state) => state.phaseThree);
+    const {edgeState, nodeState} = phaseTwoState;
+    const [nodes, setNodes, onNodesChange] = useNodesState(nodeState);
     const [edges, setEdges, onEdgesChange] = useEdgesState(edgeState);
-    let idToBeRemoved = [];
-
-
-    const dispatch = useDispatch();
-    const userSelectedNodes = useSelector((state) => state.phaseOne.selectedNodes);
-    const initialNodes = flattenNodes(nodeTree);
-    const treeMap = buildTree(initialNodes);
-    // for testing purpose
-    // const userSelectedNodes = ['C7','C15','C2', 'C13', 'C14','C12','C16','C18','C28','C12','C31','C30','C26','C32','C34','C6','C9'];
-    // const userSelectedNodes = ['C13', 'C3', 'C4', 'C14', 'C16', 'C21', 'C27', 'C33', 'C34', 'C5', 'C1', 'C2', 'C8', 'C9', 'C10', 'C28']
-
-    const updateGraph = () => {
-        const visibleNodes = evalAndRegexConditions(initialNodes, userSelectedNodes);
-        const invisibleNodes = initialNodes.filter(node => !visibleNodes.includes(node));
-        idToBeRemoved = invisibleNodes.map(item => item.id);
-        const allHiddenIds = idToBeRemoved.map(id => getAllChildrenIds(searchNode(treeMap, id))).flat();
-        const removedIds = visibleNodes.map(node=>node.id).concat(allHiddenIds);
-        const removedEdges = edgeState.filter(edge => !removedIds.includes(edge.source));
-        const hiddenEdges = edgeState.filter(edge => allHiddenIds.includes(edge.source));
-        dispatch(hideEdges(hiddenEdges.concat(removedEdges)));
-        return removeAndFlattenNodes(nodeTree, idToBeRemoved);
-    };
+    const edgeTypes = {floating: FloatingEdge, straight: StraightEdge, dotted: DottedEdge};
+    const dispatch = useDispatch()
+    const {nextPhaseEnabled, currentPhase} = useSelector((state) => state.phaseStatus);
 
     useEffect(() => {
-        if(currentPhase < 2) {
-            dispatch(updateNodes(updateGraph()));
+        if (initialPhase3aTacticNodes.length > 0 || initialPhase3cTacticNodes.length > 0) {
+            dispatch(resetPhaseThree())
         }
-        dispatch(setCurrentPhase(2));
-        dispatch(setNextPhaseEnabled(true));
+    }, [currentPhase]);
+
+    useEffect(() => {
+        if (["ethics", "fairness", "transparency", "robustness", "privacy", "security", "accountability", "data-quality"].some(nodeId => edges.some(edge => edge.source === nodeId && edge.target === "phase-two-result"))) {
+            !nextPhaseEnabled && dispatch(setNextPhaseEnabled(true));
+        }
+        else {
+            dispatch(setNextPhaseEnabled(false));
+        }
+        dispatch(connectEdge2(edges));
+    }, [edges]);
+
+    useEffect(() => {
+        dispatch(setPhaseTwoState({
+            edgeState: initialEdges,
+            nodeState: initialNodes,
+            resultName: "",
+            selectedNodes: [],
+            uploaded: 0
+        }))
     }, []);
 
     useEffect(() => {
-        setNodes(nodeState);
-        setEdges(edgeState)
-    }, [nodeState, edgeState, uploaded]);
+        setNodes(nodeState)
+    }, [nodeState]);
 
-    const handleElementClick = (event, element) => {
-            if (!element.data.type) {
-                const checkNodes = findNodeById(hiddenNodes, element.id);
-                if (checkNodes) {
-                    const newNodes = [...nodeState, ...checkNodes.children];
-                    dispatch(updateNodes(newNodes));
-                    // There are some special cases that need to be handled separately
-                    if (checkNodes.id === "improve-perceived-relative-advantage" ||
-                        checkNodes.id === "improve-perceived-compatibility" ||
-                        checkNodes.id === "improve-perceived-usefulness"){
-                        dispatch(addEdges(checkNodes.id));
-                    } else if (checkNodes.id === "increase-social-influence") {
-                        dispatch(addEdges(checkNodes.children.filter(c => !c.data.isHidden).map(child => child.id)));
-                        dispatch(addEdges(checkNodes.id));
-                    } else {
-                        dispatch(addEdges(checkNodes.children.length > 0 ? checkNodes.children.filter(c => !c.data.isHidden).map(child => child.id) : checkNodes.id));
-                    }
-                    dispatch(setHiddenNodes(hiddenNodes.filter(node => node.id !== element.id)));
-                } else {
-                    const ids = getAllChildrenIds(searchNode(treeMap, element.id));
-                    const tacticNodes = getTacticNodes(ids);
-                    const needNodes = ids.filter(id => !tacticNodes.includes(id));
-                    const newNodes = nodeState.filter(node => !needNodes.includes(node.id));
-                    dispatch(updateNodes(newNodes));
-                    dispatch(filterEdges({
-                        clickedNode: element.id,
-                        needNodes: needNodes,
-                        tacticNodes: tacticNodes,
-                    }));
-                    dispatch(setHiddenNodes(
-                        [...hiddenNodes,
-                            {
-                                id: element.id,
-                                children: nodeState.filter(node => needNodes.includes(node.id))
-                            }])
-                    );
+    useEffect(() => {
+        setEdges(edgeState);
+    }, [phaseTwoState.uploaded])
+
+
+    const defaultEdgeOptions = {
+        style: {strokeWidth: 2, stroke: 'white'},
+        type: 'floating',
+    };
+
+    const connectToBase = useCallback((event, element) => {
+        const xorEdge = edges.find(edge => edge.target === element.id && edge.source.includes('xor'));
+        const xorNode = xorEdge ? xorEdge.source : null;
+        const clickedNode = nodes.find(node => node.id === element.id);
+        if (!clickedNode.data.isConnectable) {
+            return;
+        }
+        if (clickedNode.data.isChosen) {
+            setEdges((edges) => edges.filter(edge => edge.id !== element.id + "-edge"));
+        } else {
+            setEdges((edges) => {
+                let updatedEdges = edges;
+                if (xorNode) {
+                    const xorTargets = edges.filter(edge => edge.source === xorNode).map(edge => edge.target);
+                    updatedEdges = edges.filter(edge => !(xorTargets.includes(edge.source) && edge.source !== element.id));
                 }
-                dispatch(toggleHidden(element.id))
-            }
-        };
+                const updatedEdge = {
+                    id: element.id + "-edge",
+                    target: "phase-one-result",
+                    source: element.id,
+                    animated: true,
+                    ...defaultEdgeOptions
+                };
+                return addEdge(updatedEdge, updatedEdges);
+            });
+
+        }
+        dispatch(updateNodes2(element.id))
+    }, [setEdges, nodes, setNodes, edges]);
 
     return (
         <div style={{width: "100vw", height: "93vh"}}>
             <ReactFlow
                 nodes={nodes}
-                panOnScroll={true}
                 edges={edges}
+                panOnScroll={true}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 nodeTypes={nodeTypes}
-                zoomOnDoubleClick={false}
                 edgeTypes={edgeTypes}
+                defaultEdgeOptions={defaultEdgeOptions}
+                connectionLineComponent={ConnectionLine}
                 deleteKeyCode={''}
+                onNodeClick={connectToBase}
                 fitView
-                maxZoom={2}
-                minZoom={0.1}
-                onNodeClick={handleElementClick}
+                maxZoom={1.5}
+                minZoom={0.18}
             >
                 <Controls/>
                 <MiniMap pannable zoomable/>
