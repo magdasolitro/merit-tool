@@ -14,15 +14,15 @@ import {setCurrentPhase, setNextPhaseEnabled} from "../../redux/slices/phaseStat
 import {resetPhaseTwo} from "../../redux/slices/phaseTwoSlice.js";
 import {resetPhaseThree} from "../../redux/slices/phaseThreeSlice.js";
 import DottedEdge from "../../components/DottedEdge";
-import {initialNodes} from "./phaseTwo_nodes.js";
-import {initialEdges} from "./phaseTwo_edges.js";
+import {initialNodes2} from "./phaseTwo_nodes.js";
+import {initialEdges2} from "./phaseTwo_edges.js";
 
 const nodeTypes = {circle: CircleNode, operator: OperatorNode, hexagon: HexagonNode};
 
 export default function PhaseTwo() {
     const phaseTwoState = useSelector((state) => state.phaseTwo.nodeState);
     const {initialPhase3aTacticNodes, initialPhase3cTacticNodes} = useSelector((state) => state.phaseThree);
-    const {edgeState, nodeState} = phaseTwoState;
+    const { edgeState, nodeState } = useSelector((state) => state.phaseTwo);
     const [nodes, setNodes, onNodesChange] = useNodesState(nodeState);
     const [edges, setEdges, onEdgesChange] = useEdgesState(edgeState);
     const edgeTypes = {floating: FloatingEdge, straight: StraightEdge, dotted: DottedEdge};
@@ -47,8 +47,8 @@ export default function PhaseTwo() {
 
     useEffect(() => {
         dispatch(setPhaseTwoState({
-            edgeState: initialEdges,
-            nodeState: initialNodes,
+            edgeState: initialEdges2,
+            nodeState: initialNodes2,
             resultName: "",
             selectedNodes: [],
             uploaded: 0

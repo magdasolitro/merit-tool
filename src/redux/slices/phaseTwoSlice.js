@@ -1,14 +1,14 @@
 import {createSlice} from '@reduxjs/toolkit'
 import {PhaseTwoKeyValue} from "../../data/PhaseTwoKeyValue.js";
-import {initialNodes} from "../../pages/PhaseTwo/phaseTwo_nodes.js";
-import {initialEdges} from "../../pages/PhaseTwo/phaseTwo_edges.js";
+import {initialNodes2} from "../../pages/PhaseTwo/phaseTwo_nodes.js";
+import {initialEdges2} from "../../pages/PhaseTwo/phaseTwo_edges.js";
 
 
 const initialState = {
-    nodeState: initialNodes,
-    edgeState: initialEdges,
+    nodeState: initialNodes2,
+    edgeState: initialEdges2,
     resultName: "",
-    selectedNodes: initialNodes.filter(node => node.data?.isChosen).map(node => PhaseTwoKeyValue[node.id]).filter(Boolean),
+    selectedNodes: initialNodes2.filter(node => node.data?.isChosen).map(node => PhaseTwoKeyValue[node.id]).filter(Boolean),
     uploaded: 0,
 }
 
@@ -17,10 +17,10 @@ export const phaseTwoSlice = createSlice({
     initialState,
     reducers: {
         resetPhaseTwo: (state) => {
-            state.nodeState = initialNodes;
-            state.edgeState = initialEdges;
+            state.nodeState = initialNodes2;
+            state.edgeState = initialEdges2;
             state.resultName = "";
-            state.selectedNodes = initialNodes.filter(node => node.data?.isChosen).map(node => PhaseTwoKeyValue[node.id]).filter(Boolean);
+            state.selectedNodes = initialNodes2.filter(node => node.data?.isChosen).map(node => PhaseTwoKeyValue[node.id]).filter(Boolean);
             state.uploaded = 0;
         },
         connectEdge2: (state, action) => {

@@ -1,5 +1,5 @@
 
-export const initialEdges = [
+export const initialEdges2 = [
     {id: "e1-0", source: "principles", target: "ethics", type: "straight"},
     {id: "e1-1", source: "principles", target: "fairness", type: "straight"},
     {id: "e1-2", source: "principles", target: "transparency", type: "straight"},
