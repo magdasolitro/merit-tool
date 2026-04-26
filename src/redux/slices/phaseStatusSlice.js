@@ -22,9 +22,9 @@ export const phaseStatusSlice = createSlice({
             state.currentPhase = action.payload.currentPhase;
             state.uploaded++;
         },
-        setPhase3Value: (state, action) => {
-            state.phase3Value = action.payload;
-        },
+        // setPhase3Value: (state, action) => {
+        //     state.phase3Value = action.payload;
+        // },
         toggleInfo: (state) => {
             state.infoToggle = !state.infoToggle;
         }

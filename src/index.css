@@ -55,6 +55,18 @@ button {
     background: #1a1a1a;
 }
 
+.phase-button-completed {
+    background: #1a1a1a !important;
+    border-color: #fb923c !important;
+    color: #fff !important;
+}
+
+.phase-button-future {
+    background: #1a1a1a !important;
+    border-color: #9ca3af !important;
+    color: #e5e7eb !important;
+}
+
 button:focus,
 button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;

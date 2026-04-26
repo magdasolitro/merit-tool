@@ -9,56 +9,49 @@ import FloatingEdge from "../../components/FloatingEdge";
 import StraightEdge from "../../components/StraightEdge";
 import ConnectionLine from "../../components/ConnectionLine";
 import {useDispatch, useSelector} from "react-redux";
-import {connectEdge, setPhaseOneState, updateNodes} from "../../redux/slices/phaseOneSlice.js";
+import {connectEdge3, setPhaseThreeState, updateNodes3} from "../../redux/slices/phaseThreeSlice_new.js";
 import {setCurrentPhase, setNextPhaseEnabled} from "../../redux/slices/phaseStatusSlice.js";
-import {resetPhaseTwo} from "../../redux/slices/phaseTwoSlice.js";
-import {resetPhaseThree} from "../../redux/slices/phaseThreeSlice.js";
 import DottedEdge from "../../components/DottedEdge";
-import {initialNodes} from "./phaseOne_nodes.js";
-import {initialEdges} from "./phaseOne_edges.js";
+import {initialNodes3} from "./phaseThree_nodes.js";
+import {initialEdges3} from "./phaseThree_edges.js";
 
 const nodeTypes = {circle: CircleNode, operator: OperatorNode, hexagon: HexagonNode};
+
 const edgeTypes = {floating: FloatingEdge, straight: StraightEdge, dotted: DottedEdge};
 
-export default function PhaseOne() {
-    const phaseOneState = useSelector((state) => state.phaseOne);
-    const phaseTwoState = useSelector((state) => state.phaseTwo.nodeState);
-    const {initialPhase3aTacticNodes, initialPhase3cTacticNodes} = useSelector((state) => state.phaseThree);
-    const {edgeState, nodeState} = phaseOneState;
+export default function PhaseThree() {
+    const phaseThreeState = useSelector((state) => state.phaseThreeNew);
+    const edgeState = useSelector((state) => state.phaseThreeNew?.edgeState ?? initialEdges3);
+    const nodeState = useSelector((state) => state.phaseThreeNew?.nodeState ?? initialNodes3);
     const [nodes, setNodes, onNodesChange] = useNodesState(nodeState);
     const [edges, setEdges, onEdgesChange] = useEdgesState(edgeState);
     const dispatch = useDispatch()
     const {nextPhaseEnabled, currentPhase} = useSelector((state) => state.phaseStatus);
 
     useEffect(() => {
-        dispatch(setCurrentPhase(1))
-        if (phaseTwoState.length > 0) {
-            dispatch(resetPhaseTwo())
-        }
-        if (initialPhase3aTacticNodes.length > 0 || initialPhase3cTacticNodes.length > 0) {
-            dispatch(resetPhaseThree())
-        }
-    }, [currentPhase]);
+        dispatch(setCurrentPhase(3))
+    }, []);
 
     useEffect(() => {
-        if (["unacceptable-risk", "high-risk", "medium-risk", "minimal-risk"].some(nodeId => edges.some(edge => edge.source === nodeId && edge.target === "phase-one-result"))
-            && ["researcher", "developer", "deployer"].some(nodeId => edges.some(edge => edge.source === nodeId && edge.target === "phase-one-result"))
-            && ["ai-act", "mdr", "ehds"].some(nodeId => edges.some(edge => edge.source === nodeId && edge.target === "phase-one-result"))) {
+        if (!Array.isArray(edges)) {
+            return;
+        }
+        if (["ai-act", "ehds", "mdr"].some(nodeId => edges.some(edge => edge.source === nodeId && edge.target === "phase-three-result"))) {
             !nextPhaseEnabled && dispatch(setNextPhaseEnabled(true));
         }
         else {
             dispatch(setNextPhaseEnabled(false));
         }
-        dispatch(connectEdge(edges));
+        dispatch(connectEdge3(edges));
     }, [edges]);
 
     useEffect(() => {
-        dispatch(setPhaseOneState({
-            edgeState: initialEdges,
-            nodeState: initialNodes,
+        dispatch(setPhaseThreeState({
+            nodeState: initialNodes3,
+            edgeState: initialEdges3,
             resultName: "",
             selectedNodes: [],
-            uploaded: 0
+            uploaded: 0,
         }))
     }, []);
 
@@ -68,8 +61,7 @@ export default function PhaseOne() {
 
     useEffect(() => {
         setEdges(edgeState);
-    }, [phaseOneState.uploaded])
-
+    }, [phaseThreeState.uploaded])
 
     const defaultEdgeOptions = {
         style: {strokeWidth: 2, stroke: 'white'},
@@ -77,8 +69,6 @@ export default function PhaseOne() {
     };
 
     const connectToBase = useCallback((event, element) => {
-        const xorEdge = edges.find(edge => edge.target === element.id && edge.source.includes('xor'));
-        const xorNode = xorEdge ? xorEdge.source : null;
         const clickedNode = nodes.find(node => node.id === element.id);
         if (!clickedNode.data.isConnectable) {
             return;
@@ -88,13 +78,9 @@ export default function PhaseOne() {
         } else {
             setEdges((edges) => {
                 let updatedEdges = edges;
-                if (xorNode) {
-                    const xorTargets = edges.filter(edge => edge.source === xorNode).map(edge => edge.target);
-                    updatedEdges = edges.filter(edge => !(xorTargets.includes(edge.source) && edge.source !== element.id));
-                }
                 const updatedEdge = {
                     id: element.id + "-edge",
-                    target: "phase-one-result",
+                    target: "phase-three-result",
                     source: element.id,
                     animated: true,
                     ...defaultEdgeOptions
@@ -103,7 +89,7 @@ export default function PhaseOne() {
             });
 
         }
-        dispatch(updateNodes(element.id))
+        dispatch(updateNodes3(element.id))
     }, [setEdges, nodes, setNodes, edges]);
 
     return (

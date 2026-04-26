@@ -32,6 +32,10 @@ export default function PhaseTwo() {
     const {nextPhaseEnabled, currentPhase} = useSelector((state) => state.phaseStatus);
 
     useEffect(() => {
+        dispatch(setCurrentPhase(2));
+    }, []);
+
+    useEffect(() => {
         if (initialPhase3aTacticNodes.length > 0 || initialPhase3cTacticNodes.length > 0) {
             dispatch(resetPhaseThree())
         }
@@ -83,7 +87,7 @@ export default function PhaseTwo() {
                 let updatedEdges = edges;
                 const updatedEdge = {
                     id: element.id + "-edge",
-                    target: "phase-one-result",
+                    target: "phase-two-result",
                     source: element.id,
                     animated: true,
                     ...defaultEdgeOptions

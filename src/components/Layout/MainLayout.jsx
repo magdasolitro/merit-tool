@@ -1,25 +1,23 @@
 import React, {useEffect} from "react";
 import Button from "arwes/lib/Button/index.js";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector, useStore} from "react-redux";
 import {Outlet, useNavigate} from "react-router-dom";
 import {FaDownload, FaFileUpload} from "react-icons/fa";
 import {Tooltip} from 'react-tooltip'
 import {Text} from "@arwes/react-text";
-import {setPhase3Value, setPhaseStatusState, toggleInfo} from "../../redux/slices/phaseStatusSlice.js";
+import {setPhaseStatusState, toggleInfo} from "../../redux/slices/phaseStatusSlice.js";
 import {setPhaseOneState} from "../../redux/slices/phaseOneSlice.js";
-import {setPhaseTwoState} from "../../redux/slices/phaseTwoSlice.js";
 import SelectOption from "../Select";
-import DownloadButton from "../DownloadButton.jsx";
 
 export default function MainLayout() {
     // const bleeps = useBleeps();
     const navigate = useNavigate();
     const {nextPhaseEnabled, currentPhase, infoToggle, phase3Value} = useSelector((state) => state.phaseStatus);
     const dispatch = useDispatch();
-    const store = useSelector((state) => state);
+    const store = useStore();
 
     const saveAsJson = () => {
-        const json = JSON.stringify(store, null, 2);
+        const json = JSON.stringify(store.getState(), null, 2);
         const blob = new Blob([json], {type: "application/json"});
         const href = URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -71,25 +69,25 @@ export default function MainLayout() {
         document.querySelector(".moon").classList.toggle("hide");
     }
 
-    function phase3Navigation() {
-        if (phase3Value === "Phase C1")
-            navigate("phase3/b");
-        else if (phase3Value === "Phase C2")
-            navigate("phase3/c");
-        else if (phase3Value === "Phase C3")
-            navigate("phase4");
-    }
+    // function phase3Navigation() {
+    //     if (phase3Value === "Phase C1")
+    //         navigate("phase3/b");
+    //     else if (phase3Value === "Phase C2")
+    //         navigate("phase3/c");
+    //     else if (phase3Value === "Phase C3")
+    //         navigate("phase4");
+    // }
 
-    const phaseThreeOnChange = (event) => {
-        const selectedValue = event.target.value
-        dispatch(setPhase3Value(selectedValue));
-        if (selectedValue === "Phase C1")
-            navigate("phase3/a");
-        else if (selectedValue === "Phase C2")
-            navigate("phase3/b");
-        else if (selectedValue === "Phase C3")
-            navigate("phase3/c");
-    }
+    // const phaseThreeOnChange = (event) => {
+    //     const selectedValue = event.target.value
+    //     dispatch(setPhase3Value(selectedValue));
+    //     if (selectedValue === "Phase C1")
+    //         navigate("phase3/a");
+    //     else if (selectedValue === "Phase C2")
+    //         navigate("phase3/b");
+    //     else if (selectedValue === "Phase C3")
+    //         navigate("phase3/c");
+    // }
 
     const goToNextPhase = () => {
         switch (currentPhase) {
@@ -97,14 +95,14 @@ export default function MainLayout() {
                 navigate("phase2");
                 break;
             case 2:
-                navigate("phase3/a");
+                navigate("phase3");
                 break;
-            case 3:
-                phase3Navigation();
-                break;
-            case 4:
-                navigate("phase5");
-                break;
+            // case 3:
+            //     phase3Navigation();
+            //     break;
+            // case 4:
+            //     navigate("phase5");
+            //     break;
         }
     }
     const goToPhase1 = () => {
@@ -113,12 +111,27 @@ export default function MainLayout() {
     const goToPhase2 = () => {
         navigate("phase2");
     }
-    const goToPhase4 = () => {
-        navigate("phase4");
+    const goToPhase3 = () => {
+        navigate("phase3");
     }
-    const goToPhase5 = () => {
-        navigate("phase5");
-    }
+    const getPhaseLayer = (phaseNumber) => {
+        if (currentPhase === phaseNumber) {
+            return "success";
+        }
+        return "secondary";
+    };
+
+    const getPhaseButtonClass = (baseClass, phaseNumber) => {
+        const isCompleted = phaseNumber < currentPhase;
+        const isFuture = phaseNumber > currentPhase;
+        return `${baseClass} ${isCompleted ? "phase-button-completed" : ""} ${isFuture ? "phase-button-future" : ""}`.trim();
+    };
+    // const goToPhase4 = () => {
+    //     navigate("phase4");
+    // }
+    // const goToPhase5 = () => {
+    //     navigate("phase5");
+    // }
     return (
         <div className="holy-grail bg-slate-400 dark:bg-slate-900">
             <header>
@@ -132,45 +145,26 @@ export default function MainLayout() {
                         <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0"
                             key={currentPhase}>
                             <li>
-                                <Button className={"font-semibold text-lg phase-button phase-1"}
-                                        layer={currentPhase === 1 ? "success" : "secondary"} onClick={goToPhase1}>
+                                <Button className={getPhaseButtonClass("font-semibold text-lg phase-button phase-1", 1)}
+                                        layer={getPhaseLayer(1)} onClick={goToPhase1}>
                                     Phase A
                                 </Button>
                             </li>
                             <li>
-                                <Button animate className={"font-semibold text-lg phase-button phase-2"}
+                                <Button animate className={getPhaseButtonClass("font-semibold text-lg phase-button phase-2", 2)}
                                         disabled={currentPhase < 2}
-                                        layer={currentPhase === 2 ? "success" : "secondary"} onClick={goToPhase2}>
+                                        layer={getPhaseLayer(2)} onClick={goToPhase2}>
                                     Phase B
                                 </Button>
                             </li>
                             <li>
-                                {/*<Button animate className={"font-semibold text-lg phase-button phase-3"}*/}
-                                {/*        disabled={currentPhase < 3}*/}
-                                {/*        layer={"secondary"} onClick={goToPhase3}>*/}
-                                {/*    Phase 3*/}
-                                {/*</Button>*/}
-                                <SelectOption
-                                    name="phase3"
-                                    options={[
-                                        {id: "Phase C1", value: "Phase C1"},
-                                        {id: "Phase C2", value: "Phase C2"},
-                                        {id: "Phase C3", value: "Phase C3"},
-                                    ]}
-                                    onChange={phaseThreeOnChange}
-                                    // onClick={phaseThreeOnChange}
-                                    optionValueId={"id"}
-                                    optionInnerContent={"value"}
-                                    style={{
-                                        color: currentPhase < 3 ? "#999" : currentPhase === 3 ? "#00ff00" : "#df9527",
-                                    }}
-                                    currentPhase={currentPhase}
-                                    required
-                                    selected={phase3Value}
-                                    disabled={currentPhase < 3}
-                                />
-                            </li>
-                            <li>
+                                <Button animate className={getPhaseButtonClass("font-semibold text-lg phase-button phase-3", 3)}
+                                        disabled={currentPhase < 3}
+                                        layer={getPhaseLayer(3)} onClick={goToPhase3}>
+                                    Phase C
+                                </Button>
+                            </li>                          
+                            {/* <li>
                                 <Button animate className={"font-semibold text-lg phase-button phase-4"}
                                         disabled={currentPhase < 4}
                                         onClick={goToPhase4}
@@ -185,8 +179,8 @@ export default function MainLayout() {
                                         layer={currentPhase === 5 ? "success" : "secondary"}>
                                     Phase E
                                 </Button>
-                            </li>
-                        </ul>
+                            </li>*/}
+                        </ul> 
                         {currentPhase !== 5 &&
                             <div className="flex items-center lg:order-2">
                                 <Button animate className={"font-semibold text-lg custom-button"}
