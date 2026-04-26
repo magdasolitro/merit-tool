@@ -24,6 +24,10 @@ export const phaseTwoSlice = createSlice({
             state.uploaded = 0;
         },
         connectEdge2: (state, action) => {
+            if (!Array.isArray(state.nodeState)) {
+                console.error("nodeState is not an array: ", state.nodeState);
+                return;
+            }
             state.edgeState = action.payload
             state.selectedNodes = [] // reset selected nodes
             state.edgeState.filter(edge =>
@@ -31,7 +35,12 @@ export const phaseTwoSlice = createSlice({
             )  
         },
         updateNodes2: (state, action) => {
-            state.nodeState = action.payload
+            state.nodeState = state.nodeState.map(node => {
+                if (node.id === action.payload) {
+                    node.data.isChosen = !node.data.isChosen;
+                }
+                return node;
+            });
         },
         updateResultName2: (state, action) => {
             state.resultName = action.payload

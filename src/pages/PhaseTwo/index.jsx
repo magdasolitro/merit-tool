@@ -19,13 +19,15 @@ import {initialEdges2} from "./phaseTwo_edges.js";
 
 const nodeTypes = {circle: CircleNode, operator: OperatorNode, hexagon: HexagonNode};
 
+const edgeTypes = {floating: FloatingEdge, straight: StraightEdge, dotted: DottedEdge};
+
 export default function PhaseTwo() {
-    const phaseTwoState = useSelector((state) => state.phaseTwo.nodeState);
+    const phaseTwoState = useSelector((state) => state.phaseTwo);
     const {initialPhase3aTacticNodes, initialPhase3cTacticNodes} = useSelector((state) => state.phaseThree);
-    const { edgeState, nodeState } = useSelector((state) => state.phaseTwo);
+    const edgeState = useSelector((state) => state.phaseTwo.edgeState);
+    const nodeState = useSelector((state) => state.phaseTwo.nodeState);
     const [nodes, setNodes, onNodesChange] = useNodesState(nodeState);
     const [edges, setEdges, onEdgesChange] = useEdgesState(edgeState);
-    const edgeTypes = {floating: FloatingEdge, straight: StraightEdge, dotted: DottedEdge};
     const dispatch = useDispatch()
     const {nextPhaseEnabled, currentPhase} = useSelector((state) => state.phaseStatus);
 
@@ -70,8 +72,6 @@ export default function PhaseTwo() {
     };
 
     const connectToBase = useCallback((event, element) => {
-        const xorEdge = edges.find(edge => edge.target === element.id && edge.source.includes('xor'));
-        const xorNode = xorEdge ? xorEdge.source : null;
         const clickedNode = nodes.find(node => node.id === element.id);
         if (!clickedNode.data.isConnectable) {
             return;
@@ -81,10 +81,6 @@ export default function PhaseTwo() {
         } else {
             setEdges((edges) => {
                 let updatedEdges = edges;
-                if (xorNode) {
-                    const xorTargets = edges.filter(edge => edge.source === xorNode).map(edge => edge.target);
-                    updatedEdges = edges.filter(edge => !(xorTargets.includes(edge.source) && edge.source !== element.id));
-                }
                 const updatedEdge = {
                     id: element.id + "-edge",
                     target: "phase-one-result",

@@ -127,7 +127,7 @@ export default function MainLayout() {
                         <a href="/" className="flex items-center">
                             <img src="/assets/logo.png" className="mr-3 h-6 sm:h-9" alt="Flowbite Logo"/>
                             <span
-                                className="self-center text-xl font-semibold whitespace-nowrap text-white">Web-Agon</span>
+                                className="self-center text-xl font-semibold whitespace-nowrap text-white">X-Reg</span>
                         </a>
                         <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0"
                             key={currentPhase}>

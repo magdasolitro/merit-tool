@@ -37,7 +37,7 @@ export default function Home() {
                         {/*    }}/>*/}
                         <h1 className={"font-semibold text-5xl"}>
                             <Text manager="decipher" easing="outSine" fixed>
-                                REG-AGON
+                                X-REG
                             </Text>
                         </h1>
                     </Animator>
