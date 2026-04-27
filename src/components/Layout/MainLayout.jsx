@@ -7,7 +7,6 @@ import {Tooltip} from 'react-tooltip'
 import {Text} from "@arwes/react-text";
 import {setPhaseStatusState, toggleInfo} from "../../redux/slices/phaseStatusSlice.js";
 import {setPhaseOneState} from "../../redux/slices/phaseOneSlice.js";
-import SelectOption from "../Select";
 
 export default function MainLayout() {
     // const bleeps = useBleeps();
@@ -97,9 +96,9 @@ export default function MainLayout() {
             case 2:
                 navigate("phase3");
                 break;
-            // case 3:
-            //     phase3Navigation();
-            //     break;
+            case 3:
+                navigate("result-phase");
+                break;
             // case 4:
             //     navigate("phase5");
             //     break;
@@ -114,6 +113,9 @@ export default function MainLayout() {
     const goToPhase3 = () => {
         navigate("phase3");
     }
+    const goToPhase4 = () => {
+        navigate("result-phase");
+    }
     const getPhaseLayer = (phaseNumber) => {
         if (currentPhase === phaseNumber) {
             return "success";
@@ -126,12 +128,7 @@ export default function MainLayout() {
         const isFuture = phaseNumber > currentPhase;
         return `${baseClass} ${isCompleted ? "phase-button-completed" : ""} ${isFuture ? "phase-button-future" : ""}`.trim();
     };
-    // const goToPhase4 = () => {
-    //     navigate("phase4");
-    // }
-    // const goToPhase5 = () => {
-    //     navigate("phase5");
-    // }
+
     return (
         <div className="holy-grail bg-slate-400 dark:bg-slate-900">
             <header>
@@ -164,15 +161,15 @@ export default function MainLayout() {
                                     Phase C
                                 </Button>
                             </li>                          
-                            {/* <li>
+                            <li>
                                 <Button animate className={"font-semibold text-lg phase-button phase-4"}
                                         disabled={currentPhase < 4}
                                         onClick={goToPhase4}
                                         layer={currentPhase === 4 ? "success" : "secondary"}>
-                                    Phase D
+                                    Result
                                 </Button>
                             </li>
-                            <li>
+                            {/*<li>
                                 <Button animate className={"font-semibold text-lg phase-button phase-5"}
                                         disabled={currentPhase < 5}
                                         onClick={goToPhase5}

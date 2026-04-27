@@ -3,6 +3,7 @@ import PhaseOne from "../pages/PhaseOne";
 import Intro from "../pages/Intro";
 import PhaseTwo from "../pages/PhaseTwo";
 import PhaseThree from "../pages/PhaseThree";
+import PhaseResult from "../pages/PhaseResult";
 import MainLayout from "../components/Layout/MainLayout.jsx";
 
 const routes = [
@@ -29,6 +30,10 @@ const routes = [
             {
                 path: "phase3",
                 element: <PhaseThree/>
+            },
+            {
+                path: "result-phase",
+                element: <PhaseResult/>
             }
         ]
     },

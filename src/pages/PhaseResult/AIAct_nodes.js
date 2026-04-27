@@ -1,10 +1,68 @@
-export const AIActTreeDS = [
+const OVERLAP_SPACING_X = 520;
+
+const cloneNode = (node) => ({
+    ...node,
+    position: node?.position ? {...node.position} : {x: 0, y: 0},
+    data: node?.data ? {...node.data} : node?.data,
+    children: Array.isArray(node?.children) ? node.children.map(cloneNode) : node?.children,
+});
+
+const separateOverlappingSiblings = (siblings) => {
+    const groups = new Map();
+
+    siblings.forEach((child, index) => {
+        const x = Number(child?.position?.x ?? 0);
+        const y = Number(child?.position?.y ?? 0);
+        const key = `${x}|${y}`;
+        if (!groups.has(key)) {
+            groups.set(key, []);
+        }
+        groups.get(key).push({child, index, x, y});
+    });
+
+    groups.forEach((group) => {
+        if (group.length <= 1) {
+            return;
+        }
+
+        const centerX = group[0].x;
+        const baseY = group[0].y;
+        const startX = centerX - ((group.length - 1) * OVERLAP_SPACING_X) / 2;
+
+        group.forEach(({child}, i) => {
+            child.position = {
+                ...child.position,
+                x: startX + i * OVERLAP_SPACING_X,
+                y: baseY,
+            };
+        });
+    });
+};
+
+const normalizeTreePositions = (nodes) => {
+    const normalizedNodes = nodes.map(cloneNode);
+
+    const normalizeChildren = (nodeList) => {
+        nodeList.forEach((node) => {
+            if (!Array.isArray(node?.children) || node.children.length === 0) {
+                return;
+            }
+            separateOverlappingSiblings(node.children);
+            normalizeChildren(node.children);
+        });
+    };
+
+    normalizeChildren(normalizedNodes);
+    return normalizedNodes;
+};
+
+export const raw_AIActNodes = [
     {
         "id": "ai-act-compliance",
         "type": "oval",
         "position": {
-            "x": 0,
-            "y": -200
+            "x": 60000,
+            "y": -1000
         },
         "data": {
             "isHidden": false,
@@ -8160,3 +8218,5 @@ export const AIActTreeDS = [
         ]
     }
 ];
+
+export const AIActNodes = normalizeTreePositions(raw_AIActNodes);
