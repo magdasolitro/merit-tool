@@ -11,22 +11,15 @@ export const initialNodes = [
         {
             id: "user",
             type: "circle",
-            position: {x: 500, y: 200},
+            position: {x: 1000, y: 200},
             data: {label: "User", background: "black"},
             draggable: false
         },
         {
             id: "compliance-subject",
             type: "circle",
-            position: {x: 1600, y: 200},
+            position: {x: 2200, y: 200},
             data: {label: "Compliance Subject", background: "black"},
-            draggable: false
-        },
-        {
-            id: "compliance-goal",
-            type: "circle",
-            position: {x: 2800, y: 200},
-            data: {label: "Compliance Goal", background: "black"},
             draggable: false
         },
         {
@@ -41,38 +34,30 @@ export const initialNodes = [
         {
             id: "user-role",
             type: "circle",
-            position: {x: 500, y: 500},
+            position: {x: 1000, y: 500},
             data: {label: "User Role"},
             draggable: false
         },
         {
             id: "ai-system",
             type: "circle",
-            position: {x: 1200, y: 500},
-            data: {label: "AI System", isConnectable: true, isChosen: true,},
+            position: {x: 2000, y: 500},
+            data: {label: "AI System"},
             draggable: false
         },
         {
             id: "med-device",
             type: "circle",
-            position: {x: 1800, y: 500},
+            position: {x: 2400, y: 500},
             data: {label: "Medical Device", isConnectable: true, isChosen: false,},
             draggable: false
-        },
-        {
-            id: "goal-regulation",
-            type: "circle",
-            position: {x: 2800, y: 500},
-            data: {label: "Goal Regulation", size: 130},
-            draggable: false
-        },
-        
+        },        
 
         // 4th layer
         {
             id: "xor-user-role",
             type: "operator",
-            position: {x: 525, y: 650},
+            position: {x: 1025, y: 650},
             data: {label: "XOR"},
             draggable: false
         },
@@ -100,58 +85,37 @@ export const initialNodes = [
         {
             id: "xor-ai-system",
             type: "operator",
-            position: {x: 1225, y: 650},
+            position: {x: 2025, y: 650},
             data: {label: "XOR"},
             draggable: false
         },
 
-        {
-            id: "ai-act",
-            type: "circle",
-            position: {x: 2500, y: 800},
-            data: {label: "EU AI Act", background: "black", isConnectable: true, isChosen: false},
-            draggable: false
-        },
-        {
-            id: "ehds",
-            type: "circle",
-            position: {x: 2800, y: 800},
-            data: {label: "EHDS", background: "black", isConnectable: true, isChosen: false,},
-            draggable: false
-        },
-        {
-            id: "mdr",
-            type: "circle",
-            position: {x: 3130, y: 800},
-            data: {label: "MDR", background: "black", isConnectable: true, isChosen: false,},
-            draggable: false
-        },
         
         {
             id: "unacceptable-risk",
             type: "circle",
-            position: {x: 1000, y: 800},
+            position: {x: 1760, y: 800},
             data: {label: "Unacceptable Risk", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
             id: "high-risk",
             type: "circle",
-            position: {x: 1120, y: 800},
+            position: {x: 1920, y: 800},
             data: {label: "High Risk", isConnectable: true, isChosen: true,},
             draggable: false
         },
         {
             id: "medium-risk",
             type: "circle",
-            position: {x: 1240, y: 800},
+            position: {x: 2080, y: 800},
             data: {label: "Medium Risk", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {
             id: "minimal-risk",
             type: "circle",
-            position: {x: 1360, y: 800},
+            position: {x: 2240, y: 800},
             data: {label: "Minimal Risk", isConnectable: true, isChosen: false,},
             draggable: false
         },

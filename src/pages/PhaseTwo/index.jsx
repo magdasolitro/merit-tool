@@ -69,6 +69,49 @@ export default function PhaseTwo() {
         setEdges(edgeState);
     }, [phaseTwoState.uploaded])
 
+    useEffect(() => {
+        setEdges((currentEdges) => {
+            if (!Array.isArray(currentEdges) || !Array.isArray(nodes)) {
+                return currentEdges;
+            }
+
+            const chosenConnectableIds = new Set(
+                nodes
+                    .filter((node) => node?.data?.isConnectable && node?.data?.isChosen)
+                    .map((node) => node.id)
+            );
+
+            const preservedEdges = currentEdges.filter((edge) => {
+                if (!edge?.id?.endsWith("-edge")) {
+                    return true;
+                }
+                return chosenConnectableIds.has(edge.source);
+            });
+
+            const existingConnectionSources = new Set(
+                preservedEdges
+                    .filter((edge) => edge?.id?.endsWith("-edge") && edge.target === "phase-two-result")
+                    .map((edge) => edge.source)
+            );
+
+            const missingChosenEdges = [...chosenConnectableIds]
+                .filter((sourceId) => !existingConnectionSources.has(sourceId))
+                .map((sourceId) => ({
+                    id: `${sourceId}-edge`,
+                    target: "phase-two-result",
+                    source: sourceId,
+                    animated: true,
+                    ...defaultEdgeOptions,
+                }));
+
+            if (missingChosenEdges.length === 0 && preservedEdges.length === currentEdges.length) {
+                return currentEdges;
+            }
+
+            return [...preservedEdges, ...missingChosenEdges];
+        });
+    }, [nodes, setEdges]);
+
 
     const defaultEdgeOptions = {
         style: {strokeWidth: 2, stroke: 'white'},
