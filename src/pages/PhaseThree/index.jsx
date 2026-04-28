@@ -36,11 +36,8 @@ export default function PhaseThree() {
         if (!Array.isArray(edges)) {
             return;
         }
-        if (["ai-act", "ehds", "mdr"].some(nodeId => edges.some(edge => edge.source === nodeId && edge.target === "phase-three-result"))) {
-            !nextPhaseEnabled && dispatch(setNextPhaseEnabled(true));
-        }
         else {
-            dispatch(setNextPhaseEnabled(false));
+            dispatch(setNextPhaseEnabled(true));
         }
         dispatch(connectEdge3(edges));
     }, [edges]);

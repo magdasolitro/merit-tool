@@ -16,8 +16,9 @@ import {resetPhaseThree} from "../../redux/slices/phaseThreeSlice.js";
 import DottedEdge from "../../components/DottedEdge";
 import {initialNodes2} from "./phaseTwo_nodes.js";
 import {initialEdges2} from "./phaseTwo_edges.js";
+import PrinciplesOval from "../../components/Shapes/PrinciplesOval.jsx";
 
-const nodeTypes = {circle: CircleNode, operator: OperatorNode, hexagon: HexagonNode};
+const nodeTypes = {principle: PrinciplesOval, circle: CircleNode, hexagon: HexagonNode};
 
 const edgeTypes = {floating: FloatingEdge, straight: StraightEdge, dotted: DottedEdge};
 
@@ -124,7 +125,8 @@ export default function PhaseTwo() {
             return;
         }
         if (clickedNode.data.isChosen) {
-            setEdges((edges) => edges.filter(edge => edge.id !== element.id + "-edge"));
+            // Phase 2 nodes are locked selected: prevent user de-selection.
+            return;
         } else {
             setEdges((edges) => {
                 let updatedEdges = edges;

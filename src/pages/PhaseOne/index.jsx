@@ -41,13 +41,7 @@ export default function PhaseOne() {
     }, [currentPhase]);
 
     useEffect(() => {
-        if (["unacceptable-risk", "high-risk", "medium-risk", "minimal-risk"].some(nodeId => edges.some(edge => edge.source === nodeId && edge.target === "phase-one-result"))
-            && ["researcher", "developer", "deployer"].some(nodeId => edges.some(edge => edge.source === nodeId && edge.target === "phase-one-result"))) {
-            !nextPhaseEnabled && dispatch(setNextPhaseEnabled(true));
-        }
-        else {
-            dispatch(setNextPhaseEnabled(false));
-        }
+        dispatch(setNextPhaseEnabled(true));
         dispatch(connectEdge(edges));
     }, [edges]);
 
@@ -57,6 +51,7 @@ export default function PhaseOne() {
             nodeState: initialNodes,
             resultName: "",
             selectedNodes: [],
+            selectedNodeIds: [],
             uploaded: 0
         }))
     }, []);
@@ -118,7 +113,94 @@ export default function PhaseOne() {
         type: 'floating',
     };
 
+    const getDescendants = useCallback((rootId, currentEdges) => {
+        const adjacency = new Map();
+        currentEdges.forEach((edge) => {
+            if (!adjacency.has(edge.source)) {
+                adjacency.set(edge.source, []);
+            }
+            adjacency.get(edge.source).push(edge.target);
+        });
+
+        const descendants = new Set();
+        const stack = [...(adjacency.get(rootId) || [])];
+        while (stack.length > 0) {
+            const nodeId = stack.pop();
+            if (descendants.has(nodeId)) {
+                continue;
+            }
+            descendants.add(nodeId);
+            const children = adjacency.get(nodeId) || [];
+            children.forEach((childId) => {
+                if (!descendants.has(childId)) {
+                    stack.push(childId);
+                }
+            });
+        }
+        return descendants;
+    }, []);
+
     const connectToBase = useCallback((event, element) => {
+        const isSecondLayerNode = initialEdges.some((edge) => edge.source === "context-factors" && edge.target === element.id);
+        if (isSecondLayerNode) {
+            const clickedNode = nodes.find((node) => node.id === element.id);
+            if (!clickedNode) {
+                return;
+            }
+
+            if (clickedNode.data?.isHidden) {
+                const descendantsFromInitial = getDescendants(element.id, initialEdges);
+                const subtreeNodeIds = new Set([element.id, ...descendantsFromInitial]);
+
+                setNodes((currentNodes) => {
+                    const currentById = new Map(currentNodes.map((node) => [node.id, node]));
+                    const updatedNodes = currentNodes.map((node) =>
+                        node.id === element.id
+                            ? {...node, data: {...node.data, isHidden: false}}
+                            : node
+                    );
+
+                    const missingSubtreeNodes = initialNodes
+                        .filter((node) => descendantsFromInitial.has(node.id) && !currentById.has(node.id))
+                        .map((node) => ({...node, data: {...node.data, isHidden: false}}));
+
+                    const merged = [...updatedNodes, ...missingSubtreeNodes];
+                    const orderById = new Map(initialNodes.map((node, index) => [node.id, index]));
+                    return merged.sort(
+                        (a, b) => (orderById.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (orderById.get(b.id) ?? Number.MAX_SAFE_INTEGER)
+                    );
+                });
+
+                setEdges((currentEdges) => {
+                    const currentEdgeIds = new Set(currentEdges.map((edge) => edge.id));
+                    const restoreEdges = initialEdges.filter(
+                        (edge) => subtreeNodeIds.has(edge.source) && subtreeNodeIds.has(edge.target)
+                    );
+                    const missingEdges = restoreEdges.filter((edge) => !currentEdgeIds.has(edge.id));
+                    return [...currentEdges, ...missingEdges];
+                });
+            } else {
+                const descendants = getDescendants(element.id, edges);
+
+                setNodes((currentNodes) =>
+                    currentNodes
+                        .map((node) =>
+                            node.id === element.id
+                                ? {...node, data: {...node.data, isHidden: true}}
+                                : node
+                        )
+                        .filter((node) => !descendants.has(node.id))
+                );
+
+                setEdges((currentEdges) =>
+                    currentEdges.filter(
+                        (edge) => !descendants.has(edge.source) && !descendants.has(edge.target)
+                    )
+                );
+            }
+            return;
+        }
+
         const xorEdge = edges.find(edge => edge.target === element.id && edge.source.includes('xor'));
         const xorNode = xorEdge ? xorEdge.source : null;
         const clickedNode = nodes.find(node => node.id === element.id);
@@ -146,7 +228,7 @@ export default function PhaseOne() {
 
         }
         dispatch(updateNodes(element.id))
-    }, [setEdges, nodes, setNodes, edges]);
+    }, [setEdges, nodes, setNodes, edges, getDescendants]);
 
     return (
         <div style={{width: "100vw", height: "93vh"}}>

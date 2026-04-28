@@ -4,13 +4,13 @@ import Card from "../Card";
 import {getGlossary} from "../../utils/getGlossary.js";
 import {useSelector} from "react-redux";
 
-const OvalNode = ({data}) => {
+const PrinciplesOval = ({data}) => {
     const nodeStyle = {
         width: data.width || 240,
         height: data.height || 80,
         borderRadius: "50%",
         padding: 2,
-        backgroundColor: data.type === "tactic" ? "#f1ae80" : "#8bc1f6",
+        backgroundColor: "#d8b4fe",
         outline: data.isChosen && data.tacticType === "gamified" ? "4px solid #5D803F" : data.isChosen && data.tacticType === "acceptance" && "4px solid #ED7D30",
         outlineOffset: "10px",
         color: "black",
@@ -31,35 +31,35 @@ const OvalNode = ({data}) => {
             <NodeToolbar isVisible={isVisible} position={Position.Left}>
                 <Card title={data.label} message={getGlossary(data.label)} width={data.width * 2 || 480}/>
             </NodeToolbar>
-            {!noTopHandle && <Handle type="target" position={Position.Top} id={"oval_target_top"} isConnectable={false}/>}
-            {data.left && <Handle type="target" position={Position.Left} id={"oval_target_left"} isConnectable={false}/>}
-            {data.right && <Handle type="target" position={Position.Right} id={"oval_target_right"} isConnectable={false}/>}
+            {!noTopHandle && <Handle type="target" position={Position.Top} id={"principles_oval_target_top"} isConnectable={false}/>}
+            {data.left && <Handle type="target" position={Position.Left} id={"principles_oval_target_left"} isConnectable={false}/>}
+            {data.right && <Handle type="target" position={Position.Right} id={"principles_oval_target_right"} isConnectable={false}/>}
             {data.bottom &&
-                <Handle type="target" position={Position.Bottom} id={"oval_target_bottom"} isConnectable={false}/>}
+                <Handle type="target" position={Position.Bottom} id={"principles_oval_target_bottom"} isConnectable={false}/>}
             <div className={"block"}>
                 <p className={"text-xs text-center font-bold"}>
                     {!data.titleDisable && <>
-                        &lt;&lt;{data.type === "tactic" ? "Tactic" : "Goal"}&gt;&gt;
+                        &lt;&lt;{data.type === "tactic" ? "Tactic" : "Principle"}&gt;&gt;
                         <br/>
                     </>
                     }
                     {data.label}
-                    <br/>
+                    <br/>Goal
                     {data.num}
                 </p>
             </div>
-            <Handle type="source" position={Position.Bottom} id={"oval_source_bottom"} className={"custom-handle"}
+            <Handle type="source" position={Position.Bottom} id={"principles_oval_source_bottom"} className={"custom-handle"}
                     isConnectable={false}
             />
             {data.sourceLeft &&
-                <Handle type="source" position={Position.Left} id={"oval_source_left"} isConnectable={false}/>}
+                <Handle type="source" position={Position.Left} id={"principles_oval_source_left"} isConnectable={false}/>}
             {data.sourceRight &&
-                <Handle type="source" position={Position.Right} id={"oval_source_right"} isConnectable={false}/>}
+                <Handle type="source" position={Position.Right} id={"principles_oval_source_right"} isConnectable={false}/>}
             {data.sourceTop &&
-                <Handle type="source" position={Position.Top} id={"oval_source_top"} isConnectable={false}/>
+                <Handle type="source" position={Position.Top} id={"principles_oval_source_top"} isConnectable={false}/>
             }
         </div>
     );
 };
 
-export default OvalNode;
+export default PrinciplesOval;

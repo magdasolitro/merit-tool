@@ -59,10 +59,10 @@ const normalizeTreePositions = (nodes) => {
 export const raw_AIActNodes = [
     {
         "id": "ai-act-compliance",
-        "type": "oval",
+        "type": "root",
         "position": {
-            "x": 60000,
-            "y": -1000
+            "x": 16000,
+            "y": -2000
         },
         "data": {
             "isHidden": false,
@@ -73,7 +73,7 @@ export const raw_AIActNodes = [
         "children": [
             {
                 "id": "goal-8",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 16000,
                     "y": 0
@@ -146,7 +146,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-8-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -162,7 +162,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-8-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -178,7 +178,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-8-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -194,7 +194,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-8-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -210,7 +210,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-8-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -226,7 +226,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-8-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -242,7 +242,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-8-3",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -258,7 +258,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-8-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -274,7 +274,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-8-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -290,7 +290,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-8-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -309,7 +309,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-9",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 18000,
                     "y": 0
@@ -322,7 +322,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-9-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1200,
                             "y": 500
@@ -337,7 +337,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-9-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -352,7 +352,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-9-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -367,7 +367,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-9-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -382,7 +382,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-9-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -397,7 +397,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-9-6",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -412,7 +412,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-9-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -428,7 +428,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-9-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -444,7 +444,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-9-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -460,7 +460,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-9-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -476,7 +476,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-9-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -492,7 +492,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-9-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -508,7 +508,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-9-7",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -524,7 +524,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-9-8",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -540,7 +540,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-9-9",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -556,7 +556,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-9-10",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -572,7 +572,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-9-11",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -588,7 +588,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-9-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -604,7 +604,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-9-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -620,7 +620,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-9-3",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -636,7 +636,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-9-4",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -652,7 +652,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-9-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -668,7 +668,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-9-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -684,7 +684,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-9-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -700,7 +700,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-9-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -716,7 +716,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-9-5",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -735,7 +735,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-10",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 20000,
                     "y": 0
@@ -748,7 +748,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-10-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1200,
                             "y": 500
@@ -763,7 +763,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-10-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -778,7 +778,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-10-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -793,7 +793,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-10-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -808,7 +808,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-10-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -823,7 +823,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-10-6",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -838,7 +838,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-10-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -854,7 +854,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-10-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -870,7 +870,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-10-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -886,7 +886,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-10-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -902,7 +902,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-10-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -918,7 +918,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-10-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -934,7 +934,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-10-7",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -950,7 +950,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-10-8",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -966,7 +966,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-10-9",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -982,7 +982,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-10-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -998,7 +998,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-10-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1014,7 +1014,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-10-3",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1030,7 +1030,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-10-4",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1046,7 +1046,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-10-5",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1062,7 +1062,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-10-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1078,7 +1078,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-10-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1094,7 +1094,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-10-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1110,7 +1110,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-10-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1126,7 +1126,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-10-5",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1145,7 +1145,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-11",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 22000,
                     "y": 0
@@ -1158,7 +1158,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-11-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -1173,7 +1173,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-11-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -1188,7 +1188,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-11-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -1203,7 +1203,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-11-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -1218,7 +1218,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-11-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1234,7 +1234,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-11-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1250,7 +1250,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-11-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1266,7 +1266,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-11-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1282,7 +1282,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-11-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1298,7 +1298,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-11-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1314,7 +1314,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-11-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1330,7 +1330,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-11-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1346,7 +1346,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-11-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1362,7 +1362,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-11-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1378,7 +1378,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-11-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1397,7 +1397,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-12",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 24000,
                     "y": 0
@@ -1410,7 +1410,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-12-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -1425,7 +1425,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-12-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -1440,7 +1440,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-12-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -1455,7 +1455,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-12-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -1470,7 +1470,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-12-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1486,7 +1486,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-12-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1502,7 +1502,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-12-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1518,7 +1518,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-12-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1534,7 +1534,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-12-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1550,7 +1550,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-12-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1566,7 +1566,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-12-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1582,7 +1582,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-12-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1598,7 +1598,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-12-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1614,7 +1614,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-12-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1633,7 +1633,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-13",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 26000,
                     "y": 0
@@ -1646,7 +1646,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-13-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1200,
                             "y": 500
@@ -1661,7 +1661,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-13-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -1676,7 +1676,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-13-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -1691,7 +1691,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-13-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -1706,7 +1706,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-13-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -1721,7 +1721,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-13-6",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -1736,7 +1736,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-13-7",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 1200,
                             "y": 500
@@ -1751,7 +1751,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-13-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1767,7 +1767,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-13-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1783,7 +1783,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-13-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1799,7 +1799,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-13-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1815,7 +1815,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-13-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1831,7 +1831,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-13-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1847,7 +1847,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-13-7",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1863,7 +1863,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-13-8",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1879,7 +1879,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-13-9",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1895,7 +1895,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-13-10",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1911,7 +1911,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-13-11",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1927,7 +1927,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-13-12",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1943,7 +1943,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-13-13",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1959,7 +1959,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-13-14",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1975,7 +1975,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-13-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -1991,7 +1991,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-13-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2007,7 +2007,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-13-3",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2023,7 +2023,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-13-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2039,7 +2039,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-13-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2055,7 +2055,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-13-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2071,7 +2071,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-13-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2090,7 +2090,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-14",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 28000,
                     "y": 0
@@ -2103,7 +2103,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-14-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1600,
                             "y": 500
@@ -2118,7 +2118,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-14-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1200,
                             "y": 500
@@ -2133,7 +2133,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-14-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -2148,7 +2148,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-14-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -2163,7 +2163,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-14-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -2178,7 +2178,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-14-6",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -2193,7 +2193,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-14-7",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -2208,7 +2208,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-14-8",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 1200,
                             "y": 500
@@ -2223,7 +2223,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-14-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2239,7 +2239,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-14-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2255,7 +2255,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-14-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2271,7 +2271,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-14-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2287,7 +2287,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-14-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2303,7 +2303,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-14-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2319,7 +2319,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-14-7",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2335,7 +2335,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-14-8",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2351,7 +2351,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-14-9",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2367,7 +2367,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-14-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2383,7 +2383,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-14-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2399,7 +2399,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-14-3",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2415,7 +2415,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-14-4",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2431,7 +2431,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-14-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2447,7 +2447,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-14-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2463,7 +2463,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-14-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2479,7 +2479,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-14-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2495,7 +2495,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-14-5",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2514,7 +2514,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-15",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 30000,
                     "y": 0
@@ -2527,7 +2527,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-15-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -2542,7 +2542,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-15-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -2557,7 +2557,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-15-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -2572,7 +2572,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-15-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -2587,7 +2587,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-15-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -2602,7 +2602,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-15-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2618,7 +2618,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-15-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2634,7 +2634,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-15-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2650,7 +2650,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-15-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2666,7 +2666,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-15-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2682,7 +2682,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-15-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2698,7 +2698,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-15-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2714,7 +2714,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-15-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2730,7 +2730,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-15-3",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2746,7 +2746,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-15-4",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2762,7 +2762,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-15-5",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2778,7 +2778,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-15-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2794,7 +2794,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-15-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2810,7 +2810,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-15-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2826,7 +2826,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-15-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -2845,7 +2845,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-16",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 32000,
                     "y": 0
@@ -2858,7 +2858,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-16-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -2400,
                             "y": 500
@@ -2873,7 +2873,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-16-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -2000,
                             "y": 500
@@ -2888,7 +2888,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-16-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1600,
                             "y": 500
@@ -2903,7 +2903,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-16-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1200,
                             "y": 500
@@ -2918,7 +2918,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-16-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -2933,7 +2933,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-16-6",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -2948,7 +2948,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-16-7",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -2963,7 +2963,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-16-8",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -2978,7 +2978,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-16-9",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -2993,7 +2993,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-16-10",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 1200,
                             "y": 500
@@ -3008,7 +3008,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-16-11",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 1600,
                             "y": 500
@@ -3023,7 +3023,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-16-12",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 2000,
                             "y": 500
@@ -3038,7 +3038,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-16-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3054,7 +3054,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-16-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3070,7 +3070,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-16-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3086,7 +3086,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-16-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3102,7 +3102,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-16-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3118,7 +3118,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-16-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3134,7 +3134,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-16-7",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3150,7 +3150,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-16-8",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3166,7 +3166,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-16-9",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3182,7 +3182,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-16-10",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3198,7 +3198,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-16-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3214,7 +3214,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-16-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3230,7 +3230,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-16-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3246,7 +3246,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-16-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3262,7 +3262,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-16-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3278,7 +3278,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-16-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3297,7 +3297,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-17",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 34000,
                     "y": 0
@@ -3310,7 +3310,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-17-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -2400,
                             "y": 500
@@ -3325,7 +3325,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-17-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -2000,
                             "y": 500
@@ -3340,7 +3340,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-17-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1600,
                             "y": 500
@@ -3355,7 +3355,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-17-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1200,
                             "y": 500
@@ -3370,7 +3370,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-17-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -3385,7 +3385,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-17-6",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -3400,7 +3400,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-17-7",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -3415,7 +3415,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-17-8",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -3430,7 +3430,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-17-9",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -3445,7 +3445,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-17-10",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 1200,
                             "y": 500
@@ -3460,7 +3460,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-17-11",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 1600,
                             "y": 500
@@ -3475,7 +3475,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-17-12",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 2000,
                             "y": 500
@@ -3490,7 +3490,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-17-13",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 2400,
                             "y": 500
@@ -3505,7 +3505,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-17-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3521,7 +3521,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-17-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3537,7 +3537,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-17-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3553,7 +3553,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-17-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3569,7 +3569,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-17-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3585,7 +3585,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-17-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3601,7 +3601,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-17-7",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3617,7 +3617,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-17-8",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3633,7 +3633,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-17-9",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3649,7 +3649,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-17-10",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3665,7 +3665,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-17-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3681,7 +3681,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-17-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3697,7 +3697,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-17-3",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3713,7 +3713,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-17-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3729,7 +3729,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-17-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3745,7 +3745,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-17-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3761,7 +3761,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-17-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3777,7 +3777,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-17-5",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3796,7 +3796,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-18",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 36000,
                     "y": 0
@@ -3809,7 +3809,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-18-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -3824,7 +3824,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-18-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -3839,7 +3839,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-18-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -3854,7 +3854,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-18-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -3869,7 +3869,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-18-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -3884,7 +3884,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-18-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3900,7 +3900,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-18-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3916,7 +3916,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-18-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3932,7 +3932,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-18-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3948,7 +3948,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-18-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3964,7 +3964,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-18-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3980,7 +3980,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-18-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -3996,7 +3996,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-18-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4012,7 +4012,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-18-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4028,7 +4028,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-18-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4047,7 +4047,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-19",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 38000,
                     "y": 0
@@ -4060,7 +4060,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-19-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -4075,7 +4075,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-19-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -4090,7 +4090,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-19-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -4105,7 +4105,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-19-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4121,7 +4121,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-19-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4137,7 +4137,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-19-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4153,7 +4153,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-19-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4169,7 +4169,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-19-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4185,7 +4185,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-19-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4201,7 +4201,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-19-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4217,7 +4217,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-19-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4233,7 +4233,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-19-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4252,7 +4252,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-20",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 40000,
                     "y": 0
@@ -4265,7 +4265,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-20-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -4280,7 +4280,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-20-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -4295,7 +4295,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-20-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -4310,7 +4310,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-20-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -4325,7 +4325,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-20-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -4340,7 +4340,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-20-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4356,7 +4356,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-20-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4372,7 +4372,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-20-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4388,7 +4388,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-20-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4404,7 +4404,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-20-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4420,7 +4420,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-20-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4436,7 +4436,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-20-7",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4452,7 +4452,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-20-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4468,7 +4468,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-20-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4484,7 +4484,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-20-3",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4500,7 +4500,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-20-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4516,7 +4516,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-20-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4532,7 +4532,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-20-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4548,7 +4548,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-20-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4564,7 +4564,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-20-5",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4583,7 +4583,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-21",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 42000,
                     "y": 0
@@ -4596,7 +4596,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-21-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -4611,7 +4611,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-21-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -4626,7 +4626,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-21-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4642,7 +4642,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-21-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4658,7 +4658,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-21-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4674,7 +4674,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-21-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4690,7 +4690,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-21-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4706,7 +4706,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-21-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4722,7 +4722,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-21-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4738,7 +4738,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-21-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4754,7 +4754,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-21-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4773,7 +4773,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-22",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 44000,
                     "y": 0
@@ -4786,7 +4786,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-22-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1600,
                             "y": 500
@@ -4801,7 +4801,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-22-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1200,
                             "y": 500
@@ -4816,7 +4816,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-22-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -4831,7 +4831,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-22-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -4846,7 +4846,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-22-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -4861,7 +4861,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-22-6",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -4876,7 +4876,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-22-7",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -4891,7 +4891,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-22-8",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 1200,
                             "y": 500
@@ -4906,7 +4906,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-22-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4922,7 +4922,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-22-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4938,7 +4938,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-22-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4954,7 +4954,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-22-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4970,7 +4970,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-22-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -4986,7 +4986,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-22-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5002,7 +5002,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-22-7",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5018,7 +5018,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-22-8",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5034,7 +5034,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-22-9",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5050,7 +5050,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-22-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5066,7 +5066,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-22-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5082,7 +5082,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-22-3",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5098,7 +5098,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-22-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5114,7 +5114,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-22-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5130,7 +5130,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-22-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5146,7 +5146,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-22-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5165,7 +5165,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-23",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 46000,
                     "y": 0
@@ -5178,7 +5178,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-23-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -2000,
                             "y": 500
@@ -5193,7 +5193,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-23-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1600,
                             "y": 500
@@ -5208,7 +5208,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-23-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1200,
                             "y": 500
@@ -5223,7 +5223,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-23-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -5238,7 +5238,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-23-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -5253,7 +5253,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-23-6",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -5268,7 +5268,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-23-7",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -5283,7 +5283,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-23-8",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -5298,7 +5298,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-23-9",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 1200,
                             "y": 500
@@ -5313,7 +5313,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-23-10",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 1600,
                             "y": 500
@@ -5328,7 +5328,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-23-11",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 2000,
                             "y": 500
@@ -5343,7 +5343,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-23-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5359,7 +5359,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-23-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5375,7 +5375,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-23-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5391,7 +5391,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-23-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5407,7 +5407,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-23-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5423,7 +5423,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-23-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5439,7 +5439,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-23-7",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5455,7 +5455,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-23-8",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5471,7 +5471,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-23-9",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5487,7 +5487,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-23-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5503,7 +5503,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-23-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5519,7 +5519,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-23-3",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5535,7 +5535,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-23-4",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5551,7 +5551,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-23-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5567,7 +5567,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-23-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5583,7 +5583,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-23-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5599,7 +5599,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-23-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5615,7 +5615,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-23-5",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5634,7 +5634,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-24",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 48000,
                     "y": 0
@@ -5647,7 +5647,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-24-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1600,
                             "y": 500
@@ -5662,7 +5662,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-24-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1200,
                             "y": 500
@@ -5677,7 +5677,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-24-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -5692,7 +5692,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-24-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -5707,7 +5707,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-24-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -5722,7 +5722,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-24-6",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -5737,7 +5737,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-24-7",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -5752,7 +5752,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-24-8",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 1200,
                             "y": 500
@@ -5767,7 +5767,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-24-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5783,7 +5783,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-24-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5799,7 +5799,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-24-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5815,7 +5815,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-24-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5831,7 +5831,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-24-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5847,7 +5847,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-24-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5863,7 +5863,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-24-7",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5879,7 +5879,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-24-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5895,7 +5895,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-24-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5911,7 +5911,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-24-3",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5927,7 +5927,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-24-4",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5943,7 +5943,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-24-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5959,7 +5959,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-24-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5975,7 +5975,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-24-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -5991,7 +5991,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-24-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6007,7 +6007,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-24-5",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6026,7 +6026,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-25",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 50000,
                     "y": 0
@@ -6039,7 +6039,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-25-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1200,
                             "y": 500
@@ -6054,7 +6054,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-25-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -6069,7 +6069,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-25-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -6084,7 +6084,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-25-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -6099,7 +6099,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-25-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -6114,7 +6114,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-25-6",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -6129,7 +6129,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-25-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6145,7 +6145,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-25-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6161,7 +6161,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-25-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6177,7 +6177,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-25-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6193,7 +6193,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-25-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6209,7 +6209,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-25-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6225,7 +6225,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-25-7",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6241,7 +6241,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-25-8",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6257,7 +6257,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-25-9",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6273,7 +6273,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-25-10",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6289,7 +6289,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-25-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6305,7 +6305,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-25-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6321,7 +6321,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-25-3",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6337,7 +6337,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-25-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6353,7 +6353,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-25-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6369,7 +6369,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-25-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6385,7 +6385,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-25-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6401,7 +6401,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-25-5",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6417,7 +6417,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-25-6",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6433,7 +6433,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-25-7",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6452,7 +6452,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-26",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 52000,
                     "y": 0
@@ -6465,7 +6465,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-26-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -2400,
                             "y": 500
@@ -6480,7 +6480,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-26-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -2000,
                             "y": 500
@@ -6495,7 +6495,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-26-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1600,
                             "y": 500
@@ -6510,7 +6510,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-26-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1200,
                             "y": 500
@@ -6525,7 +6525,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-26-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -6540,7 +6540,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-26-6",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -6555,7 +6555,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-26-7",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -6570,7 +6570,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-26-8",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -6585,7 +6585,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-26-9",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -6600,7 +6600,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-26-10",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 1200,
                             "y": 500
@@ -6615,7 +6615,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-26-11",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 1600,
                             "y": 500
@@ -6630,7 +6630,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-26-12",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 2000,
                             "y": 500
@@ -6645,7 +6645,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-26-13",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 2400,
                             "y": 500
@@ -6660,7 +6660,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6676,7 +6676,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6692,7 +6692,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6708,7 +6708,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6724,7 +6724,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6740,7 +6740,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6756,7 +6756,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-7",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6772,7 +6772,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-8",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6788,7 +6788,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-9",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6804,7 +6804,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-10",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6820,7 +6820,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-11",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6836,7 +6836,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-12",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6852,7 +6852,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-13",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6868,7 +6868,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-14",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6884,7 +6884,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-15",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6900,7 +6900,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-16",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6916,7 +6916,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-17",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6932,7 +6932,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-18",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6948,7 +6948,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-26-19",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6964,7 +6964,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-26-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6980,7 +6980,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-26-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -6996,7 +6996,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-26-3",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7012,7 +7012,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-26-4",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7028,7 +7028,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-26-5",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7044,7 +7044,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-26-6",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7060,7 +7060,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-26-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7076,7 +7076,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-26-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7092,7 +7092,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-26-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7108,7 +7108,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-26-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7124,7 +7124,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-26-5",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7140,7 +7140,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-26-6",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7156,7 +7156,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-26-7",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7172,7 +7172,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-26-8",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7188,7 +7188,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-26-9",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7204,7 +7204,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-26-10",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7223,7 +7223,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-50",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 100000,
                     "y": 0
@@ -7236,7 +7236,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-50-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -7251,7 +7251,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-50-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -7266,7 +7266,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-50-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -7281,7 +7281,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-50-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -7296,7 +7296,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-50-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -7311,7 +7311,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-50-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7327,7 +7327,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-50-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7343,7 +7343,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-50-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7359,7 +7359,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-50-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7375,7 +7375,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-50-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7391,7 +7391,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-50-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7407,7 +7407,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-50-7",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7423,7 +7423,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-50-8",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7439,7 +7439,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-50-9",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7455,7 +7455,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-50-10",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7471,7 +7471,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-50-11",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7487,7 +7487,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-50-12",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7503,7 +7503,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-50-13",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7519,7 +7519,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-50-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7535,7 +7535,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-50-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7551,7 +7551,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-50-3",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7567,7 +7567,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-50-4",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7583,7 +7583,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-50-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7599,7 +7599,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-50-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7615,7 +7615,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-50-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7631,7 +7631,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-50-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7647,7 +7647,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-50-5",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7663,7 +7663,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-50-6",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7679,7 +7679,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-50-7",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7695,7 +7695,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-50-8",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7711,7 +7711,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-50-9",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7730,7 +7730,7 @@ export const raw_AIActNodes = [
             },
             {
                 "id": "goal-27",
-                "type": "oval",
+                "type": "goal",
                 "position": {
                     "x": 54000,
                     "y": 0
@@ -7743,7 +7743,7 @@ export const raw_AIActNodes = [
                 "children": [
                     {
                         "id": "subgoal-27-1",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1600,
                             "y": 500
@@ -7758,7 +7758,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-27-2",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -1200,
                             "y": 500
@@ -7773,7 +7773,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-27-3",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -800,
                             "y": 500
@@ -7788,7 +7788,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-27-4",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": -400,
                             "y": 500
@@ -7803,7 +7803,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-27-5",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 0,
                             "y": 500
@@ -7818,7 +7818,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-27-6",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 400,
                             "y": 500
@@ -7833,7 +7833,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-27-7",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 800,
                             "y": 500
@@ -7848,7 +7848,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-27-8",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 1200,
                             "y": 500
@@ -7863,7 +7863,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "subgoal-27-9",
-                        "type": "oval",
+                        "type": "subgoal",
                         "position": {
                             "x": 1600,
                             "y": 500
@@ -7878,7 +7878,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-27-1",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7894,7 +7894,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-27-2",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7910,7 +7910,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-27-3",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7926,7 +7926,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-27-4",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7942,7 +7942,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-27-5",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7958,7 +7958,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-27-6",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7974,7 +7974,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-27-7",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -7990,7 +7990,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-27-8",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -8006,7 +8006,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-27-9",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -8022,7 +8022,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "dc-27-10",
-                        "type": "oval",
+                        "type": "domain-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -8038,7 +8038,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-27-1",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -8054,7 +8054,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-27-2",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -8070,7 +8070,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-27-3",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -8086,7 +8086,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "qc-27-4",
-                        "type": "oval",
+                        "type": "quality-constraint",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -8102,7 +8102,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-27-1",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -8118,7 +8118,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-27-2",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -8134,7 +8134,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-27-3",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -8150,7 +8150,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-27-4",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -8166,7 +8166,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-27-5",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -8182,7 +8182,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-27-6",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000
@@ -8198,7 +8198,7 @@ export const raw_AIActNodes = [
                     },
                     {
                         "id": "cf-27-7",
-                        "type": "oval",
+                        "type": "context-factor",
                         "position": {
                             "x": 0,
                             "y": 1000

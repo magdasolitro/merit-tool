@@ -8,6 +8,7 @@ const initialState = {
     nodeState: initialNodes,
     resultName: "",
     selectedNodes: initialNodes.filter(node => node.data?.isChosen).map(node => PhaseOneKeyValue[node.id]).filter(Boolean),
+    selectedNodeIds: [],
     uploaded: 0,
 }
 
@@ -17,10 +18,25 @@ export const phaseOneSlice = createSlice({
     reducers: {
         connectEdge: (state, action) => {
             state.edgeState = action.payload
-            state.selectedNodes = [] // reset selected nodes
-            state.edgeState.filter(edge =>
-                state.nodeState.some(node => node.id === edge.source && node.data?.isConnectable && node.data?.isChosen)
-            )
+            const selectedNodeIds = [
+                ...new Set(
+                    state.edgeState
+                        .filter((edge) => edge.target === "phase-one-result")
+                        .map((edge) => edge.source)
+                        .filter((sourceId) =>
+                            state.nodeState.some(
+                                (node) =>
+                                    node.id === sourceId &&
+                                    node.data?.isConnectable &&
+                                    node.data?.isChosen
+                            )
+                        )
+                ),
+            ];
+
+            // Keep both raw IDs and legacy mapped representation for compatibility.
+            state.selectedNodeIds = selectedNodeIds;
+            state.selectedNodes = selectedNodeIds.map((id) => PhaseOneKeyValue[id] || id);
         },
         updateNodes: (state, action) => {
             const xorEdge = state.edgeState.find(edge => edge.target === action.payload && edge.source.includes('xor'));
@@ -46,6 +62,7 @@ export const phaseOneSlice = createSlice({
             state.nodeState = action.payload.nodeState
             state.resultName = action.payload.resultName
             state.selectedNodes = action.payload.selectedNodes
+            state.selectedNodeIds = action.payload.selectedNodeIds || action.payload.selectedNodes || []
             state.uploaded++;
         }
     },

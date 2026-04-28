@@ -37,7 +37,12 @@ export const phaseTwoSlice = createSlice({
         updateNodes2: (state, action) => {
             state.nodeState = state.nodeState.map(node => {
                 if (node.id === action.payload) {
-                    node.data.isChosen = !node.data.isChosen;
+                    // Keep Phase 2 connectable nodes always selected.
+                    if (node.data?.isConnectable) {
+                        node.data.isChosen = true;
+                    } else {
+                        node.data.isChosen = !node.data.isChosen;
+                    }
                 }
                 return node;
             });

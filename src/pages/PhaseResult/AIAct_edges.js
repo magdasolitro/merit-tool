@@ -1,4 +1,4 @@
-import {raw_AIActNodes} from "./AIAct_nodes.js";
+import {AIActNodes} from "./AIAct_nodes.js";
 
 const collectEdgesFromTree = (nodes) => {
     const edges = [];
@@ -22,6 +22,6 @@ const collectEdgesFromTree = (nodes) => {
     return edges;
 };
 
-export const AIActEdges = collectEdgesFromTree(raw_AIActNodes);
+export const AIActEdges = collectEdgesFromTree(AIActNodes);
 
 export default AIActEdges;
