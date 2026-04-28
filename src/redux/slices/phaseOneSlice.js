@@ -23,14 +23,7 @@ export const phaseOneSlice = createSlice({
                     state.edgeState
                         .filter((edge) => edge.target === "phase-one-result")
                         .map((edge) => edge.source)
-                        .filter((sourceId) =>
-                            state.nodeState.some(
-                                (node) =>
-                                    node.id === sourceId &&
-                                    node.data?.isConnectable &&
-                                    node.data?.isChosen
-                            )
-                        )
+                        .filter((sourceId) => sourceId !== "phase-one-result" && sourceId !== "context-factors")
                 ),
             ];
 

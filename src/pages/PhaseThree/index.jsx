@@ -2,22 +2,18 @@ import {useCallback, useEffect} from "react";
 import ReactFlow, {addEdge, Background, Controls, MiniMap, useEdgesState, useNodesState,} from "reactflow";
 
 import "reactflow/dist/style.css";
-import CircleNode from "../../components/Shapes/CircleNode.jsx";
-import OperatorNode from "../../components/Shapes/OperatorNode.jsx";
-import HexagonNode from "../../components/Shapes/HexagonNode.jsx";
+import RegulationOval from "../../components/Shapes/RegulationOval.jsx";
 import FloatingEdge from "../../components/FloatingEdge";
-import StraightEdge from "../../components/StraightEdge";
 import ConnectionLine from "../../components/ConnectionLine";
 import {useDispatch, useSelector} from "react-redux";
 import {connectEdge3, setPhaseThreeState, updateNodes3} from "../../redux/slices/phaseThreeSlice_new.js";
 import {setCurrentPhase, setNextPhaseEnabled} from "../../redux/slices/phaseStatusSlice.js";
-import DottedEdge from "../../components/DottedEdge";
 import {initialNodes3} from "./phaseThree_nodes.js";
 import {initialEdges3} from "./phaseThree_edges.js";
 
-const nodeTypes = {circle: CircleNode, operator: OperatorNode, hexagon: HexagonNode};
+const nodeTypes = {regulation: RegulationOval};
 
-const edgeTypes = {floating: FloatingEdge, straight: StraightEdge, dotted: DottedEdge};
+const edgeTypes = {floating: FloatingEdge};
 
 export default function PhaseThree() {
     const phaseThreeState = useSelector((state) => state.phaseThreeNew);
@@ -26,7 +22,6 @@ export default function PhaseThree() {
     const [nodes, setNodes, onNodesChange] = useNodesState(nodeState);
     const [edges, setEdges, onEdgesChange] = useEdgesState(edgeState);
     const dispatch = useDispatch()
-    const {nextPhaseEnabled, currentPhase} = useSelector((state) => state.phaseStatus);
 
     useEffect(() => {
         dispatch(setCurrentPhase(3))
