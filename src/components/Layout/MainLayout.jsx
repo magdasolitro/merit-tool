@@ -9,7 +9,6 @@ import {setPhaseStatusState, toggleInfo} from "../../redux/slices/phaseStatusSli
 import {setPhaseOneState} from "../../redux/slices/phaseOneSlice.js";
 
 export default function MainLayout() {
-    // const bleeps = useBleeps();
     const navigate = useNavigate();
     const {nextPhaseEnabled, currentPhase, infoToggle, phase3Value} = useSelector((state) => state.phaseStatus);
     const dispatch = useDispatch();
@@ -99,9 +98,6 @@ export default function MainLayout() {
             case 3:
                 navigate("result-phase");
                 break;
-            // case 4:
-            //     navigate("phase5");
-            //     break;
         }
     }
     const goToPhase1 = () => {

@@ -9,6 +9,7 @@ const initialState = {
     edgeState: initialEdges3,
     resultName: "",
     selectedNodes: initialNodes3.filter(node => node.data?.isChosen).map(node => PhaseThreeKeyValue[node.id]).filter(Boolean),
+    selectedNodeIds: initialNodes3.filter(node => node.data?.isConnectable && !node.data?.isHidden).map(node => node.id),
     uploaded: 0,
 }
 
@@ -21,6 +22,7 @@ export const phaseThreeSlice = createSlice({
             state.edgeState = initialEdges3;
             state.resultName = "";
             state.selectedNodes = initialNodes3.filter(node => node.data?.isChosen).map(node => PhaseThreeKeyValue[node.id]).filter(Boolean);
+            state.selectedNodeIds = initialNodes3.filter(node => node.data?.isConnectable && !node.data?.isHidden).map(node => node.id);
             state.uploaded = 0;
         },
         connectEdge3: (state, action) => {
@@ -29,18 +31,31 @@ export const phaseThreeSlice = createSlice({
                 return;
             }
             state.edgeState = action.payload
-            state.selectedNodes = [] // reset selected nodes
-            state.edgeState.filter(edge =>
-                state.nodeState.some(node => node.id === edge.source && node.data?.isConnectable && node.data?.isChosen)
-            )  
+            const visibleNodeIds = state.nodeState
+                .filter((node) => node.data?.isConnectable && !node.data?.isHidden)
+                .map((node) => node.id);
+
+            state.selectedNodeIds = visibleNodeIds;
+            state.selectedNodes = visibleNodeIds.map((id) => PhaseThreeKeyValue[id] || id);
         },
         updateNodes3: (state, action) => {
             state.nodeState = state.nodeState.map(node => {
                 if (node.id === action.payload) {
-                    node.data.isChosen = !node.data.isChosen;
+                    if (node.data?.isConnectable) {
+                        node.data.isHidden = !node.data?.isHidden;
+                        node.data.isChosen = !node.data.isHidden;
+                    } else {
+                        node.data.isChosen = !node.data.isChosen;
+                    }
                 }
                 return node;
             });
+
+            const visibleNodeIds = state.nodeState
+                .filter((node) => node.data?.isConnectable && !node.data?.isHidden)
+                .map((node) => node.id);
+            state.selectedNodeIds = visibleNodeIds;
+            state.selectedNodes = visibleNodeIds.map((id) => PhaseThreeKeyValue[id] || id);
         },
         updateResultName3: (state, action) => {
             state.resultName = action.payload
@@ -50,6 +65,10 @@ export const phaseThreeSlice = createSlice({
             state.edgeState = action.payload.edgeState
             state.resultName = action.payload.resultName
             state.selectedNodes = action.payload.selectedNodes
+            const fallbackVisibleIds = (action.payload.nodeState || [])
+                .filter((node) => node.data?.isConnectable && !node.data?.isHidden)
+                .map((node) => node.id);
+            state.selectedNodeIds = action.payload.selectedNodeIds || fallbackVisibleIds
             state.uploaded++;
         }
     },

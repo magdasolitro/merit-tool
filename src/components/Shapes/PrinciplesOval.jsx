@@ -44,7 +44,7 @@ const PrinciplesOval = ({data}) => {
                     </>
                     }
                     {data.label}
-                    <br/>Goal
+                    <br/>
                     {data.num}
                 </p>
             </div>

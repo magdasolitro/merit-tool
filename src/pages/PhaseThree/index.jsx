@@ -1,5 +1,5 @@
 import {useCallback, useEffect} from "react";
-import ReactFlow, {addEdge, Background, Controls, MiniMap, useEdgesState, useNodesState,} from "reactflow";
+import ReactFlow, {Background, Controls, MiniMap, useEdgesState, useNodesState,} from "reactflow";
 
 import "reactflow/dist/style.css";
 import RegulationOval from "../../components/Shapes/RegulationOval.jsx";
@@ -43,6 +43,7 @@ export default function PhaseThree() {
             edgeState: initialEdges3,
             resultName: "",
             selectedNodes: [],
+            selectedNodeIds: [],
             uploaded: 0,
         }))
     }, []);
@@ -55,49 +56,6 @@ export default function PhaseThree() {
         setEdges(edgeState);
     }, [phaseThreeState.uploaded])
 
-    useEffect(() => {
-        setEdges((currentEdges) => {
-            if (!Array.isArray(currentEdges) || !Array.isArray(nodes)) {
-                return currentEdges;
-            }
-
-            const chosenConnectableIds = new Set(
-                nodes
-                    .filter((node) => node?.data?.isConnectable && node?.data?.isChosen)
-                    .map((node) => node.id)
-            );
-
-            const preservedEdges = currentEdges.filter((edge) => {
-                if (!edge?.id?.endsWith("-edge")) {
-                    return true;
-                }
-                return chosenConnectableIds.has(edge.source);
-            });
-
-            const existingConnectionSources = new Set(
-                preservedEdges
-                    .filter((edge) => edge?.id?.endsWith("-edge") && edge.target === "phase-three-result")
-                    .map((edge) => edge.source)
-            );
-
-            const missingChosenEdges = [...chosenConnectableIds]
-                .filter((sourceId) => !existingConnectionSources.has(sourceId))
-                .map((sourceId) => ({
-                    id: `${sourceId}-edge`,
-                    target: "phase-three-result",
-                    source: sourceId,
-                    animated: true,
-                    ...defaultEdgeOptions,
-                }));
-
-            if (missingChosenEdges.length === 0 && preservedEdges.length === currentEdges.length) {
-                return currentEdges;
-            }
-
-            return [...preservedEdges, ...missingChosenEdges];
-        });
-    }, [nodes, setEdges]);
-
     const defaultEdgeOptions = {
         style: {strokeWidth: 2, stroke: 'white'},
         type: 'floating',
@@ -108,24 +66,8 @@ export default function PhaseThree() {
         if (!clickedNode.data.isConnectable) {
             return;
         }
-        if (clickedNode.data.isChosen) {
-            setEdges((edges) => edges.filter(edge => edge.id !== element.id + "-edge"));
-        } else {
-            setEdges((edges) => {
-                let updatedEdges = edges;
-                const updatedEdge = {
-                    id: element.id + "-edge",
-                    target: "phase-three-result",
-                    source: element.id,
-                    animated: true,
-                    ...defaultEdgeOptions
-                };
-                return addEdge(updatedEdge, updatedEdges);
-            });
-
-        }
         dispatch(updateNodes3(element.id))
-    }, [setEdges, nodes, setNodes, edges]);
+    }, [dispatch, nodes]);
 
     return (
         <div style={{width: "100vw", height: "93vh"}}>

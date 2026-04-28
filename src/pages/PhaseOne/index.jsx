@@ -8,15 +8,13 @@ import FloatingEdge from "../../components/FloatingEdge";
 import StraightEdge from "../../components/StraightEdge";
 import ConnectionLine from "../../components/ConnectionLine";
 import {useDispatch, useSelector} from "react-redux";
-import {connectEdge, setPhaseOneState} from "../../redux/slices/phaseOneSlice.js";
+import {connectEdge} from "../../redux/slices/phaseOneSlice.js";
 import {setCurrentPhase, setNextPhaseEnabled} from "../../redux/slices/phaseStatusSlice.js";
-import {resetPhaseTwo} from "../../redux/slices/phaseTwoSlice.js";
-import {resetPhaseThree} from "../../redux/slices/phaseThreeSlice.js";
 import DottedEdge from "../../components/DottedEdge";
 import {initialNodes} from "./phaseOne_nodes.js";
 import {initialEdges} from "./phaseOne_edges.js";
 
-const nodeTypes = {circle: CircleNode, operator: OperatorNode, hexagon: HexagonNode}
+const nodeTypes = {circle: CircleNode, operator: OperatorNode, hexagon: HexagonNode};
 const edgeTypes = {floating: FloatingEdge, straight: StraightEdge, dotted: DottedEdge};
 const ROOT_NODE_ID = "context-factors";
 const RESULT_NODE_ID = "phase-one-result";
@@ -25,54 +23,52 @@ const isResultEdge = (edge) => edge.target === RESULT_NODE_ID;
 
 export default function PhaseOne() {
     const phaseOneState = useSelector((state) => state.phaseOne);
-    const phaseTwoState = useSelector((state) => state.phaseTwo.nodeState);
-    const {initialPhase3aTacticNodes, initialPhase3cTacticNodes} = useSelector((state) => state.phaseThree);
-    const dispatch = useDispatch();
     const {edgeState, nodeState} = phaseOneState;
     const [nodes, setNodes, onNodesChange] = useNodesState(nodeState);
     const [edges, setEdges, onEdgesChange] = useEdgesState(edgeState);
-    const {currentPhase} = useSelector((state) => state.phaseStatus);
+    const dispatch = useDispatch();
 
     const defaultEdgeOptions = {
         style: {strokeWidth: 2, stroke: "white"},
         type: "floating",
     };
 
+    // Entering phase one should not reset phase one itself.
+    // We only set active phase and clear later phases if needed.
     useEffect(() => {
         dispatch(setCurrentPhase(1));
-        if (phaseTwoState.length > 0) {
-            dispatch(resetPhaseTwo());
-        }
-        if (initialPhase3aTacticNodes.length > 0 || initialPhase3cTacticNodes.length > 0) {
-            dispatch(resetPhaseThree());
-        }
-    }, [currentPhase, dispatch, phaseTwoState.length, initialPhase3aTacticNodes.length, initialPhase3cTacticNodes.length]);
-
-    useEffect(() => {
-        dispatch(
-            setPhaseOneState({
-                edgeState: initialEdges,
-                nodeState: initialNodes,
-                resultName: "",
-                selectedNodes: [],
-                selectedNodeIds: [],
-                uploaded: 0,
-            })
-        );
     }, [dispatch]);
 
+    // Sync local ReactFlow state with persisted Redux state.
     useEffect(() => {
         setNodes(nodeState);
     }, [nodeState, setNodes]);
 
     useEffect(() => {
         setEdges(edgeState);
-    }, [phaseOneState.uploaded, edgeState, setEdges]);
+    }, [edgeState, phaseOneState.uploaded, setEdges]);
 
+    // useEffect(() => {
+    //     dispatch(setPhaseOneState({
+    //         nodeState: initialNodes,
+    //         edgeState: initialEdges,
+    //         resultName: "",
+    //         selectedNodes: [],
+    //         selectedNodeIds: [],
+    //         uploaded: 0,
+    //     }))
+    // }, []);
+
+    // Keep selected IDs in Redux derived from current edges.
     useEffect(() => {
         dispatch(setNextPhaseEnabled(true));
         dispatch(connectEdge(edges));
-    }, [edges, dispatch]);
+    }, [dispatch, edges]);
+
+    const isSecondLayerNode = useCallback(
+        (nodeId) => initialEdges.some((edge) => edge.source === ROOT_NODE_ID && edge.target === nodeId),
+        []
+    );
 
     const getDescendants = useCallback((rootId, sourceEdges) => {
         const adjacency = new Map();
@@ -86,13 +82,12 @@ export default function PhaseOne() {
         const descendants = new Set();
         const stack = [...(adjacency.get(rootId) || [])];
         while (stack.length > 0) {
-            const nodeId = stack.pop();
-            if (descendants.has(nodeId) || nodeId === RESULT_NODE_ID) {
+            const currentId = stack.pop();
+            if (descendants.has(currentId) || currentId === RESULT_NODE_ID) {
                 continue;
             }
-            descendants.add(nodeId);
-            const children = adjacency.get(nodeId) || [];
-            children.forEach((childId) => {
+            descendants.add(currentId);
+            (adjacency.get(currentId) || []).forEach((childId) => {
                 if (!descendants.has(childId)) {
                     stack.push(childId);
                 }
@@ -100,11 +95,6 @@ export default function PhaseOne() {
         }
         return descendants;
     }, []);
-
-    const isSecondLayerNode = useCallback(
-        (nodeId) => initialEdges.some((edge) => edge.source === ROOT_NODE_ID && edge.target === nodeId),
-        []
-    );
 
     const hideSubtree = useCallback(
         (parentId) => {
@@ -120,10 +110,12 @@ export default function PhaseOne() {
 
             setEdges((currentEdges) =>
                 currentEdges.filter((edge) => {
-                    if (isResultEdge(edge)) {
-                        return !descendants.has(edge.source);
+                    // Remove all structure edges touching removed descendants.
+                    if (!isResultEdge(edge)) {
+                        return !descendants.has(edge.source) && !descendants.has(edge.target);
                     }
-                    return !descendants.has(edge.source) && !descendants.has(edge.target);
+                    // Remove result connections only for leaves inside removed subtree.
+                    return !descendants.has(edge.source);
                 })
             );
         },
@@ -132,75 +124,80 @@ export default function PhaseOne() {
 
     const restoreSubtree = useCallback(
         (parentId) => {
-            const descendants = getDescendants(parentId, initialEdges);
-            const subtreeNodeIds = new Set([parentId, ...descendants]);
+            const descendantsFromInitial = getDescendants(parentId, initialEdges);
+            const subtreeIds = new Set([parentId, ...descendantsFromInitial]);
 
             setNodes((currentNodes) => {
-                const currentById = new Map(currentNodes.map((node) => [node.id, node]));
+                const presentIds = new Set(currentNodes.map((node) => node.id));
 
-                const toggled = currentNodes.map((node) =>
+                const toggledNodes = currentNodes.map((node) =>
                     node.id === parentId ? {...node, data: {...node.data, isHidden: false}} : node
                 );
 
-                const missingDescendants = initialNodes
-                    .filter((node) => descendants.has(node.id) && !currentById.has(node.id))
+                const restoredDescendants = initialNodes
+                    .filter((node) => descendantsFromInitial.has(node.id) && !presentIds.has(node.id))
                     .map((node) => ({...node, data: {...node.data, isHidden: false}}));
 
-                const merged = [...toggled, ...missingDescendants];
-                const orderById = new Map(initialNodes.map((node, idx) => [node.id, idx]));
-
-                return merged.sort(
-                    (a, b) => (orderById.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (orderById.get(b.id) ?? Number.MAX_SAFE_INTEGER)
+                const mergedNodes = [...toggledNodes, ...restoredDescendants];
+                const orderById = new Map(initialNodes.map((node, index) => [node.id, index]));
+                return mergedNodes.sort(
+                    (a, b) =>
+                        (orderById.get(a.id) ?? Number.MAX_SAFE_INTEGER) -
+                        (orderById.get(b.id) ?? Number.MAX_SAFE_INTEGER)
                 );
             });
 
             setEdges((currentEdges) => {
                 const currentEdgeIds = new Set(currentEdges.map((edge) => edge.id));
-                const subtreeStructureEdges = initialEdges.filter(
+                const structureEdgesToRestore = initialEdges.filter(
                     (edge) =>
                         !isResultEdge(edge) &&
-                        subtreeNodeIds.has(edge.source) &&
-                        subtreeNodeIds.has(edge.target)
+                        subtreeIds.has(edge.source) &&
+                        subtreeIds.has(edge.target)
                 );
-                const missing = subtreeStructureEdges.filter((edge) => !currentEdgeIds.has(edge.id));
-                return [...currentEdges, ...missing];
+                const missingEdges = structureEdgesToRestore.filter((edge) => !currentEdgeIds.has(edge.id));
+                // IMPORTANT: we intentionally do not restore leaf->result edges.
+                return [...currentEdges, ...missingEdges];
             });
         },
         [getDescendants, setEdges, setNodes]
     );
 
-    const toggleLeafConnection = useCallback(
+    const toggleLeafSelection = useCallback(
         (node) => {
-            if (!node?.data?.isConnectable) {
+            if (!node.data?.isConnectable) {
                 return;
             }
 
-            const isConnected = edges.some((edge) => edge.id === `${node.id}-edge`);
-            if (isConnected) {
-                setEdges((currentEdges) => currentEdges.filter((edge) => edge.id !== `${node.id}-edge`));
+            const edgeId = `${node.id}-edge`;
+            const alreadyConnected = edges.some((edge) => edge.id === edgeId);
+
+            if (alreadyConnected) {
+                setEdges((currentEdges) => currentEdges.filter((edge) => edge.id !== edgeId));
                 setNodes((currentNodes) =>
                     currentNodes.map((n) =>
                         n.id === node.id ? {...n, data: {...n.data, isChosen: false}} : n
                     )
                 );
-                return;
+            } else {
+                setEdges((currentEdges) =>
+                    addEdge(
+                        {
+                            id: edgeId,
+                            source: node.id,
+                            target: RESULT_NODE_ID,
+                            animated: true,
+                            ...defaultEdgeOptions,
+                        },
+                        currentEdges
+                    )
+                );
+                setNodes((currentNodes) =>
+                    currentNodes.map((n) =>
+                        n.id === node.id ? {...n, data: {...n.data, isChosen: true}} : n
+                    )
+                );
             }
-
-            setEdges((currentEdges) =>
-                addEdge(
-                    {
-                        id: `${node.id}-edge`,
-                        source: node.id,
-                        target: RESULT_NODE_ID,
-                        animated: true,
-                        ...defaultEdgeOptions,
-                    },
-                    currentEdges
-                )
-            );
-            setNodes((currentNodes) =>
-                currentNodes.map((n) => (n.id === node.id ? {...n, data: {...n.data, isChosen: true}} : n))
-            );
         },
         [defaultEdgeOptions, edges, setEdges, setNodes]
     );
@@ -208,11 +205,7 @@ export default function PhaseOne() {
     const onNodeClick = useCallback(
         (_event, element) => {
             const clickedNode = nodes.find((node) => node.id === element.id);
-            if (!clickedNode) {
-                return;
-            }
-
-            if (clickedNode.id === RESULT_NODE_ID) {
+            if (!clickedNode || clickedNode.id === RESULT_NODE_ID) {
                 return;
             }
 
@@ -225,9 +218,9 @@ export default function PhaseOne() {
                 return;
             }
 
-            toggleLeafConnection(clickedNode);
+            toggleLeafSelection(clickedNode);
         },
-        [hideSubtree, isSecondLayerNode, nodes, restoreSubtree, toggleLeafConnection]
+        [hideSubtree, isSecondLayerNode, nodes, restoreSubtree, toggleLeafSelection]
     );
 
     return (
@@ -255,4 +248,3 @@ export default function PhaseOne() {
         </div>
     );
 }
-
