@@ -8,7 +8,7 @@ import FloatingEdge from "../../components/FloatingEdge";
 import StraightEdge from "../../components/StraightEdge";
 import ConnectionLine from "../../components/ConnectionLine";
 import {useDispatch, useSelector} from "react-redux";
-import {connectEdge} from "../../redux/slices/phaseOneSlice.js";
+import {connectEdge, setNodeState} from "../../redux/slices/phaseOneSlice.js";
 import {setCurrentPhase, setNextPhaseEnabled} from "../../redux/slices/phaseStatusSlice.js";
 import DottedEdge from "../../components/DottedEdge";
 import {initialNodes} from "./phaseOne_nodes.js";
@@ -48,16 +48,9 @@ export default function PhaseOne() {
         setEdges(edgeState);
     }, [edgeState, phaseOneState.uploaded, setEdges]);
 
-    // useEffect(() => {
-    //     dispatch(setPhaseOneState({
-    //         nodeState: initialNodes,
-    //         edgeState: initialEdges,
-    //         resultName: "",
-    //         selectedNodes: [],
-    //         selectedNodeIds: [],
-    //         uploaded: 0,
-    //     }))
-    // }, []);
+    useEffect(() => {
+        dispatch(setNodeState(nodes));
+    }, [dispatch, nodes]);
 
     // Keep selected IDs in Redux derived from current edges.
     useEffect(() => {

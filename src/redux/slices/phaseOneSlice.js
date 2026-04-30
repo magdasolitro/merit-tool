@@ -31,6 +31,9 @@ export const phaseOneSlice = createSlice({
             state.selectedNodeIds = selectedNodeIds;
             state.selectedNodes = selectedNodeIds.map((id) => PhaseOneKeyValue[id] || id);
         },
+        setNodeState: (state, action) => {
+            state.nodeState = action.payload;
+        },
         updateNodes: (state, action) => {
             const xorEdge = state.edgeState.find(edge => edge.target === action.payload && edge.source.includes('xor'));
             const xorNode = xorEdge ? xorEdge.source : null;
@@ -61,6 +64,6 @@ export const phaseOneSlice = createSlice({
     },
 })
 
-export const {connectEdge, updateResultName, setPhaseOneState, updateNodes} = phaseOneSlice.actions
+export const {connectEdge, setNodeState, updateResultName, setPhaseOneState, updateNodes} = phaseOneSlice.actions
 
 export default phaseOneSlice.reducer
