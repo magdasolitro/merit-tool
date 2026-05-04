@@ -6,7 +6,7 @@ import RegulationOval from "../../components/Shapes/RegulationOval.jsx";
 import FloatingEdge from "../../components/FloatingEdge";
 import ConnectionLine from "../../components/ConnectionLine";
 import {useDispatch, useSelector} from "react-redux";
-import {connectEdge3, setPhaseThreeState, updateNodes3} from "../../redux/slices/phaseThreeSlice_new.js";
+import {connectEdge3, updateNodes3} from "../../redux/slices/phaseThreeSlice_new.js";
 import {setCurrentPhase, setNextPhaseEnabled} from "../../redux/slices/phaseStatusSlice.js";
 import {initialNodes3} from "./phaseThree_nodes.js";
 import {initialEdges3} from "./phaseThree_edges.js";
@@ -36,17 +36,6 @@ export default function PhaseThree() {
         }
         dispatch(connectEdge3(edges));
     }, [edges]);
-
-    useEffect(() => {
-        dispatch(setPhaseThreeState({
-            nodeState: initialNodes3,
-            edgeState: initialEdges3,
-            resultName: "",
-            selectedNodes: [],
-            selectedNodeIds: [],
-            uploaded: 0,
-        }))
-    }, []);
 
     useEffect(() => {
         setNodes(nodeState)

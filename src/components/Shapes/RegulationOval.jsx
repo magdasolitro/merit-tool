@@ -39,7 +39,7 @@ const RegulationOval = ({data}) => {
             <div className={"block"}>
                 <p className={"text-xs text-center font-bold"}>
                     {!data.titleDisable && <>
-                        &lt;&lt;Regulation&gt;&gt;
+                        &lt;&lt;Regulatory_Artefact&gt;&gt;
                         <br/>
                     </>
                     }

@@ -39,7 +39,7 @@ const OvalNode = ({data}) => {
             <div className={"block"}>
                 <p className={"text-xs text-center font-bold"}>
                     {!data.titleDisable && <>
-                        &lt;&lt;{data.type === "tactic" ? "Tactic" : "Goal"}&gt;&gt;
+                        &lt;&lt;{data.type === "goal" ? "Goal" : "SubGoal"}&gt;&gt;
                         <br/>
                     </>
                     }

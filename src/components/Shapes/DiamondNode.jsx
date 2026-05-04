@@ -10,14 +10,12 @@ const DiamondNode = ({data}) => {
         cursor: data.isConnectable ? "pointer" : "default",
         outline: data.isChosen && "4px solid #5D803F",
         outlineOffset: "8px",
-        backgroundColor: data.background || "white",
-        color: data.background === "black" ? "white" : "black",
-        border: "2px solid #2b2b2b",
+        backgroundColor: "#fcfcb8",
+        color: "black",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         transform: "rotate(45deg)",
-        boxSizing: "border-box",
     };
 
     const labelStyle = {

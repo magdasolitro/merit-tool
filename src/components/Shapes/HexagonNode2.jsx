@@ -11,15 +11,13 @@ const HexagonNode2 = ({data}) => {
         cursor: data.isConnectable ? "pointer" : "default",
         outline: data.isChosen && "4px solid #5D803F",
         outlineOffset: "8px",
-        backgroundColor: data.background || "white",
-        color: data.background === "black" ? "white" : "black",
-        border: "2px solid #2b2b2b",
-        clipPath: "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
+        backgroundColor: "#7ccfa1",
+        color: "black",
+        clipPath: "polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         padding: "16px 30px",
-        boxSizing: "border-box",
     };
 
     const labelStyle = {
