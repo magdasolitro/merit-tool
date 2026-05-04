@@ -236,17 +236,17 @@ export default function MainLayout() {
                 Context Characterization Phase
             </Tooltip>
             <Tooltip anchorSelect=".phase-2" place="bottom">
-                Context-Based Analysis of Acceptance Requirements
+                Principles Selection
             </Tooltip>
             <Tooltip anchorSelect=".phase-3" place="bottom">
-                Acceptance Requirements Refinement
+                Regulatory Framework
             </Tooltip>
             <Tooltip anchorSelect=".phase-4" place="bottom">
-                Specification Summary
+                Result Presentation and Solution Model 
             </Tooltip>
-            <Tooltip anchorSelect=".phase-5" place="bottom">
+            {/* <Tooltip anchorSelect=".phase-5" place="bottom">
                 Context-Based Operationalization via Gamification
-            </Tooltip>
+            </Tooltip> */}
         </div>
     );
 }

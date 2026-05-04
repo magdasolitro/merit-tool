@@ -4,7 +4,22 @@ import Card from "../Card";
 import {getGlossary} from "../../utils/getGlossary.js";
 import {useSelector} from "react-redux";
 
-const OvalNode = ({data}) => {
+const OvalNode = ({data, type: reactFlowType}) => {
+    const goalSubgoalLabel = (() => {
+        if (reactFlowType === "goal") {
+            return "Goal";
+        }
+        if (reactFlowType === "subgoal") {
+            return "SubGoal";
+        }
+        if (data.type === "goal") {
+            return "Goal";
+        }
+        if (data.type === "subgoal") {
+            return "SubGoal";
+        }
+        return null;
+    })();
     const nodeStyle = {
         width: data.width || 240,
         height: data.height || 80,
@@ -38,11 +53,12 @@ const OvalNode = ({data}) => {
                 <Handle type="target" position={Position.Bottom} id={"oval_target_bottom"} isConnectable={false}/>}
             <div className={"block"}>
                 <p className={"text-xs text-center font-bold"}>
-                    {!data.titleDisable && <>
-                        &lt;&lt;{data.type === "goal" ? "Goal" : "SubGoal"}&gt;&gt;
-                        <br/>
-                    </>
-                    }
+                    {!data.titleDisable && goalSubgoalLabel !== null && (
+                        <>
+                            {`<<${goalSubgoalLabel}>>`}
+                            <br/>
+                        </>
+                    )}
                     {data.label}
                     <br/>
                     {data.num}
