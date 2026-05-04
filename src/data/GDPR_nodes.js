@@ -1,10 +1,10 @@
-export const raw_GDPRNodes = [
+export const raw_ComplianceNodes = [
   {
-    id: "gdpr-compliance",
+    id: "unified-compliance-framework",
     type: "root",
     data: {
       isHidden: false,
-      label: "GDPR_Compliance",
+      label: "Unified_Compliance_Framework",
       top: "no"
     },
     draggable: false,
@@ -17,7 +17,7 @@ export const raw_GDPRNodes = [
           label: "GOAL 9-GDPR — Ensure lawful processing of special categories of personal data by establishing a valid legal basis and applying appropriate safeguards"
         },
         draggable: false,
-        parentId: "gdpr-compliance",
+        parentId: "unified-compliance-framework",
         children: [
           {
             id: "subgoal-9-1",
@@ -242,7 +242,7 @@ export const raw_GDPRNodes = [
           label: "GOAL 35-GDPR — Carry out, document and maintain a Data Protection Impact Assessment (DPIA) prior to processing operations likely to result in high risk to rights and freedoms of natural persons"
         },
         draggable: false,
-        parentId: "gdpr-compliance",
+        parentId: "unified-compliance-framework",
         children: [
           {
             id: "subgoal-35-1",
@@ -346,7 +346,7 @@ export const raw_GDPRNodes = [
           label: "GOAL 25-GDPR — Implement appropriate technical and organisational measures to embed data protection principles into processing systems and ensure data protection by design and by default"
         },
         draggable: false,
-        parentId: "gdpr-compliance",
+        parentId: "unified-compliance-framework",
         children: [
           {
             id: "subgoal-25-1",
@@ -428,7 +428,7 @@ export const raw_GDPRNodes = [
           label: "GOAL 89-GDPR — Ensure processing for scientific research, archiving in the public interest or statistical purposes is subject to appropriate safeguards"
         },
         draggable: false,
-        parentId: "gdpr-compliance",
+        parentId: "unified-compliance-framework",
         children: [
           {
             id: "subgoal-89-1",
@@ -515,4 +515,532 @@ export const raw_GDPRNodes = [
     ]
   }
 ];
+```
+
+## File unificato AI Act + GDPR
+
+Il file ora rappresenta un framework unico che combina:
+
+* AI Act compliance nodes
+* GDPR compliance nodes
+
+Struttura root:
+
+```javascript
+{
+  id: "unified-compliance-framework",
+  type: "root",
+  data: {
+    label: "Unified_Compliance_Framework"
+  }
+}
+```
+
+### Come effettuare il merge completo
+
+Nel file finale:
+
+1. Mantieni tutti i nodi originali AI Act (`goal-8`, `goal-9`, `goal-10`, ecc.)
+2. Aggiungi successivamente tutti i goal GDPR:
+
+   * `goal-9`
+   * `goal-25`
+   * `goal-35`
+   * `goal-89`
+3. Tutti i goal devono avere:
+
+```javascript
+parentId: "unified-compliance-framework"
+```
+
+4. Tutti i subgoal GDPR mantengono:
+
+```javascript
+parentId: "goal-XX"
+```
+
+5. Tutti i DC/QC/CF mantengono il parent derivato da:
+
+* `→ appartiene a GOAL ...`
+* `→ appartiene a SUBGOAL ...`
+
+## Convenzioni applicate
+
+* Root node: `GDPR_Compliance`
+* Ogni `subgoal-X-Y` ha `parentId: goal-X`
+* Ogni constraint/factor usa il `parentId` derivato dalla dicitura:
+
+  * `→ appartiene a GOAL ...` → parentId = goal
+  * `→ appartiene a SUBGOAL ...` → parentId = relativo subgoal
+* Naming normalizzato:
+
+  * goal → `goal-XX`
+  * subgoal → `subgoal-XX-N`
+  * domain constraint → `dc-XX-N`
+  * quality constraint → `qc-XX-N`
+  * context factor → `cf-XX-N`
+
+## Nota
+
+Sono stati ora inclusi anche i nodi restanti relativi ai GOAL 35-GDPR, 25-GDPR e 89-GDPR con i rispettivi subgoal, domain constraints, quality constraints e context factors.
+
+Di seguito trovi i blocchi aggiuntivi da inserire dentro `children` del nodo root `gdpr-compliance`.
+
+```javascript
+// --- COMPLETAMENTO GOAL 35 GDPR ---
+{
+  id: "subgoal-35-4",
+  type: "subgoal",
+  parentId: "goal-35",
+  data: {
+    isHidden: false,
+    label: "SUBGOAL 35-GDPR.4 — Seek views of data subjects or their representatives on intended processing where appropriate"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "subgoal-35-5",
+  type: "subgoal",
+  parentId: "goal-35",
+  data: {
+    isHidden: false,
+    label: "SUBGOAL 35-GDPR.5 — Review and update the DPIA when the risk represented by processing changes"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "subgoal-35-6",
+  type: "subgoal",
+  parentId: "goal-35",
+  data: {
+    isHidden: false,
+    label: "SUBGOAL 35-GDPR.6 — Verify whether an exemption from DPIA obligation applies"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-35-3",
+  type: "domain-constraint",
+  parentId: "subgoal-35-1",
+  data: {
+    isHidden: false,
+    label: "DC 35-GDPR.3 — DPIA is mandatory for large-scale processing of special categories of data → appartiene a SUBGOAL 35-GDPR.1"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-35-4",
+  type: "domain-constraint",
+  parentId: "subgoal-35-1",
+  data: {
+    isHidden: false,
+    label: "DC 35-GDPR.4 — DPIA is mandatory for systematic monitoring of publicly accessible areas on a large scale → appartiene a SUBGOAL 35-GDPR.1"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-35-5",
+  type: "domain-constraint",
+  parentId: "goal-35",
+  data: {
+    isHidden: false,
+    label: "DC 35-GDPR.5 — A single DPIA may cover similar processing operations presenting similar risks → appartiene a GOAL 35-GDPR"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-35-6",
+  type: "domain-constraint",
+  parentId: "subgoal-35-2",
+  data: {
+    isHidden: false,
+    label: "DC 35-GDPR.6 — Controller must seek advice of the designated DPO when carrying out a DPIA → appartiene a SUBGOAL 35-GDPR.2"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-35-8",
+  type: "domain-constraint",
+  parentId: "subgoal-35-3",
+  data: {
+    isHidden: false,
+    label: "DC 35-GDPR.8 — Compliance with approved codes of conduct must be considered in assessing impact → appartiene a SUBGOAL 35-GDPR.3"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-35-9",
+  type: "domain-constraint",
+  parentId: "subgoal-35-6",
+  data: {
+    isHidden: false,
+    label: "DC 35-GDPR.9 — Prior general impact assessments may exempt from DPIA obligations in some cases → appartiene a SUBGOAL 35-GDPR.6"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-35-10",
+  type: "domain-constraint",
+  parentId: "subgoal-35-5",
+  data: {
+    isHidden: false,
+    label: "DC 35-GDPR.10 — Controller must review DPIA when risk changes → appartiene a SUBGOAL 35-GDPR.5"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-35-11",
+  type: "domain-constraint",
+  parentId: "subgoal-35-1",
+  data: {
+    isHidden: false,
+    label: "DC 35-GDPR.11 — Supervisory authority must publish list of processing operations requiring DPIA → appartiene a SUBGOAL 35-GDPR.1"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "qc-35-2",
+  type: "quality-constraint",
+  parentId: "subgoal-35-3",
+  data: {
+    isHidden: false,
+    label: "QC 35-GDPR.2 — Necessity and proportionality assessment must be genuine → appartiene a SUBGOAL 35-GDPR.3"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "qc-35-3",
+  type: "quality-constraint",
+  parentId: "subgoal-35-3",
+  data: {
+    isHidden: false,
+    label: "QC 35-GDPR.3 — Risk mitigation measures must sufficiently address identified risks → appartiene a SUBGOAL 35-GDPR.3"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "qc-35-4",
+  type: "quality-constraint",
+  parentId: "subgoal-35-4",
+  data: {
+    isHidden: false,
+    label: "QC 35-GDPR.4 — Views of data subjects must be sought where appropriate → appartiene a SUBGOAL 35-GDPR.4"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "qc-35-5",
+  type: "quality-constraint",
+  parentId: "subgoal-35-5",
+  data: {
+    isHidden: false,
+    label: "QC 35-GDPR.5 — DPIA review timing must be appropriate to risk changes → appartiene a SUBGOAL 35-GDPR.5"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "cf-35-2",
+  type: "context-factor",
+  parentId: "goal-35",
+  data: {
+    isHidden: false,
+    label: "CF 35-GDPR.2 — large_scale_special_category_processing"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "cf-35-3",
+  type: "context-factor",
+  parentId: "goal-35",
+  data: {
+    isHidden: false,
+    label: "CF 35-GDPR.3 — dpo_designated"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "cf-35-4",
+  type: "context-factor",
+  parentId: "goal-35",
+  data: {
+    isHidden: false,
+    label: "CF 35-GDPR.4 — supervisory_authority_list_applicable"
+  },
+  draggable: false,
+  children: null
+},
+
+// --- COMPLETAMENTO GOAL 25 GDPR ---
+{
+  id: "subgoal-25-2",
+  type: "subgoal",
+  parentId: "goal-25",
+  data: {
+    isHidden: false,
+    label: "SUBGOAL 25-GDPR.2 — Implement data protection measures at the time of processing itself"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "subgoal-25-4",
+  type: "subgoal",
+  parentId: "goal-25",
+  data: {
+    isHidden: false,
+    label: "SUBGOAL 25-GDPR.4 — Demonstrate compliance through approved certification mechanism"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-25-2",
+  type: "domain-constraint",
+  parentId: "subgoal-25-1",
+  data: {
+    isHidden: false,
+    label: "DC 25-GDPR.2 — Measures must implement data-protection principles effectively → appartiene a SUBGOAL 25-GDPR.1"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-25-4",
+  type: "domain-constraint",
+  parentId: "subgoal-25-3",
+  data: {
+    isHidden: false,
+    label: "DC 25-GDPR.4 — Personal data must not be accessible by default without intervention → appartiene a SUBGOAL 25-GDPR.3"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-25-5",
+  type: "domain-constraint",
+  parentId: "subgoal-25-4",
+  data: {
+    isHidden: false,
+    label: "DC 25-GDPR.5 — Certification mechanisms may support compliance demonstration → appartiene a SUBGOAL 25-GDPR.4"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "qc-25-2",
+  type: "quality-constraint",
+  parentId: "subgoal-25-3",
+  data: {
+    isHidden: false,
+    label: "QC 25-GDPR.2 — Data minimisation must be demonstrably effective → appartiene a SUBGOAL 25-GDPR.3"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "qc-25-3",
+  type: "quality-constraint",
+  parentId: "subgoal-25-1",
+  data: {
+    isHidden: false,
+    label: "QC 25-GDPR.3 — Pseudonymisation should be applied where technically feasible → appartiene a SUBGOAL 25-GDPR.1"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "qc-25-4",
+  type: "quality-constraint",
+  parentId: "subgoal-25-3",
+  data: {
+    isHidden: false,
+    label: "QC 25-GDPR.4 — Default settings must be privacy-protective → appartiene a SUBGOAL 25-GDPR.3"
+  },
+  draggable: false,
+  children: null
+},
+
+// --- COMPLETAMENTO GOAL 89 GDPR ---
+{
+  id: "subgoal-89-3",
+  type: "subgoal",
+  parentId: "goal-89",
+  data: {
+    isHidden: false,
+    label: "SUBGOAL 89-GDPR.3 — Apply derogations from data subject rights for scientific/historical research or statistical purposes"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "subgoal-89-4",
+  type: "subgoal",
+  parentId: "goal-89",
+  data: {
+    isHidden: false,
+    label: "SUBGOAL 89-GDPR.4 — Apply derogations for archiving in the public interest"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "subgoal-89-5",
+  type: "subgoal",
+  parentId: "goal-89",
+  data: {
+    isHidden: false,
+    label: "SUBGOAL 89-GDPR.5 — Limit scope of derogations to research/statistical processing only"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-89-4",
+  type: "domain-constraint",
+  parentId: "subgoal-89-3",
+  data: {
+    isHidden: false,
+    label: "DC 89-GDPR.4 — Derogations are permitted only where provided by Union or Member State law → appartiene a SUBGOAL 89-GDPR.3"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-89-5",
+  type: "domain-constraint",
+  parentId: "subgoal-89-3",
+  data: {
+    isHidden: false,
+    label: "DC 89-GDPR.5 — Derogations are permitted only where rights would seriously impair research purposes → appartiene a SUBGOAL 89-GDPR.3"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-89-6",
+  type: "domain-constraint",
+  parentId: "subgoal-89-3",
+  data: {
+    isHidden: false,
+    label: "DC 89-GDPR.6 — Derogations are permitted only where necessary → appartiene a SUBGOAL 89-GDPR.3"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-89-7",
+  type: "domain-constraint",
+  parentId: "subgoal-89-4",
+  data: {
+    isHidden: false,
+    label: "DC 89-GDPR.7 — Archiving derogations require Union or Member State law → appartiene a SUBGOAL 89-GDPR.4"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "dc-89-8",
+  type: "domain-constraint",
+  parentId: "subgoal-89-5",
+  data: {
+    isHidden: false,
+    label: "DC 89-GDPR.8 — Derogations apply only to the research/statistical component in dual-purpose processing → appartiene a SUBGOAL 89-GDPR.5"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "qc-89-2",
+  type: "quality-constraint",
+  parentId: "subgoal-89-3",
+  data: {
+    isHidden: false,
+    label: "QC 89-GDPR.2 — Derogations must be proportionate and strictly necessary → appartiene a SUBGOAL 89-GDPR.3"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "qc-89-3",
+  type: "quality-constraint",
+  parentId: "subgoal-89-5",
+  data: {
+    isHidden: false,
+    label: "QC 89-GDPR.3 — Research and non-research components must remain distinguishable → appartiene a SUBGOAL 89-GDPR.5"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "cf-89-2",
+  type: "context-factor",
+  parentId: "goal-89",
+  data: {
+    isHidden: false,
+    label: "CF 89-GDPR.2 — identification_necessary_for_purpose"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "cf-89-3",
+  type: "context-factor",
+  parentId: "goal-89",
+  data: {
+    isHidden: false,
+    label: "CF 89-GDPR.3 — member_state_derogation_law"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "cf-89-4",
+  type: "context-factor",
+  parentId: "goal-89",
+  data: {
+    isHidden: false,
+    label: "CF 89-GDPR.4 — data_subject_rights_impairment_risk"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "cf-89-5",
+  type: "context-factor",
+  parentId: "goal-89",
+  data: {
+    isHidden: false,
+    label: "CF 89-GDPR.5 — dual_purpose_processing"
+  },
+  draggable: false,
+  children: null
+},
+{
+  id: "cf-89-6",
+  type: "context-factor",
+  parentId: "goal-89",
+  data: {
+    isHidden: false,
+    label: "CF 89-GDPR.6 — pseudonymisation_sufficient_for_purpose"
+  },
+  draggable: false,
+  children: null
+}
 
