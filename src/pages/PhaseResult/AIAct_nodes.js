@@ -1,276 +1,310 @@
-/** Minimum clear gap (px) between bounding boxes (horizontal + vertical packing) */
-const MIN_NODE_SEPARATION = 100;
-/** Extra vertical space between rows of siblings (pushes content to lower layers) */
-const ROW_VERTICAL_EXTRA = 72;
-/** Gap between root bottom and layer-2 goals */
-const GAP_ROOT_TO_GOALS = 200;
-/** Gap between parent bottom and first child row */
-const GAP_PARENT_TO_CHILDREN = 160;
-/** Max siblings per row: lower = more rows below parent, less crowding */
-const MAX_SIBLINGS_PER_ROW = 3;
-/** Layer-1 root top Y */
-const LAYER_1_Y = 40;
-/** Horizontal anchor for centering (matches typical graph origin) */
-const CANVAS_ANCHOR_X = 16000;
-/** Additional horizontal gap between layer-2 goals */
-const GOAL_TO_GOAL_EXTRA_GAP = 80;
+const LAYER_ROOT = 1;
+const LAYER_GOAL = 2;
+const LAYER_SUBGOAL = 3;
+/** Tutti i tipi diversi da root / goal / subgoal stanno da qui in giù (sotto i subgoal). */
+const MIN_LAYER_OTHER = 4;
 
-const LAYER_TWO_GOAL_ID = /^goal-\d+$/;
+const GAP_X = 48;
+const GAP_Y = 300;
+const MARGIN_X = 48;
+const MARGIN_Y = 40;
 
-const TYPE_DIMENSIONS = {
-    root: {width: 120, height: 120},
-    goal: {width: 260, height: 100},
-    subgoal: {width: 260, height: 100},
-    oval: {width: 260, height: 100},
-    "domain-constraint": {width: 280, height: 140},
-    "quality-constraint": {width: 180, height: 180},
-    "context-factor": {width: 220, height: 110},
+const DEFAULT_SIZE_BY_TYPE = {
+    root: {width: 100, height: 100},
+    goal: {width: 240, height: 80},
+    subgoal: {width: 240, height: 80},
+    "domain-constraint": {width: 300, height: 96},
+    "quality-constraint": {width: 120, height: 120},
+    "context-factor": {width: 180, height: 90},
 };
 
-const cloneNode = (node) => ({
-    ...node,
-    position: node?.position ? {...node.position} : {x: 0, y: 0},
-    data: node?.data ? {...node.data} : node?.data,
-    children: Array.isArray(node?.children) ? node.children.map(cloneNode) : node?.children,
-});
+const getChildren = (node) => (Array.isArray(node?.children) ? node.children : []);
 
-const getNodeSize = (node) => {
-    const fallback = TYPE_DIMENSIONS[node?.type] || {width: 220, height: 110};
-    if (!node?.data) {
-        return fallback;
+const estimateNodeSize = (node) => {
+    const base = DEFAULT_SIZE_BY_TYPE[node?.type] ?? {width: 200, height: 80};
+    const label = String(node?.data?.label ?? "");
+    const extraW = Math.min(220, Math.max(0, Math.floor((label.length - 36) * 3.2)));
+    return {width: base.width + extraW, height: base.height};
+};
+
+const deepCloneForest = (forest) => JSON.parse(JSON.stringify(forest));
+
+const buildParentIdToNode = (roots, map = new Map()) => {
+    const walk = (node) => {
+        map.set(node.id, node);
+        getChildren(node).forEach(walk);
+    };
+    roots.forEach(walk);
+    return map;
+};
+
+const collectPreorderMeta = (roots) => {
+    const rows = [];
+    let preorder = 0;
+    const walk = (node, activeGoalId) => {
+        const goalAncestorId = node.type === "goal" ? node.id : activeGoalId;
+        rows.push({node, preorder: preorder++, goalAncestorId});
+        const nextGoal = node.type === "goal" ? node.id : activeGoalId;
+        getChildren(node).forEach((ch) => walk(ch, nextGoal));
+    };
+    roots.forEach((r) => walk(r, null));
+    return rows;
+};
+
+const fixedLayerForType = (type) => {
+    if (type === "root") {
+        return LAYER_ROOT;
     }
-    if (node.type === "goal" || node.type === "subgoal" || node.type === "oval") {
-        return {
-            width: Number(node.data.width || fallback.width),
-            height: Number(node.data.height || fallback.height),
-        };
+    if (type === "goal") {
+        return LAYER_GOAL;
     }
-    if (node.type === "context-factor") {
-        return {
-            width: Number(node.data.sizeX || fallback.width),
-            height: Number(node.data.sizeY || fallback.height),
-        };
+    if (type === "subgoal") {
+        return LAYER_SUBGOAL;
     }
-    return fallback;
-};
-
-const isLayerTwoGoal = (node, parent) =>
-    parent?.type === "root" && node?.type === "goal" && LAYER_TWO_GOAL_ID.test(String(node?.id ?? ""));
-
-const getRect = (node) => {
-    const s = getNodeSize(node);
-    const x = Number(node?.position?.x ?? 0);
-    const y = Number(node?.position?.y ?? 0);
-    return {left: x, top: y, right: x + s.width, bottom: y + s.height};
-};
-
-/** Inflated AABB: two nodes "touch" only if closer than MIN_NODE_SEPARATION */
-const getInflatedRect = (node) => {
-    const r = getRect(node);
-    const p = MIN_NODE_SEPARATION / 2;
-    return {left: r.left - p, top: r.top - p, right: r.right + p, bottom: r.bottom + p};
-};
-
-const rectsOverlap = (a, b) =>
-    a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
-
-const flattenNodes = (node, parent, out) => {
-    out.push({node, parent});
-    (node.children || []).forEach((ch) => flattenNodes(ch, node, out));
-};
-
-const collectSubtree = (node, acc) => {
-    acc.push(node);
-    (node.children || []).forEach((ch) => collectSubtree(ch, acc));
-    return acc;
-};
-
-const translateSubtree = (rootNode, dx, dy) => {
-    collectSubtree(rootNode, []).forEach((n) => {
-        n.position = {
-            x: Number(n.position.x) + dx,
-            y: Number(n.position.y) + dy,
-        };
-    });
+    return null;
 };
 
 /**
- * After arbitrary moves: every child must be fully below its parent (with gap).
- * Repeats until stable (subtree moves can affect deeper levels).
+ * Assegna un indice intero di layer a ogni nodo:
+ * 1 root, 2 goal, 3 subgoal, >=4 altri tipi con vincolo parent sopra figlio.
  */
-const enforceBelowParentTree = (rootNode) => {
-    const walk = (n) => {
-        const children = Array.isArray(n.children) ? n.children.filter(Boolean) : [];
-        const pSize = getNodeSize(n);
-        const minChildTop = n.position.y + pSize.height + GAP_PARENT_TO_CHILDREN;
-        children.forEach((child) => {
-            if (child.position.y < minChildTop) {
-                translateSubtree(child, 0, minChildTop - child.position.y);
-            }
-            walk(child);
-        });
-    };
-    for (let k = 0; k < 64; k++) {
-        walk(rootNode);
+const depthByParentId = (nodeId, idToNode, memo = new Map(), visiting = new Set()) => {
+    if (memo.has(nodeId)) {
+        return memo.get(nodeId);
     }
+    if (visiting.has(nodeId)) {
+        return 0;
+    }
+    visiting.add(nodeId);
+    const n = idToNode.get(nodeId);
+    if (!n?.parentId) {
+        memo.set(nodeId, 0);
+        visiting.delete(nodeId);
+        return 0;
+    }
+    const d = 1 + depthByParentId(n.parentId, idToNode, memo, visiting);
+    visiting.delete(nodeId);
+    memo.set(nodeId, d);
+    return d;
 };
 
-const layoutRootAndLayerTwoGoals = (root) => {
-    const rootSize = getNodeSize(root);
-    root.position = {
-        x: CANVAS_ANCHOR_X - rootSize.width / 2,
-        y: LAYER_1_Y,
+const assignSemanticLayers = (rows, idToNode) => {
+    const layerById = new Map();
+    const others = [];
+
+    for (const {node} of rows) {
+        const fixed = fixedLayerForType(node.type);
+        if (fixed != null) {
+            layerById.set(node.id, fixed);
+        } else {
+            others.push(node);
+        }
+    }
+
+    others.sort((a, b) => depthByParentId(a.id, idToNode) - depthByParentId(b.id, idToNode));
+
+    const parentLayer = (parentId) => {
+        if (!parentId) {
+            return LAYER_ROOT;
+        }
+        const p = idToNode.get(parentId);
+        if (!p) {
+            return LAYER_ROOT;
+        }
+        const assigned = layerById.get(parentId);
+        if (assigned != null) {
+            return assigned;
+        }
+        const fx = fixedLayerForType(p.type);
+        if (fx != null) {
+            return fx;
+        }
+        return LAYER_SUBGOAL;
     };
 
-    const children = root.children || [];
-    const goals = children.filter((c) => isLayerTwoGoal(c, root));
-    if (goals.length === 0) {
-        return;
+    for (const node of others) {
+        const pl = parentLayer(node.parentId);
+        layerById.set(node.id, Math.max(MIN_LAYER_OTHER, pl + 1));
     }
 
-    const layer2Top = root.position.y + rootSize.height + GAP_ROOT_TO_GOALS;
-    const gapX = MIN_NODE_SEPARATION + GOAL_TO_GOAL_EXTRA_GAP;
-    const totalW = goals.reduce((s, g) => s + getNodeSize(g).width, 0) + (goals.length - 1) * gapX;
-    let x = CANVAS_ANCHOR_X - totalW / 2;
-    goals.forEach((g) => {
-        const sz = getNodeSize(g);
-        g.position = {x, y: layer2Top};
-        x += sz.width + gapX;
-    });
-};
-
-const layoutNonGoalChildren = (parent, options = {}) => {
-    const allCh = Array.isArray(parent.children) ? parent.children.filter(Boolean) : [];
-    const children =
-        parent.type === "root" ? allCh.filter((c) => !isLayerTwoGoal(c, parent)) : allCh;
-    if (children.length === 0) {
-        return;
-    }
-
-    const pSize = getNodeSize(parent);
-    const pCx = parent.position.x + pSize.width / 2;
-    const baseBelowParent = parent.position.y + pSize.height + GAP_PARENT_TO_CHILDREN;
-    const firstRowTop = Math.max(baseBelowParent, options.minChildTop ?? -Infinity);
-
-    let index = 0;
-    let rowTop = firstRowTop;
-    while (index < children.length) {
-        const slice = children.slice(index, index + MAX_SIBLINGS_PER_ROW);
-        const maxH = Math.max(...slice.map((c) => getNodeSize(c).height));
-        const innerW =
-            slice.reduce((s, c) => s + getNodeSize(c).width, 0) + (slice.length - 1) * MIN_NODE_SEPARATION;
-        let left = pCx - innerW / 2;
-        slice.forEach((child) => {
-            const cs = getNodeSize(child);
-            child.position = {x: left, y: rowTop};
-            left += cs.width + MIN_NODE_SEPARATION;
-            layoutNonGoalChildren(child, {});
-        });
-        rowTop += maxH + MIN_NODE_SEPARATION + ROW_VERTICAL_EXTRA;
-        index += slice.length;
-    }
+    return layerById;
 };
 
 /**
- * Global overlap removal: nudge subtrees apart (large vertical / horizontal steps).
- * Nodes sorted by top Y: inner loop can stop when j is too far below i for vertical overlap.
+ * Larghezza massima (su un singolo layer) dei nodi discendenti di un goal
+ * (layer >= subgoal), usata per allocare la colonna sotto il goal.
  */
-const resolveGlobalOverlaps = (flatList) => {
-    const maxIterations = 2200;
-    const nudgeY = 110;
-    const nudgeX = 140;
-    const verticalScanSlack = MIN_NODE_SEPARATION * 6;
+const maxSubtreeBandWidthForGoal = (goalId, sortedLayerKeys, layers) => {
+    const gRow = [...layers.values()]
+        .flat()
+        .find((r) => r.node?.id === goalId && r.node?.type === "goal");
+    let maxW = gRow ? estimateNodeSize(gRow.node).width : 240;
 
-    for (let iter = 0; iter < maxIterations; iter++) {
-        const sorted = flatList
-            .map((e) => e.node)
-            .sort((a, b) => getRect(a).top - getRect(b).top || String(a.id).localeCompare(String(b.id)));
-
-        let moved = false;
-        outer: for (let i = 0; i < sorted.length; i++) {
-            const a = sorted[i];
-            const ra = getInflatedRect(a);
-            for (let j = i + 1; j < sorted.length; j++) {
-                const b = sorted[j];
-                const rbTop = getRect(b).top;
-                if (rbTop > ra.bottom + verticalScanSlack) {
-                    break;
-                }
-                if (!rectsOverlap(ra, getInflatedRect(b))) {
-                    continue;
-                }
-                const toNudge =
-                    Number(a.position.y) > Number(b.position.y) ||
-                    (a.position.y === b.position.y && String(a.id) > String(b.id))
-                        ? a
-                        : b;
-                const dx = iter % 4 === 1 || iter % 4 === 3 ? nudgeX : 0;
-                translateSubtree(toNudge, dx, nudgeY);
-                moved = true;
-                break outer;
+    for (const L of sortedLayerKeys) {
+        if (L < LAYER_SUBGOAL) {
+            continue;
+        }
+        const bucket = layers.get(L) ?? [];
+        const group = bucket.filter((r) => r.goalAncestorId === goalId);
+        if (group.length === 0) {
+            continue;
+        }
+        group.sort((a, b) => a.preorder - b.preorder);
+        let sum = 0;
+        for (let i = 0; i < group.length; i += 1) {
+            sum += estimateNodeSize(group[i].node).width;
+            if (i < group.length - 1) {
+                sum += GAP_X;
             }
         }
-        if (!moved) {
-            break;
-        }
+        maxW = Math.max(maxW, sum);
     }
+    return maxW;
 };
 
-const normalizeTreePositions = (roots) => {
-    const normalized = roots.map(cloneNode);
-    normalized.forEach((root) => {
-        if (root.type !== "root") {
-            layoutNonGoalChildren(root, {});
-            const flat = [];
-            flattenNodes(root, null, flat);
-            enforceBelowParentTree(root);
-            resolveGlobalOverlaps(flat);
-            enforceBelowParentTree(root);
-            const flat2 = [];
-            flattenNodes(root, null, flat2);
-            resolveGlobalOverlaps(flat2);
-            enforceBelowParentTree(root);
+/**
+ * Bbox orizzontale di tutti i nodi tranne il root (per centrare il root).
+ */
+const horizontalBoundsExcludingRoot = (roots) => {
+    let minX = Infinity;
+    let maxX = -Infinity;
+    const walk = (node) => {
+        if (node.type === "root") {
+            getChildren(node).forEach(walk);
             return;
         }
-
-        layoutRootAndLayerTwoGoals(root);
-        const rootChildren = root.children || [];
-        const layerGoals = rootChildren.filter((c) => isLayerTwoGoal(c, root));
-
-        let minTopForOthers = -Infinity;
-        if (layerGoals.length > 0) {
-            minTopForOthers =
-                Math.max(...layerGoals.map((g) => g.position.y + getNodeSize(g).height)) +
-                GAP_PARENT_TO_CHILDREN;
-        }
-
-        layerGoals.forEach((g) => layoutNonGoalChildren(g, {}));
-
-        if (rootChildren.some((c) => !isLayerTwoGoal(c, root))) {
-            layoutNonGoalChildren(root, {minChildTop: minTopForOthers});
-        }
-
-        const flat = [];
-        flattenNodes(root, null, flat);
-        enforceBelowParentTree(root);
-        resolveGlobalOverlaps(flat);
-        enforceBelowParentTree(root);
-        const flat2 = [];
-        flattenNodes(root, null, flat2);
-        resolveGlobalOverlaps(flat2);
-        enforceBelowParentTree(root);
-    });
-    return normalized;
+        const {width} = estimateNodeSize(node);
+        const x = Number(node?.position?.x ?? 0);
+        minX = Math.min(minX, x);
+        maxX = Math.max(maxX, x + width);
+        getChildren(node).forEach(walk);
+    };
+    roots.forEach(walk);
+    return {minX, maxX};
 };
+
+/**
+ * Posiziona per layer: root; goal su colonne larghe al massimo delle bande figlie;
+ * da subgoal in giù, righe per goal centrate sul centro orizzontale del goal.
+ */
+const applyLayeredPositions = (roots, rows, layerById) => {
+    const layers = new Map();
+    for (const row of rows) {
+        const L = layerById.get(row.node.id) ?? LAYER_ROOT;
+        if (!layers.has(L)) {
+            layers.set(L, []);
+        }
+        layers.get(L).push(row);
+    }
+
+    const sortedKeys = [...layers.keys()].sort((a, b) => a - b);
+    const rootNode = roots.find((n) => n.type === "root");
+    const goals =
+        rootNode && Array.isArray(rootNode.children) ? rootNode.children.filter((c) => c.type === "goal") : [];
+
+    let yCursor = MARGIN_Y;
+
+    for (const L of sortedKeys) {
+        const bucket = layers.get(L);
+
+        if (L === LAYER_ROOT) {
+            let rowMaxH = 0;
+            for (const {node} of bucket) {
+                const {width, height} = estimateNodeSize(node);
+                rowMaxH = Math.max(rowMaxH, height);
+                node.position = {x: MARGIN_X, y: yCursor};
+            }
+            yCursor += rowMaxH + GAP_Y;
+            continue;
+        }
+
+        if (L === LAYER_GOAL) {
+            let rowMaxH = 0;
+            let xCol = MARGIN_X;
+            for (const G of goals) {
+                const colW = maxSubtreeBandWidthForGoal(G.id, sortedKeys, layers);
+                const {width: wG, height: hG} = estimateNodeSize(G);
+                rowMaxH = Math.max(rowMaxH, hG);
+                G.position = {x: xCol + (colW - wG) / 2, y: yCursor};
+                xCol += colW + GAP_X;
+            }
+            yCursor += rowMaxH + GAP_Y;
+            continue;
+        }
+
+        const byGoal = new Map();
+        for (const row of bucket) {
+            const gid = row.goalAncestorId;
+            if (gid == null) {
+                continue;
+            }
+            if (!byGoal.has(gid)) {
+                byGoal.set(gid, []);
+            }
+            byGoal.get(gid).push(row);
+        }
+
+        let rowMaxH = 0;
+        for (const G of goals) {
+            const group = (byGoal.get(G.id) ?? []).slice().sort((a, b) => a.preorder - b.preorder);
+            for (const r of group) {
+                rowMaxH = Math.max(rowMaxH, estimateNodeSize(r.node).height);
+            }
+        }
+
+        for (const G of goals) {
+            const group = (byGoal.get(G.id) ?? []).slice().sort((a, b) => a.preorder - b.preorder);
+            if (group.length === 0) {
+                continue;
+            }
+            let pack = 0;
+            const lefts = [];
+            for (let i = 0; i < group.length; i += 1) {
+                const r = group[i];
+                const w = estimateNodeSize(r.node).width;
+                lefts.push(pack);
+                pack += w + (i < group.length - 1 ? GAP_X : 0);
+            }
+            const totalW = pack;
+            const {width: wGoal} = estimateNodeSize(G);
+            const goalCx = G.position.x + wGoal / 2;
+            const offset = goalCx - totalW / 2;
+            for (let i = 0; i < group.length; i += 1) {
+                const r = group[i];
+                r.node.position = {x: offset + lefts[i], y: yCursor};
+            }
+        }
+
+        yCursor += rowMaxH + GAP_Y;
+    }
+
+    if (rootNode?.position) {
+        const {minX, maxX} = horizontalBoundsExcludingRoot(roots);
+        if (Number.isFinite(minX) && Number.isFinite(maxX) && maxX >= minX) {
+            const rw = estimateNodeSize(rootNode).width;
+            rootNode.position.x = (minX + maxX) / 2 - rw / 2;
+        }
+    }
+};
+
+export function normalizeTreePositions(forest) {
+    const roots = deepCloneForest(forest);
+    if (!roots.length) {
+        return roots;
+    }
+
+    const idToNode = buildParentIdToNode(roots);
+    const rows = collectPreorderMeta(roots);
+    const layerById = assignSemanticLayers(rows, idToNode);
+    applyLayeredPositions(roots, rows, layerById);
+
+    return roots;
+}
 
 export const raw_AIActNodes = [
     {
         "id": "ai-act-compliance",
         "type": "root",
-        "position": {
-            "x": 16000,
-            "y": -2000
-        },
         "data": {
             "isHidden": false,
             "label": "AI_Act_Compliance",
@@ -281,10 +315,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-8",
                 "type": "goal",
-                "position": {
-                    "x": 16000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "Goal 8 — Ensure high-risk AI system compliance with AI Act requirements according to intended purpose and state of the art"
@@ -294,10 +324,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "8-1-ensure-compliance-with-section-iii-requirements-art",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-8",
                         "data": {
                             "isHidden": false,
@@ -309,10 +335,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "8-2-integrate-risk-management-system-into-compliance-proce",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-8",
                         "data": {
                             "isHidden": false,
@@ -324,10 +346,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "8-3-ensure-full-compliance-with-applicable-union-harmonisa",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-8",
                         "data": {
                             "isHidden": false,
@@ -339,10 +357,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "8-4-integrate-existing-testing-reporting-processes-to-avoi",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-8",
                         "data": {
                             "isHidden": false,
@@ -354,10 +368,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-8-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-8",
                         "data": {
                             "isHidden": false,
@@ -370,10 +380,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-8-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-8",
                         "data": {
                             "isHidden": false,
@@ -385,10 +391,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-8-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "8-3-ensure-full-compliance-with-applicable-union-harmonisa",
                         "data": {
                             "isHidden": false,
@@ -400,10 +402,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-8-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "8-4-integrate-existing-testing-reporting-processes-to-avoi",
                         "data": {
                             "isHidden": false,
@@ -415,10 +413,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-8-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "8-4-integrate-existing-testing-reporting-processes-to-avoi",
                         "data": {
                             "isHidden": false,
@@ -430,10 +424,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-8-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "8-4-integrate-existing-testing-reporting-processes-to-avoi",
                         "data": {
                             "isHidden": false,
@@ -445,10 +435,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-8-3",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "8-4-integrate-existing-testing-reporting-processes-to-avoi",
                         "data": {
                             "isHidden": false,
@@ -460,10 +446,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-8-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-8",
                         "data": {
                             "isHidden": false,
@@ -476,10 +458,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-8-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-8",
                         "data": {
                             "isHidden": false,
@@ -491,10 +469,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-8-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-8",
                         "data": {
                             "isHidden": false,
@@ -510,10 +484,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-9",
                 "type": "goal",
-                "position": {
-                    "x": 18000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 9 — Establish, implement, document and maintain a risk management system for the high-risk AI system throughout its entire lifecycle"
@@ -523,10 +493,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-9-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1200,
-                            "y": 500
-                        },
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
@@ -538,10 +504,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-9-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
@@ -553,10 +515,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-9-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
@@ -568,10 +526,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-9-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
@@ -583,10 +537,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-9-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
@@ -598,10 +548,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-9-6",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
@@ -613,10 +559,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-9-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
@@ -629,10 +571,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-9-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
@@ -645,10 +583,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-9-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
@@ -661,10 +595,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-9-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-9-4",
                         "data": {
                             "isHidden": false,
@@ -677,10 +607,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-9-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-9-4",
                         "data": {
                             "isHidden": false,
@@ -693,10 +619,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-9-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-9-4",
                         "data": {
                             "isHidden": false,
@@ -709,10 +631,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-9-7",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-9-4",
                         "data": {
                             "isHidden": false,
@@ -725,10 +643,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-9-8",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-9-4",
                         "data": {
                             "isHidden": false,
@@ -741,10 +655,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-9-9",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-9-5",
                         "data": {
                             "isHidden": false,
@@ -757,10 +667,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-9-10",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-9-5",
                         "data": {
                             "isHidden": false,
@@ -773,10 +679,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-9-11",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
@@ -789,10 +691,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-9-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-9-4",
                         "data": {
                             "isHidden": false,
@@ -805,10 +703,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-9-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-9-5",
                         "data": {
                             "isHidden": false,
@@ -821,10 +715,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-9-3",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-9-5",
                         "data": {
                             "isHidden": false,
@@ -837,10 +727,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-9-4",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-9-4",
                         "data": {
                             "isHidden": false,
@@ -853,10 +739,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-9-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
@@ -869,10 +751,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-9-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
@@ -885,10 +763,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-9-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
@@ -901,10 +775,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-9-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
@@ -917,10 +787,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-9-5",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
@@ -936,10 +802,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-10",
                 "type": "goal",
-                "position": {
-                    "x": 20000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 10 — Ensure data governance and quality of training, validation and testing datasets for the high-risk AI system"
@@ -949,10 +811,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-10-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1200,
-                            "y": 500
-                        },
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
@@ -964,10 +822,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-10-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
@@ -979,10 +833,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-10-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
@@ -994,10 +844,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-10-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
@@ -1009,10 +855,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-10-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
@@ -1024,10 +866,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-10-6",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
@@ -1039,10 +877,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-10-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-10-1",
                         "data": {
                             "isHidden": false,
@@ -1055,10 +889,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-10-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-10-1",
                         "data": {
                             "isHidden": false,
@@ -1071,10 +901,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-10-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-10-1",
                         "data": {
                             "isHidden": false,
@@ -1087,10 +913,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-10-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-10-3",
                         "data": {
                             "isHidden": false,
@@ -1103,10 +925,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-10-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-10-6",
                         "data": {
                             "isHidden": false,
@@ -1119,10 +937,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-10-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-10-6",
                         "data": {
                             "isHidden": false,
@@ -1135,10 +949,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-10-7",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-10-6",
                         "data": {
                             "isHidden": false,
@@ -1151,10 +961,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-10-8",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-10-6",
                         "data": {
                             "isHidden": false,
@@ -1167,10 +973,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-10-9",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
@@ -1183,10 +985,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-10-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-10-2",
                         "data": {
                             "isHidden": false,
@@ -1199,10 +997,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-10-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-10-2",
                         "data": {
                             "isHidden": false,
@@ -1215,10 +1009,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-10-3",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-10-6",
                         "data": {
                             "isHidden": false,
@@ -1231,10 +1021,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-10-4",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-10-6",
                         "data": {
                             "isHidden": false,
@@ -1247,10 +1033,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-10-5",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-10-6",
                         "data": {
                             "isHidden": false,
@@ -1263,10 +1045,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-10-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
@@ -1279,10 +1057,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-10-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
@@ -1295,10 +1069,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-10-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
@@ -1311,10 +1081,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-10-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
@@ -1327,10 +1093,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-10-5",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
@@ -1346,10 +1108,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-11",
                 "type": "goal",
-                "position": {
-                    "x": 22000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 11 — Draw up, maintain and keep up-to-date technical documentation for the high-risk AI system before market placement or service deployment"
@@ -1359,10 +1117,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-11-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-11",
                         "data": {
                             "isHidden": false,
@@ -1374,10 +1128,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-11-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-11",
                         "data": {
                             "isHidden": false,
@@ -1389,10 +1139,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-11-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-11",
                         "data": {
                             "isHidden": false,
@@ -1404,10 +1150,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-11-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-11",
                         "data": {
                             "isHidden": false,
@@ -1419,10 +1161,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-11-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-11",
                         "data": {
                             "isHidden": false,
@@ -1435,10 +1173,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-11-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-11",
                         "data": {
                             "isHidden": false,
@@ -1451,10 +1185,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-11-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-11-3",
                         "data": {
                             "isHidden": false,
@@ -1467,10 +1197,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-11-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-11-4",
                         "data": {
                             "isHidden": false,
@@ -1483,10 +1209,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-11-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-11-3",
                         "data": {
                             "isHidden": false,
@@ -1499,10 +1221,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-11-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-11-2",
                         "data": {
                             "isHidden": false,
@@ -1515,10 +1233,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-11-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-11-2",
                         "data": {
                             "isHidden": false,
@@ -1531,10 +1245,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-11-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-11-2",
                         "data": {
                             "isHidden": false,
@@ -1547,10 +1257,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-11-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-11",
                         "data": {
                             "isHidden": false,
@@ -1563,10 +1269,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-11-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-11",
                         "data": {
                             "isHidden": false,
@@ -1579,10 +1281,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-11-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-11",
                         "data": {
                             "isHidden": false,
@@ -1598,10 +1296,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-12",
                 "type": "goal",
-                "position": {
-                    "x": 24000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 12 — Ensure automatic logging of events throughout the lifetime of the high-risk AI system"
@@ -1611,10 +1305,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-12-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-12",
                         "data": {
                             "isHidden": false,
@@ -1626,10 +1316,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-12-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-12",
                         "data": {
                             "isHidden": false,
@@ -1641,10 +1327,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-12-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-12",
                         "data": {
                             "isHidden": false,
@@ -1656,10 +1338,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-12-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-12",
                         "data": {
                             "isHidden": false,
@@ -1671,10 +1349,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-12-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-12",
                         "data": {
                             "isHidden": false,
@@ -1687,10 +1361,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-12-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-12",
                         "data": {
                             "isHidden": false,
@@ -1703,10 +1373,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-12-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-12-4",
                         "data": {
                             "isHidden": false,
@@ -1719,10 +1385,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-12-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-12-4",
                         "data": {
                             "isHidden": false,
@@ -1735,10 +1397,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-12-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-12-4",
                         "data": {
                             "isHidden": false,
@@ -1751,10 +1409,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-12-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-12-4",
                         "data": {
                             "isHidden": false,
@@ -1767,10 +1421,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-12-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-12",
                         "data": {
                             "isHidden": false,
@@ -1783,10 +1433,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-12-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-12",
                         "data": {
                             "isHidden": false,
@@ -1799,10 +1445,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-12-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-12",
                         "data": {
                             "isHidden": false,
@@ -1815,10 +1457,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-12-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-12",
                         "data": {
                             "isHidden": false,
@@ -1834,10 +1472,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-13",
                 "type": "goal",
-                "position": {
-                    "x": 26000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 13 — Ensure sufficient transparency of high-risk AI system to enable deployers to interpret output and use it appropriately"
@@ -1847,10 +1481,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-13-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1200,
-                            "y": 500
-                        },
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
@@ -1862,10 +1492,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-13-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
@@ -1877,10 +1503,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-13-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
@@ -1892,10 +1514,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-13-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
@@ -1907,10 +1525,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-13-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
@@ -1922,10 +1536,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-13-6",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
@@ -1937,10 +1547,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-13-7",
                         "type": "subgoal",
-                        "position": {
-                            "x": 1200,
-                            "y": 500
-                        },
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
@@ -1952,10 +1558,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-13-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
@@ -1968,10 +1570,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-13-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-13-2",
                         "data": {
                             "isHidden": false,
@@ -1984,10 +1582,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-13-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-13-3",
                         "data": {
                             "isHidden": false,
@@ -2000,10 +1594,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-13-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
@@ -2016,10 +1606,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-13-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
@@ -2032,10 +1618,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-13-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
@@ -2048,10 +1630,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-13-7",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
@@ -2064,10 +1642,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-13-8",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
@@ -2080,10 +1654,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-13-9",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
@@ -2096,10 +1666,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-13-10",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
@@ -2112,10 +1678,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-13-11",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
@@ -2128,10 +1690,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-13-12",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-13-5",
                         "data": {
                             "isHidden": false,
@@ -2144,10 +1702,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-13-13",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-13-6",
                         "data": {
                             "isHidden": false,
@@ -2160,10 +1714,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-13-14",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
@@ -2176,10 +1726,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-13-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-13-2",
                         "data": {
                             "isHidden": false,
@@ -2192,10 +1738,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-13-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-13-2",
                         "data": {
                             "isHidden": false,
@@ -2208,10 +1750,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-13-3",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
@@ -2224,10 +1762,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-13-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
@@ -2240,10 +1774,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-13-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
@@ -2256,10 +1786,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-13-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
@@ -2272,10 +1798,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-13-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
@@ -2291,10 +1813,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-14",
                 "type": "goal",
-                "position": {
-                    "x": 28000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 14 — Ensure effective human oversight of high-risk AI system during its use through appropriate design and measures"
@@ -2304,10 +1822,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-14-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1600,
-                            "y": 500
-                        },
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
@@ -2319,10 +1833,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-14-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1200,
-                            "y": 500
-                        },
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
@@ -2334,10 +1844,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-14-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
@@ -2349,10 +1855,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-14-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
@@ -2364,10 +1866,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-14-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
@@ -2379,10 +1877,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-14-6",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
@@ -2394,10 +1888,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-14-7",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
@@ -2409,10 +1899,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-14-8",
                         "type": "subgoal",
-                        "position": {
-                            "x": 1200,
-                            "y": 500
-                        },
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
@@ -2424,10 +1910,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-14-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
@@ -2440,10 +1922,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-14-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-14-1",
                         "data": {
                             "isHidden": false,
@@ -2456,10 +1934,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-14-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-14-2",
                         "data": {
                             "isHidden": false,
@@ -2472,10 +1946,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-14-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-14-3",
                         "data": {
                             "isHidden": false,
@@ -2488,10 +1958,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-14-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-14-5",
                         "data": {
                             "isHidden": false,
@@ -2504,10 +1970,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-14-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-14-6",
                         "data": {
                             "isHidden": false,
@@ -2520,10 +1982,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-14-7",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-14-7",
                         "data": {
                             "isHidden": false,
@@ -2536,10 +1994,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-14-8",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-14-8",
                         "data": {
                             "isHidden": false,
@@ -2552,10 +2006,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-14-9",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-14-8",
                         "data": {
                             "isHidden": false,
@@ -2568,10 +2018,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-14-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
@@ -2584,10 +2030,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-14-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-14-3",
                         "data": {
                             "isHidden": false,
@@ -2600,10 +2042,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-14-3",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-14-4",
                         "data": {
                             "isHidden": false,
@@ -2616,10 +2054,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-14-4",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-14-8",
                         "data": {
                             "isHidden": false,
@@ -2632,10 +2066,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-14-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
@@ -2648,10 +2078,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-14-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
@@ -2664,10 +2090,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-14-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
@@ -2680,10 +2102,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-14-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
@@ -2696,10 +2114,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-14-5",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
@@ -2715,10 +2129,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-15",
                 "type": "goal",
-                "position": {
-                    "x": 30000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 15 — Ensure appropriate level of accuracy, robustness and cybersecurity of the high-risk AI system consistently throughout its lifecycle"
@@ -2728,10 +2138,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-15-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
@@ -2743,10 +2149,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-15-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
@@ -2758,10 +2160,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-15-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
@@ -2773,10 +2171,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-15-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
@@ -2788,10 +2182,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-15-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
@@ -2803,10 +2193,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-15-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
@@ -2819,10 +2205,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-15-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-15-1",
                         "data": {
                             "isHidden": false,
@@ -2835,10 +2217,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-15-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-15-2",
                         "data": {
                             "isHidden": false,
@@ -2851,10 +2229,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-15-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-15-3",
                         "data": {
                             "isHidden": false,
@@ -2867,10 +2241,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-15-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-15-3",
                         "data": {
                             "isHidden": false,
@@ -2883,10 +2253,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-15-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-15-5",
                         "data": {
                             "isHidden": false,
@@ -2899,10 +2265,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-15-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
@@ -2915,10 +2277,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-15-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-15-2",
                         "data": {
                             "isHidden": false,
@@ -2931,10 +2289,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-15-3",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-15-2",
                         "data": {
                             "isHidden": false,
@@ -2947,10 +2301,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-15-4",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-15-4",
                         "data": {
                             "isHidden": false,
@@ -2963,10 +2313,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-15-5",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-15-3",
                         "data": {
                             "isHidden": false,
@@ -2979,10 +2325,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-15-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
@@ -2995,10 +2337,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-15-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
@@ -3011,10 +2349,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-15-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
@@ -3027,10 +2361,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-15-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
@@ -3046,10 +2376,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-16",
                 "type": "goal",
-                "position": {
-                    "x": 32000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 16 — Fulfil all provider obligations for high-risk AI systems throughout their lifecycle"
@@ -3059,10 +2385,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-16-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -2400,
-                            "y": 500
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3074,10 +2396,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-16-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -2000,
-                            "y": 500
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3089,10 +2407,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-16-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1600,
-                            "y": 500
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3104,10 +2418,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-16-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1200,
-                            "y": 500
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3119,10 +2429,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-16-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3134,10 +2440,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-16-6",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3149,10 +2451,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-16-7",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3164,10 +2462,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-16-8",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3179,10 +2473,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-16-9",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3194,10 +2484,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-16-10",
                         "type": "subgoal",
-                        "position": {
-                            "x": 1200,
-                            "y": 500
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3209,10 +2495,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-16-11",
                         "type": "subgoal",
-                        "position": {
-                            "x": 1600,
-                            "y": 500
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3224,10 +2506,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-16-12",
                         "type": "subgoal",
-                        "position": {
-                            "x": 2000,
-                            "y": 500
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3239,10 +2517,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-16-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-16-2",
                         "data": {
                             "isHidden": false,
@@ -3255,10 +2529,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-16-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-16-3",
                         "data": {
                             "isHidden": false,
@@ -3271,10 +2541,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-16-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-16-5",
                         "data": {
                             "isHidden": false,
@@ -3287,10 +2553,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-16-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-16-6",
                         "data": {
                             "isHidden": false,
@@ -3303,10 +2565,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-16-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-16-7",
                         "data": {
                             "isHidden": false,
@@ -3319,10 +2577,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-16-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-16-8",
                         "data": {
                             "isHidden": false,
@@ -3335,10 +2589,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-16-7",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-16-9",
                         "data": {
                             "isHidden": false,
@@ -3351,10 +2601,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-16-8",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-16-10",
                         "data": {
                             "isHidden": false,
@@ -3367,10 +2613,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-16-9",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-16-11",
                         "data": {
                             "isHidden": false,
@@ -3383,10 +2625,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-16-10",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-16-12",
                         "data": {
                             "isHidden": false,
@@ -3399,10 +2637,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-16-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-16-10",
                         "data": {
                             "isHidden": false,
@@ -3415,10 +2649,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-16-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-16-11",
                         "data": {
                             "isHidden": false,
@@ -3431,10 +2661,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-16-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3447,10 +2673,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-16-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3463,10 +2685,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-16-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3479,10 +2697,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-16-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-16",
                         "data": {
                             "isHidden": false,
@@ -3498,10 +2712,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-17",
                 "type": "goal",
-                "position": {
-                    "x": 34000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 17 — Establish, document and maintain a quality management system ensuring compliance with AI Act for high-risk AI systems"
@@ -3511,10 +2721,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-17-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -2400,
-                            "y": 500
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3526,10 +2732,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-17-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -2000,
-                            "y": 500
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3541,10 +2743,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-17-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1600,
-                            "y": 500
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3556,10 +2754,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-17-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1200,
-                            "y": 500
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3571,10 +2765,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-17-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3586,10 +2776,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-17-6",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3601,10 +2787,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-17-7",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3616,10 +2798,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-17-8",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3631,10 +2809,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-17-9",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3646,10 +2820,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-17-10",
                         "type": "subgoal",
-                        "position": {
-                            "x": 1200,
-                            "y": 500
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3661,10 +2831,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-17-11",
                         "type": "subgoal",
-                        "position": {
-                            "x": 1600,
-                            "y": 500
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3676,10 +2842,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-17-12",
                         "type": "subgoal",
-                        "position": {
-                            "x": 2000,
-                            "y": 500
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3691,10 +2853,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-17-13",
                         "type": "subgoal",
-                        "position": {
-                            "x": 2400,
-                            "y": 500
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3706,10 +2864,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-17-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3722,10 +2876,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-17-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-17-1",
                         "data": {
                             "isHidden": false,
@@ -3738,10 +2888,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-17-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-17-4",
                         "data": {
                             "isHidden": false,
@@ -3754,10 +2900,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-17-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-17-5",
                         "data": {
                             "isHidden": false,
@@ -3770,10 +2912,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-17-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-17-6",
                         "data": {
                             "isHidden": false,
@@ -3786,10 +2924,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-17-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-17-7",
                         "data": {
                             "isHidden": false,
@@ -3802,10 +2936,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-17-7",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-17-8",
                         "data": {
                             "isHidden": false,
@@ -3818,10 +2948,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-17-8",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-17-9",
                         "data": {
                             "isHidden": false,
@@ -3834,10 +2960,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-17-9",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3850,10 +2972,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-17-10",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3866,10 +2984,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-17-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3882,10 +2996,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-17-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3898,10 +3008,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-17-3",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-17-13",
                         "data": {
                             "isHidden": false,
@@ -3914,10 +3020,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-17-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3930,10 +3032,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-17-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3946,10 +3044,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-17-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3962,10 +3056,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-17-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3978,10 +3068,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-17-5",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
@@ -3997,10 +3083,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-18",
                 "type": "goal",
-                "position": {
-                    "x": 36000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 18 — Retain and keep at disposal of national competent authorities all required documentation for 10 years after market placement or service deployment"
@@ -4010,10 +3092,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-18-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
@@ -4025,10 +3103,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-18-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
@@ -4040,10 +3114,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-18-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
@@ -4055,10 +3125,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-18-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
@@ -4070,10 +3136,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-18-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
@@ -4085,10 +3147,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-18-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
@@ -4101,10 +3159,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-18-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
@@ -4117,10 +3171,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-18-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
@@ -4133,10 +3183,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-18-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-18-1",
                         "data": {
                             "isHidden": false,
@@ -4149,10 +3195,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-18-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
@@ -4165,10 +3207,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-18-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
@@ -4181,10 +3219,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-18-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
@@ -4197,10 +3231,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-18-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
@@ -4213,10 +3243,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-18-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
@@ -4229,10 +3255,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-18-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
@@ -4248,10 +3270,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-19",
                 "type": "goal",
-                "position": {
-                    "x": 38000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 19 — Retain automatically generated logs of high-risk AI system for the required retention period"
@@ -4261,10 +3279,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-19-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-19",
                         "data": {
                             "isHidden": false,
@@ -4276,10 +3290,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-19-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-19",
                         "data": {
                             "isHidden": false,
@@ -4291,10 +3301,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-19-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-19",
                         "data": {
                             "isHidden": false,
@@ -4306,10 +3312,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-19-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-19-1",
                         "data": {
                             "isHidden": false,
@@ -4322,10 +3324,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-19-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-19-2",
                         "data": {
                             "isHidden": false,
@@ -4338,10 +3336,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-19-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-19-2",
                         "data": {
                             "isHidden": false,
@@ -4354,10 +3348,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-19-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-19-3",
                         "data": {
                             "isHidden": false,
@@ -4370,10 +3360,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-19-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-19-2",
                         "data": {
                             "isHidden": false,
@@ -4386,10 +3372,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-19-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-19",
                         "data": {
                             "isHidden": false,
@@ -4402,10 +3384,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-19-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-19",
                         "data": {
                             "isHidden": false,
@@ -4418,10 +3396,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-19-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-19",
                         "data": {
                             "isHidden": false,
@@ -4434,10 +3408,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-19-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-19",
                         "data": {
                             "isHidden": false,
@@ -4453,10 +3423,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-20",
                 "type": "goal",
-                "position": {
-                    "x": 40000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 20 — Take immediate corrective action and inform relevant parties when high-risk AI system is not in conformity with AI Act"
@@ -4466,10 +3432,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-20-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-20",
                         "data": {
                             "isHidden": false,
@@ -4481,10 +3443,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-20-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-20",
                         "data": {
                             "isHidden": false,
@@ -4496,10 +3454,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-20-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-20",
                         "data": {
                             "isHidden": false,
@@ -4511,10 +3465,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-20-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-20",
                         "data": {
                             "isHidden": false,
@@ -4526,10 +3476,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-20-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-20",
                         "data": {
                             "isHidden": false,
@@ -4541,10 +3487,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-20-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-20",
                         "data": {
                             "isHidden": false,
@@ -4557,10 +3499,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-20-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-20-2",
                         "data": {
                             "isHidden": false,
@@ -4573,10 +3511,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-20-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-20-3",
                         "data": {
                             "isHidden": false,
@@ -4589,10 +3523,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-20-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-20-4",
                         "data": {
                             "isHidden": false,
@@ -4605,10 +3535,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-20-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-20-5",
                         "data": {
                             "isHidden": false,
@@ -4621,10 +3547,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-20-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-20-5",
                         "data": {
                             "isHidden": false,
@@ -4637,10 +3559,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-20-7",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-20-5",
                         "data": {
                             "isHidden": false,
@@ -4653,10 +3571,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-20-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-20-4",
                         "data": {
                             "isHidden": false,
@@ -4669,10 +3583,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-20-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-20-2",
                         "data": {
                             "isHidden": false,
@@ -4685,10 +3595,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-20-3",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-20-3",
                         "data": {
                             "isHidden": false,
@@ -4701,10 +3607,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-20-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-20",
                         "data": {
                             "isHidden": false,
@@ -4717,10 +3619,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-20-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-20",
                         "data": {
                             "isHidden": false,
@@ -4733,10 +3631,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-20-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-20",
                         "data": {
                             "isHidden": false,
@@ -4749,10 +3643,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-20-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-20",
                         "data": {
                             "isHidden": false,
@@ -4765,10 +3655,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-20-5",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-20",
                         "data": {
                             "isHidden": false,
@@ -4784,10 +3670,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-21",
                 "type": "goal",
-                "position": {
-                    "x": 42000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 21 — Provide competent authorities with all information, documentation and logs necessary to demonstrate conformity upon reasoned request"
@@ -4797,10 +3679,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-21-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-21",
                         "data": {
                             "isHidden": false,
@@ -4812,10 +3690,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-21-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-21",
                         "data": {
                             "isHidden": false,
@@ -4827,10 +3701,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-21-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-21",
                         "data": {
                             "isHidden": false,
@@ -4843,10 +3713,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-21-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-21-1",
                         "data": {
                             "isHidden": false,
@@ -4859,10 +3725,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-21-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-21-2",
                         "data": {
                             "isHidden": false,
@@ -4875,10 +3737,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-21-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-21",
                         "data": {
                             "isHidden": false,
@@ -4891,10 +3749,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-21-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-21-1",
                         "data": {
                             "isHidden": false,
@@ -4907,10 +3761,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-21-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-21-1",
                         "data": {
                             "isHidden": false,
@@ -4923,10 +3773,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-21-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-21",
                         "data": {
                             "isHidden": false,
@@ -4939,10 +3785,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-21-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-21",
                         "data": {
                             "isHidden": false,
@@ -4955,10 +3797,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-21-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-21",
                         "data": {
                             "isHidden": false,
@@ -4974,10 +3812,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-22",
                 "type": "goal",
-                "position": {
-                    "x": 44000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 22 — Appoint and enable an authorised representative in the Union for third-country providers before market placement"
@@ -4987,10 +3821,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-22-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1600,
-                            "y": 500
-                        },
                         "parentId": "goal-22",
                         "data": {
                             "isHidden": false,
@@ -5002,10 +3832,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-22-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1200,
-                            "y": 500
-                        },
                         "parentId": "goal-22",
                         "data": {
                             "isHidden": false,
@@ -5017,10 +3843,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-22-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-22",
                         "data": {
                             "isHidden": false,
@@ -5032,10 +3854,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-22-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-22",
                         "data": {
                             "isHidden": false,
@@ -5047,10 +3865,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-22-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-22",
                         "data": {
                             "isHidden": false,
@@ -5062,10 +3876,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-22-6",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-22",
                         "data": {
                             "isHidden": false,
@@ -5077,10 +3887,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-22-7",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-22",
                         "data": {
                             "isHidden": false,
@@ -5092,10 +3898,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-22-8",
                         "type": "subgoal",
-                        "position": {
-                            "x": 1200,
-                            "y": 500
-                        },
                         "parentId": "goal-22",
                         "data": {
                             "isHidden": false,
@@ -5107,10 +3909,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-22-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-22-1",
                         "data": {
                             "isHidden": false,
@@ -5123,10 +3921,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-22-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-22-1",
                         "data": {
                             "isHidden": false,
@@ -5139,10 +3933,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-22-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-22-2",
                         "data": {
                             "isHidden": false,
@@ -5155,10 +3945,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-22-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-22-4",
                         "data": {
                             "isHidden": false,
@@ -5171,10 +3957,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-22-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-22-4",
                         "data": {
                             "isHidden": false,
@@ -5187,10 +3969,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-22-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-22-5",
                         "data": {
                             "isHidden": false,
@@ -5203,10 +3981,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-22-7",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-22-8",
                         "data": {
                             "isHidden": false,
@@ -5219,10 +3993,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-22-8",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-22-8",
                         "data": {
                             "isHidden": false,
@@ -5235,10 +4005,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-22-9",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-22-2",
                         "data": {
                             "isHidden": false,
@@ -5251,10 +4017,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-22-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-22-5",
                         "data": {
                             "isHidden": false,
@@ -5267,10 +4029,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-22-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-22-6",
                         "data": {
                             "isHidden": false,
@@ -5283,10 +4041,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-22-3",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-22-8",
                         "data": {
                             "isHidden": false,
@@ -5299,10 +4053,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-22-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-22",
                         "data": {
                             "isHidden": false,
@@ -5315,10 +4065,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-22-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-22",
                         "data": {
                             "isHidden": false,
@@ -5331,10 +4077,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-22-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-22",
                         "data": {
                             "isHidden": false,
@@ -5347,10 +4089,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-22-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-22",
                         "data": {
                             "isHidden": false,
@@ -5366,10 +4104,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-23",
                 "type": "goal",
-                "position": {
-                    "x": 46000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 23 — Fulfil all importer obligations to ensure conformity of high-risk AI system before and after market placement"
@@ -5379,10 +4113,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-23-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -2000,
-                            "y": 500
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5394,10 +4124,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-23-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1600,
-                            "y": 500
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5409,10 +4135,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-23-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1200,
-                            "y": 500
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5424,10 +4146,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-23-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5439,10 +4157,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-23-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5454,10 +4168,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-23-6",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5469,10 +4179,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-23-7",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5484,10 +4190,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-23-8",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5499,10 +4201,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-23-9",
                         "type": "subgoal",
-                        "position": {
-                            "x": 1200,
-                            "y": 500
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5514,10 +4212,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-23-10",
                         "type": "subgoal",
-                        "position": {
-                            "x": 1600,
-                            "y": 500
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5529,10 +4223,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-23-11",
                         "type": "subgoal",
-                        "position": {
-                            "x": 2000,
-                            "y": 500
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5544,10 +4234,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-23-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5560,10 +4246,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-23-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-23-5",
                         "data": {
                             "isHidden": false,
@@ -5576,10 +4258,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-23-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-23-6",
                         "data": {
                             "isHidden": false,
@@ -5592,10 +4270,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-23-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-23-7",
                         "data": {
                             "isHidden": false,
@@ -5608,10 +4282,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-23-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-23-8",
                         "data": {
                             "isHidden": false,
@@ -5624,10 +4294,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-23-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-23-9",
                         "data": {
                             "isHidden": false,
@@ -5640,10 +4306,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-23-7",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-23-9",
                         "data": {
                             "isHidden": false,
@@ -5656,10 +4318,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-23-8",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-23-10",
                         "data": {
                             "isHidden": false,
@@ -5672,10 +4330,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-23-9",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-23-10",
                         "data": {
                             "isHidden": false,
@@ -5688,10 +4342,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-23-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5704,10 +4354,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-23-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-23-11",
                         "data": {
                             "isHidden": false,
@@ -5720,10 +4366,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-23-3",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-23-11",
                         "data": {
                             "isHidden": false,
@@ -5736,10 +4378,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-23-4",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-23-8",
                         "data": {
                             "isHidden": false,
@@ -5752,10 +4390,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-23-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5768,10 +4402,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-23-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5784,10 +4414,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-23-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5800,10 +4426,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-23-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5816,10 +4438,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-23-5",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
@@ -5835,10 +4453,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-24",
                 "type": "goal",
-                "position": {
-                    "x": 48000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 24 — Fulfil all distributor obligations to ensure conformity of high-risk AI system before and after market availability"
@@ -5848,10 +4462,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-24-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1600,
-                            "y": 500
-                        },
                         "parentId": "goal-24",
                         "data": {
                             "isHidden": false,
@@ -5863,10 +4473,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-24-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1200,
-                            "y": 500
-                        },
                         "parentId": "goal-24",
                         "data": {
                             "isHidden": false,
@@ -5878,10 +4484,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-24-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-24",
                         "data": {
                             "isHidden": false,
@@ -5893,10 +4495,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-24-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-24",
                         "data": {
                             "isHidden": false,
@@ -5908,10 +4506,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-24-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-24",
                         "data": {
                             "isHidden": false,
@@ -5923,10 +4517,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-24-6",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-24",
                         "data": {
                             "isHidden": false,
@@ -5938,10 +4528,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-24-7",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-24",
                         "data": {
                             "isHidden": false,
@@ -5953,10 +4539,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-24-8",
                         "type": "subgoal",
-                        "position": {
-                            "x": 1200,
-                            "y": 500
-                        },
                         "parentId": "goal-24",
                         "data": {
                             "isHidden": false,
@@ -5968,10 +4550,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-24-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-24-1",
                         "data": {
                             "isHidden": false,
@@ -5984,10 +4562,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-24-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-24-2",
                         "data": {
                             "isHidden": false,
@@ -6000,10 +4574,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-24-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-24-3",
                         "data": {
                             "isHidden": false,
@@ -6016,10 +4586,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-24-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-24-4",
                         "data": {
                             "isHidden": false,
@@ -6032,10 +4598,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-24-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-24-5",
                         "data": {
                             "isHidden": false,
@@ -6048,10 +4610,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-24-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-24-6",
                         "data": {
                             "isHidden": false,
@@ -6064,10 +4622,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-24-7",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-24-7",
                         "data": {
                             "isHidden": false,
@@ -6080,10 +4634,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-24-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-24-7",
                         "data": {
                             "isHidden": false,
@@ -6096,10 +4646,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-24-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-24-6",
                         "data": {
                             "isHidden": false,
@@ -6112,10 +4658,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-24-3",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-24-8",
                         "data": {
                             "isHidden": false,
@@ -6128,10 +4670,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-24-4",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-24-4",
                         "data": {
                             "isHidden": false,
@@ -6144,10 +4682,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-24-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-24",
                         "data": {
                             "isHidden": false,
@@ -6160,10 +4694,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-24-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-24",
                         "data": {
                             "isHidden": false,
@@ -6176,10 +4706,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-24-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-24",
                         "data": {
                             "isHidden": false,
@@ -6192,10 +4718,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-24-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-24",
                         "data": {
                             "isHidden": false,
@@ -6208,10 +4730,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-24-5",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-24",
                         "data": {
                             "isHidden": false,
@@ -6227,10 +4745,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-25",
                 "type": "goal",
-                "position": {
-                    "x": 50000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 25 — Correctly identify provider role and establish obligations when distributor, importer, deployer or third party assumes provider responsibilities"
@@ -6240,10 +4754,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-25-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1200,
-                            "y": 500
-                        },
                         "parentId": "goal-25",
                         "data": {
                             "isHidden": false,
@@ -6255,10 +4765,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-25-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-25",
                         "data": {
                             "isHidden": false,
@@ -6270,10 +4776,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-25-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-25",
                         "data": {
                             "isHidden": false,
@@ -6285,10 +4787,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-25-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-25",
                         "data": {
                             "isHidden": false,
@@ -6300,10 +4798,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-25-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-25",
                         "data": {
                             "isHidden": false,
@@ -6315,10 +4809,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-25-6",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-25",
                         "data": {
                             "isHidden": false,
@@ -6330,10 +4820,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-25-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-25-1",
                         "data": {
                             "isHidden": false,
@@ -6346,10 +4832,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-25-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-25-2",
                         "data": {
                             "isHidden": false,
@@ -6362,10 +4844,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-25-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-25-3",
                         "data": {
                             "isHidden": false,
@@ -6378,10 +4856,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-25-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-25-4",
                         "data": {
                             "isHidden": false,
@@ -6394,10 +4868,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-25-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-25-4",
                         "data": {
                             "isHidden": false,
@@ -6410,10 +4880,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-25-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-25-4",
                         "data": {
                             "isHidden": false,
@@ -6426,10 +4892,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-25-7",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-25-5",
                         "data": {
                             "isHidden": false,
@@ -6442,10 +4904,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-25-8",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-25-6",
                         "data": {
                             "isHidden": false,
@@ -6458,10 +4916,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-25-9",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-25-6",
                         "data": {
                             "isHidden": false,
@@ -6474,10 +4928,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-25-10",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-25",
                         "data": {
                             "isHidden": false,
@@ -6490,10 +4940,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-25-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-25-4",
                         "data": {
                             "isHidden": false,
@@ -6506,10 +4952,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-25-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-25-6",
                         "data": {
                             "isHidden": false,
@@ -6522,10 +4964,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-25-3",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-25-4",
                         "data": {
                             "isHidden": false,
@@ -6538,10 +4976,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-25-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-25",
                         "data": {
                             "isHidden": false,
@@ -6554,10 +4988,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-25-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-25",
                         "data": {
                             "isHidden": false,
@@ -6570,10 +5000,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-25-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-25",
                         "data": {
                             "isHidden": false,
@@ -6586,10 +5012,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-25-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-25",
                         "data": {
                             "isHidden": false,
@@ -6602,10 +5024,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-25-5",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-25",
                         "data": {
                             "isHidden": false,
@@ -6618,10 +5036,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-25-6",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-25",
                         "data": {
                             "isHidden": false,
@@ -6634,10 +5048,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-25-7",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-25",
                         "data": {
                             "isHidden": false,
@@ -6653,10 +5063,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-26",
                 "type": "goal",
-                "position": {
-                    "x": 52000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 26 — Fulfil all deployer obligations to ensure compliant, monitored and transparent use of high-risk AI system"
@@ -6666,10 +5072,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-26-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -2400,
-                            "y": 500
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -6681,10 +5083,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-26-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -2000,
-                            "y": 500
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -6696,10 +5094,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-26-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1600,
-                            "y": 500
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -6711,10 +5105,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-26-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1200,
-                            "y": 500
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -6726,10 +5116,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-26-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -6741,10 +5127,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-26-6",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -6756,10 +5138,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-26-7",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -6771,10 +5149,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-26-8",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -6786,10 +5160,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-26-9",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -6801,10 +5171,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-26-10",
                         "type": "subgoal",
-                        "position": {
-                            "x": 1200,
-                            "y": 500
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -6816,10 +5182,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-26-11",
                         "type": "subgoal",
-                        "position": {
-                            "x": 1600,
-                            "y": 500
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -6831,10 +5193,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-26-12",
                         "type": "subgoal",
-                        "position": {
-                            "x": 2000,
-                            "y": 500
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -6846,10 +5204,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-26-13",
                         "type": "subgoal",
-                        "position": {
-                            "x": 2400,
-                            "y": 500
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -6861,10 +5215,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-1",
                         "data": {
                             "isHidden": false,
@@ -6877,10 +5227,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-2",
                         "data": {
                             "isHidden": false,
@@ -6893,10 +5239,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-3",
                         "data": {
                             "isHidden": false,
@@ -6909,10 +5251,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-5",
                         "data": {
                             "isHidden": false,
@@ -6925,10 +5263,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-6",
                         "data": {
                             "isHidden": false,
@@ -6941,10 +5275,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-6",
                         "data": {
                             "isHidden": false,
@@ -6957,10 +5287,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-7",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-7",
                         "data": {
                             "isHidden": false,
@@ -6973,10 +5299,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-8",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-7",
                         "data": {
                             "isHidden": false,
@@ -6989,10 +5311,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-9",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-4",
                         "data": {
                             "isHidden": false,
@@ -7005,10 +5323,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-10",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-7",
                         "data": {
                             "isHidden": false,
@@ -7021,10 +5335,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-11",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-8",
                         "data": {
                             "isHidden": false,
@@ -7037,10 +5347,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-12",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-9",
                         "data": {
                             "isHidden": false,
@@ -7053,10 +5359,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-13",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-11",
                         "data": {
                             "isHidden": false,
@@ -7069,10 +5371,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-14",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-11",
                         "data": {
                             "isHidden": false,
@@ -7085,10 +5383,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-15",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-11",
                         "data": {
                             "isHidden": false,
@@ -7101,10 +5395,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-16",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-11",
                         "data": {
                             "isHidden": false,
@@ -7117,10 +5407,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-17",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-11",
                         "data": {
                             "isHidden": false,
@@ -7133,10 +5419,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-18",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-12",
                         "data": {
                             "isHidden": false,
@@ -7149,10 +5431,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-26-19",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-4",
                         "data": {
                             "isHidden": false,
@@ -7165,10 +5443,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-26-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-2",
                         "data": {
                             "isHidden": false,
@@ -7181,10 +5455,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-26-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-3",
                         "data": {
                             "isHidden": false,
@@ -7197,10 +5467,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-26-3",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-5",
                         "data": {
                             "isHidden": false,
@@ -7213,10 +5479,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-26-4",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-6",
                         "data": {
                             "isHidden": false,
@@ -7229,10 +5491,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-26-5",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -7245,10 +5503,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-26-6",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-26-13",
                         "data": {
                             "isHidden": false,
@@ -7261,10 +5515,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-26-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -7277,10 +5527,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-26-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -7293,10 +5539,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-26-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -7309,10 +5551,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-26-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -7325,10 +5563,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-26-5",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -7341,10 +5575,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-26-6",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -7357,10 +5587,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-26-7",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -7373,10 +5599,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-26-8",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -7389,10 +5611,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-26-9",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -7405,10 +5623,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-26-10",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
@@ -7424,10 +5638,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-50",
                 "type": "goal",
-                "position": {
-                    "x": 100000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 50 — Ensure transparency obligations for providers and deployers of AI systems interacting with or affecting natural persons"
@@ -7437,10 +5647,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-50-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7452,10 +5658,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-50-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7467,10 +5669,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-50-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7482,10 +5680,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-50-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7497,10 +5691,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-50-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7512,10 +5702,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-50-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-50-1",
                         "data": {
                             "isHidden": false,
@@ -7528,10 +5714,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-50-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-50-1",
                         "data": {
                             "isHidden": false,
@@ -7544,10 +5726,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-50-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-50-2",
                         "data": {
                             "isHidden": false,
@@ -7560,10 +5738,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-50-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-50-2",
                         "data": {
                             "isHidden": false,
@@ -7576,10 +5750,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-50-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-50-3",
                         "data": {
                             "isHidden": false,
@@ -7592,10 +5762,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-50-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-50-3",
                         "data": {
                             "isHidden": false,
@@ -7608,10 +5774,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-50-7",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-50-3",
                         "data": {
                             "isHidden": false,
@@ -7624,10 +5786,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-50-8",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-50-4",
                         "data": {
                             "isHidden": false,
@@ -7640,10 +5798,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-50-9",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-50-4",
                         "data": {
                             "isHidden": false,
@@ -7656,10 +5810,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-50-10",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-50-4",
                         "data": {
                             "isHidden": false,
@@ -7672,10 +5822,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-50-11",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-50-5",
                         "data": {
                             "isHidden": false,
@@ -7688,10 +5834,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-50-12",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7704,10 +5846,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-50-13",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7720,10 +5858,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-50-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7736,10 +5870,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-50-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7752,10 +5882,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-50-3",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-50-2",
                         "data": {
                             "isHidden": false,
@@ -7768,10 +5894,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-50-4",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-50-2",
                         "data": {
                             "isHidden": false,
@@ -7784,10 +5906,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-50-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7800,10 +5918,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-50-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7816,10 +5930,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-50-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7832,10 +5942,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-50-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7848,10 +5954,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-50-5",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7864,10 +5966,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-50-6",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7880,10 +5978,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-50-7",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7896,10 +5990,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-50-8",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7912,10 +6002,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-50-9",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
@@ -7931,10 +6017,6 @@ export const raw_AIActNodes = [
             {
                 "id": "goal-27",
                 "type": "goal",
-                "position": {
-                    "x": 54000,
-                    "y": 0
-                },
                 "data": {
                     "isHidden": false,
                     "label": "GOAL 27 — Perform and notify a fundamental rights impact assessment before deploying high-risk AI system"
@@ -7944,10 +6026,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-27-1",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1600,
-                            "y": 500
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -7959,10 +6037,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-27-2",
                         "type": "subgoal",
-                        "position": {
-                            "x": -1200,
-                            "y": 500
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -7974,10 +6048,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-27-3",
                         "type": "subgoal",
-                        "position": {
-                            "x": -800,
-                            "y": 500
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -7989,10 +6059,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-27-4",
                         "type": "subgoal",
-                        "position": {
-                            "x": -400,
-                            "y": 500
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8004,10 +6070,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-27-5",
                         "type": "subgoal",
-                        "position": {
-                            "x": 0,
-                            "y": 500
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8019,10 +6081,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-27-6",
                         "type": "subgoal",
-                        "position": {
-                            "x": 400,
-                            "y": 500
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8034,10 +6092,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-27-7",
                         "type": "subgoal",
-                        "position": {
-                            "x": 800,
-                            "y": 500
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8049,10 +6103,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-27-8",
                         "type": "subgoal",
-                        "position": {
-                            "x": 1200,
-                            "y": 500
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8064,10 +6114,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "subgoal-27-9",
                         "type": "subgoal",
-                        "position": {
-                            "x": 1600,
-                            "y": 500
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8079,10 +6125,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-27-1",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8095,10 +6137,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-27-2",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8111,10 +6149,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-27-3",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8127,10 +6161,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-27-4",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8143,10 +6173,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-27-5",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-27-4",
                         "data": {
                             "isHidden": false,
@@ -8159,10 +6185,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-27-6",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-27-6",
                         "data": {
                             "isHidden": false,
@@ -8175,10 +6197,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-27-7",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-27-7",
                         "data": {
                             "isHidden": false,
@@ -8191,10 +6209,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-27-8",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-27-7",
                         "data": {
                             "isHidden": false,
@@ -8207,10 +6221,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-27-9",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-27-9",
                         "data": {
                             "isHidden": false,
@@ -8223,10 +6233,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "dc-27-10",
                         "type": "domain-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-27-8",
                         "data": {
                             "isHidden": false,
@@ -8239,10 +6245,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-27-1",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8255,10 +6257,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-27-2",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-27-4",
                         "data": {
                             "isHidden": false,
@@ -8271,10 +6269,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-27-3",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-27-8",
                         "data": {
                             "isHidden": false,
@@ -8287,10 +6281,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "qc-27-4",
                         "type": "quality-constraint",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "subgoal-27-9",
                         "data": {
                             "isHidden": false,
@@ -8303,10 +6293,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-27-1",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8319,10 +6305,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-27-2",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8335,10 +6317,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-27-3",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8351,10 +6329,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-27-4",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8367,10 +6341,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-27-5",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8383,10 +6353,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-27-6",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
@@ -8399,10 +6365,6 @@ export const raw_AIActNodes = [
                     {
                         "id": "cf-27-7",
                         "type": "context-factor",
-                        "position": {
-                            "x": 0,
-                            "y": 1000
-                        },
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,

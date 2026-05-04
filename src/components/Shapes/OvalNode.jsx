@@ -6,16 +6,10 @@ import {useSelector} from "react-redux";
 
 const OvalNode = ({data, type: reactFlowType}) => {
     const goalSubgoalLabel = (() => {
-        if (reactFlowType === "goal") {
+        if (reactFlowType === "goal" || data.type === "goal") {
             return "Goal";
         }
-        if (reactFlowType === "subgoal") {
-            return "SubGoal";
-        }
-        if (data.type === "goal") {
-            return "Goal";
-        }
-        if (data.type === "subgoal") {
+        if (reactFlowType === "subgoal" || data.type === "subgoal") {
             return "SubGoal";
         }
         return null;

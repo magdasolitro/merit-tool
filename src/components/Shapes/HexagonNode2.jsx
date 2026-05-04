@@ -6,6 +6,7 @@ const HexagonNode2 = ({data}) => {
 
     const nodeStyle = {
         width: "fit-content",
+        height: "fit-content",
         minWidth: size,
         minHeight: size * (3 / 5),
         cursor: data.isConnectable ? "pointer" : "default",
