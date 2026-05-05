@@ -7,8 +7,15 @@ import "reactflow/dist/style.css";
 import OvalNode from "../../components/Shapes/OvalNode.jsx";
 import DottedEdge from "../../components/DottedEdge/index.jsx";
 import StraightEdge from "../../components/StraightEdge/index.jsx";
-import {AIActNodes} from "./AIAct_nodes.js";
-import {AIActEdges} from "./AIAct_edges.js";
+import {
+    normalizeTreePositions as normalizeAIActTreePositions,
+    raw_AIActNodes,
+} from "./AIAct_nodes.js";
+import {
+    GDPRNodes,
+    normalizeTreePositions as normalizeGDPRTreePositions,
+    raw_GDPRNodes,
+} from "../../data/GDPR_nodes.js";
 import CircleNode from "../../components/Shapes/CircleNode.jsx";
 import DiamondNode from "../../components/Shapes/DiamondNode.jsx";
 import HexagonNode2 from "../../components/Shapes/HexagonNode2.jsx";
@@ -49,6 +56,53 @@ const flattenTreeNodes = (treeNodes) => {
     return flatNodes;
 };
 
+const collectEdgesFromFlatNodes = (flatNodes) => (
+    flatNodes
+        .filter((node) => node?.parentId)
+        .map((node) => ({
+            id: `${node.parentId}->${node.id}`,
+            source: node.parentId,
+            target: node.id,
+            type: "straight",
+        }))
+);
+
+const namespaceTree = (treeNodes, prefix) => {
+    const walk = (node) => {
+        const namespacedId = `${prefix}${node.id}`;
+        const namespacedParentId = node.parentId ? `${prefix}${node.parentId}` : undefined;
+        return {
+            ...node,
+            id: namespacedId,
+            ...(namespacedParentId ? {parentId: namespacedParentId} : {}),
+            children: Array.isArray(node.children) ? node.children.map(walk) : node.children,
+        };
+    };
+    return treeNodes.map(walk);
+};
+
+const buildVisibleAIActTree = (hiddenPhaseOneLeafIds) => {
+    const baseTree = hiddenPhaseOneLeafIds.size === 0
+        ? raw_AIActNodes
+        : raw_AIActNodes.map((rootNode) => {
+            if (!Array.isArray(rootNode.children)) {
+                return rootNode;
+            }
+
+            const filteredGoals = rootNode.children.filter((goalNode) => {
+                const goalContextFactors = collectDescendantsByType(goalNode, "context-factor");
+                return !goalContextFactors.some((cfNode) => hiddenPhaseOneLeafIds.has(cfNode.id));
+            });
+
+            return {
+                ...rootNode,
+                children: filteredGoals,
+            };
+        });
+
+    return normalizeAIActTreePositions(baseTree);
+};
+
 const collectDescendantsByType = (node, type, acc = []) => {
     if (!node || !Array.isArray(node.children)) {
         return acc;
@@ -67,6 +121,7 @@ const collectDescendantsByType = (node, type, acc = []) => {
 export default function PhaseResult() {
     const dispatch = useDispatch();
     const phaseOneNodeState = useSelector((state) => state.phaseOne?.nodeState ?? []);
+    const phaseThreeSelectedNodeIds = useSelector((state) => state.phaseThreeNew?.selectedNodeIds ?? []);
 
     const hiddenPhaseOneLeafIds = useMemo(() => {
         const currentNodesById = new Map(phaseOneNodeState.map((node) => [node.id, node]));
@@ -82,34 +137,20 @@ export default function PhaseResult() {
     }, [phaseOneNodeState]);
 
     const visibleTree = useMemo(() => {
-        if (hiddenPhaseOneLeafIds.size === 0) {
-            return AIActNodes;
+        const showGDPR = phaseThreeSelectedNodeIds.includes("gdpr");
+        const visibleAIActTree = buildVisibleAIActTree(hiddenPhaseOneLeafIds);
+
+        if (!showGDPR) {
+            return visibleAIActTree;
         }
 
-        return AIActNodes.map((rootNode) => {
-            if (!Array.isArray(rootNode.children)) {
-                return rootNode;
-            }
-
-            const filteredGoals = rootNode.children.filter((goalNode) => {
-                const goalContextFactors = collectDescendantsByType(goalNode, "context-factor");
-                return !goalContextFactors.some((cfNode) => hiddenPhaseOneLeafIds.has(cfNode.id));
-            });
-
-            return {
-                ...rootNode,
-                children: filteredGoals,
-            };
-        });
-    }, [hiddenPhaseOneLeafIds]);
+        const visibleGDPRTree = normalizeGDPRTreePositions(raw_GDPRNodes);
+        const namespacedGDPRTree = namespaceTree(visibleGDPRTree ?? GDPRNodes, "gdpr:");
+        return [...visibleAIActTree, ...namespacedGDPRTree];
+    }, [hiddenPhaseOneLeafIds, phaseThreeSelectedNodeIds]);
 
     const nodes = useMemo(() => flattenTreeNodes(visibleTree), [visibleTree]);
-    const edges = useMemo(() => {
-        const visibleNodeIds = new Set(nodes.map((node) => node.id));
-        return AIActEdges.filter(
-            (edge) => visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)
-        );
-    }, [nodes]);
+    const edges = useMemo(() => collectEdgesFromFlatNodes(nodes), [nodes]);
 
     useEffect(() => {
         dispatch(setCurrentPhase(4));
