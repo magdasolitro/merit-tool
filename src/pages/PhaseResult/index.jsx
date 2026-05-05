@@ -31,11 +31,13 @@ const nodeTypes = {
     "context-factor": RectangleNode,
 };
 const edgeTypes = {dotted: DottedEdge, straight: StraightEdge};
+const TREE_STACK_GAP_Y = 220;
+const AI_ACT_LINK_GAP_Y = 140;
 
 const flattenTreeNodes = (treeNodes) => {
     const flatNodes = [];
     const getChildren = (node) => Array.isArray(node?.children) ? node.children : [];
-    const walk = (node) => {
+    const walk = (node, structuralParentId = undefined) => {
         flatNodes.push({
             id: node.id,
             type: node.type,
@@ -45,15 +47,122 @@ const flattenTreeNodes = (treeNodes) => {
             },
             data: {...node.data},
             draggable: node.draggable ?? false,
-            parentId: node.parentId,
+            // Use the tree structure as source of truth for hierarchy edges.
+            // Some datasets can contain stale or missing parentId values.
+            parentId: structuralParentId ?? node.parentId,
+            aiActLink: node.aiActLink ?? null,
         });
 
-        getChildren(node).forEach((child) => walk(child));
+        getChildren(node).forEach((child) => walk(child, node.id));
     };
 
     treeNodes.forEach((rootNode) => walk(rootNode));
 
     return flatNodes;
+};
+
+const applyAiActLinksToFlatNodes = (flatNodes) => {
+    const nodes = flatNodes.map((node) => ({
+        ...node,
+        position: {x: Number(node?.position?.x ?? 0), y: Number(node?.position?.y ?? 0)},
+    }));
+    const nodeById = new Map(nodes.map((node) => [node.id, node]));
+    const childrenByParent = new Map();
+
+    nodes.forEach((node) => {
+        if (!node.parentId) {
+            return;
+        }
+        if (!childrenByParent.has(node.parentId)) {
+            childrenByParent.set(node.parentId, []);
+        }
+        childrenByParent.get(node.parentId).push(node.id);
+    });
+
+    const shiftSubtree = (rootId, dx, dy) => {
+        const stack = [rootId];
+        while (stack.length > 0) {
+            const currentId = stack.pop();
+            const currentNode = nodeById.get(currentId);
+            if (!currentNode) {
+                continue;
+            }
+            currentNode.position = {
+                x: currentNode.position.x + dx,
+                y: currentNode.position.y + dy,
+            };
+            const children = childrenByParent.get(currentId) ?? [];
+            children.forEach((childId) => stack.push(childId));
+        }
+    };
+
+    const findAiActSubtreeRootId = (nodeId) => {
+        let currentId = nodeId;
+
+        while (true) {
+            const currentNode = nodeById.get(currentId);
+            if (!currentNode) {
+                return nodeId;
+            }
+
+            const parentId = currentNode.parentId;
+            if (!parentId || parentId.startsWith("gdpr:")) {
+                return currentId;
+            }
+
+            const parentNode = nodeById.get(parentId);
+            if (parentNode?.type === "root") {
+                return currentId;
+            }
+
+            currentId = parentId;
+        }
+    };
+
+    const getSubtreeMaxY = (rootId) => {
+        const stack = [rootId];
+        let maxY = -Infinity;
+
+        while (stack.length > 0) {
+            const currentId = stack.pop();
+            const currentNode = nodeById.get(currentId);
+            if (!currentNode || currentNode.id.startsWith("gdpr:")) {
+                continue;
+            }
+
+            maxY = Math.max(maxY, Number(currentNode.position?.y ?? 0));
+            const children = childrenByParent.get(currentId) ?? [];
+            children.forEach((childId) => stack.push(childId));
+        }
+
+        return Number.isFinite(maxY) ? maxY : 0;
+    };
+
+    const linkEdges = [];
+    nodes.forEach((node) => {
+        if (!node.aiActLink || !node.id.startsWith("gdpr:")) {
+            return;
+        }
+        const aiActTarget = nodeById.get(node.aiActLink);
+        if (!aiActTarget) {
+            return;
+        }
+
+        const aiActSubtreeRootId = findAiActSubtreeRootId(aiActTarget.id);
+        const aiActSubtreeBottomY = getSubtreeMaxY(aiActSubtreeRootId);
+        const targetX = Number(aiActTarget.position?.x ?? 0);
+        const targetY = aiActSubtreeBottomY + AI_ACT_LINK_GAP_Y;
+        shiftSubtree(node.id, targetX - node.position.x, targetY - node.position.y);
+
+        linkEdges.push({
+            id: `${aiActTarget.id}->${node.id}:link`,
+            source: aiActTarget.id,
+            target: node.id,
+            type: "straight",
+        });
+    });
+
+    return {nodes, linkEdges};
 };
 
 const collectEdgesFromFlatNodes = (flatNodes) => (
@@ -79,6 +188,32 @@ const namespaceTree = (treeNodes, prefix) => {
         };
     };
     return treeNodes.map(walk);
+};
+
+const getMaxTreeY = (treeNodes) => {
+    let maxY = -Infinity;
+    const walk = (node) => {
+        maxY = Math.max(maxY, Number(node?.position?.y ?? 0));
+        if (Array.isArray(node?.children)) {
+            node.children.forEach(walk);
+        }
+    };
+    treeNodes.forEach(walk);
+    return Number.isFinite(maxY) ? maxY : 0;
+};
+
+const shiftTreeY = (treeNodes, offsetY) => {
+    const walk = (node) => {
+        node.position = {
+            x: Number(node?.position?.x ?? 0),
+            y: Number(node?.position?.y ?? 0) + offsetY,
+        };
+        if (Array.isArray(node?.children)) {
+            node.children.forEach(walk);
+        }
+    };
+    treeNodes.forEach(walk);
+    return treeNodes;
 };
 
 const buildVisibleAIActTree = (hiddenPhaseOneLeafIds) => {
@@ -146,11 +281,24 @@ export default function PhaseResult() {
 
         const visibleGDPRTree = normalizeGDPRTreePositions(raw_GDPRNodes);
         const namespacedGDPRTree = namespaceTree(visibleGDPRTree ?? GDPRNodes, "gdpr:");
-        return [...visibleAIActTree, ...namespacedGDPRTree];
+
+        const aiActBottomY = getMaxTreeY(visibleAIActTree);
+        const gdprRootY = Number(namespacedGDPRTree[0]?.position?.y ?? 0);
+        const gdprOffsetY = aiActBottomY + TREE_STACK_GAP_Y - gdprRootY;
+        const shiftedGDPRTree = shiftTreeY(namespacedGDPRTree, gdprOffsetY);
+
+        return [...visibleAIActTree, ...shiftedGDPRTree];
     }, [hiddenPhaseOneLeafIds, phaseThreeSelectedNodeIds]);
 
-    const nodes = useMemo(() => flattenTreeNodes(visibleTree), [visibleTree]);
-    const edges = useMemo(() => collectEdgesFromFlatNodes(nodes), [nodes]);
+    const graph = useMemo(() => {
+        const baseNodes = flattenTreeNodes(visibleTree);
+        const {nodes, linkEdges} = applyAiActLinksToFlatNodes(baseNodes);
+        const hierarchyEdges = collectEdgesFromFlatNodes(nodes);
+        return {
+            nodes,
+            edges: [...hierarchyEdges, ...linkEdges],
+        };
+    }, [visibleTree]);
 
     useEffect(() => {
         dispatch(setCurrentPhase(4));
@@ -159,8 +307,8 @@ export default function PhaseResult() {
     return (
         <div style={{width: "100vw", height: "93vh"}}>
             <ReactFlow
-                nodes={nodes}
-                edges={edges}
+                nodes={graph.nodes}
+                edges={graph.edges}
                 panOnScroll={true}
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
