@@ -371,7 +371,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-8",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 8.1 — Compliance must consider intended purpose of the system → appartiene a GOAL 8",
+                            "label": "DC 8.1 — Compliance must consider intended purpose of the system",
                              
                         },
                         "draggable": false,
@@ -383,7 +383,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-8",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 8.2 — Compliance must reflect generally acknowledged state of the art → appartiene a GOAL 8",
+                            "label": "DC 8.2 — Compliance must reflect generally acknowledged state of the art",
                         },
                         "draggable": false,
                         "children": null
@@ -394,7 +394,7 @@ export const raw_AIActNodes = [
                         "parentId": "8-3-ensure-full-compliance-with-applicable-union-harmonisa",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 8.3 — If Union harmonisation legislation (Annex I, Section A) applies, provider is fully responsible → appartiene a SUBGOAL 8.3",
+                            "label": "DC 8.3 — If Union harmonisation legislation (Annex I, Section A) applies, provider is fully responsible",
                         },
                         "draggable": false,
                         "children": null
@@ -405,7 +405,7 @@ export const raw_AIActNodes = [
                         "parentId": "8-4-integrate-existing-testing-reporting-processes-to-avoi",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 8.4 — Integration of documentation is permitted (not mandatory) → appartiene a SUBGOAL 8.4",
+                            "label": "DC 8.4 — Integration of documentation is permitted (not mandatory)",
                         },
                         "draggable": false,
                         "children": null
@@ -416,7 +416,7 @@ export const raw_AIActNodes = [
                         "parentId": "8-4-integrate-existing-testing-reporting-processes-to-avoi",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 8.1 — Consistency across applicable regulations → appartiene a SUBGOAL 8.4",
+                            "label": "QC 8.1 — Consistency across applicable regulations",
                         },
                         "draggable": false,
                         "children": null
@@ -427,7 +427,7 @@ export const raw_AIActNodes = [
                         "parentId": "8-4-integrate-existing-testing-reporting-processes-to-avoi",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 8.2 — Minimisation of additional compliance burdens → appartiene a SUBGOAL 8.4",
+                            "label": "QC 8.2 — Minimisation of additional compliance burdens",
                         },
                         "draggable": false,
                         "children": null
@@ -438,7 +438,7 @@ export const raw_AIActNodes = [
                         "parentId": "8-4-integrate-existing-testing-reporting-processes-to-avoi",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 8.3 — Avoid duplication of documentation/reporting → appartiene a SUBGOAL 8.4",
+                            "label": "QC 8.3 — Avoid duplication of documentation/reporting",
                         },
                         "draggable": false,
                         "children": null
@@ -562,7 +562,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 9.1 — Risk management shall be a continuous iterative process throughout the entire lifecycle → appartiene a GOAL 9",
+                            "label": "DC 9.1 — Risk management shall be a continuous iterative process throughout the entire lifecycle",
                              
                         },
                         "draggable": false,
@@ -574,7 +574,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 9.2 — Risk management shall require regular systematic review and updating → appartiene a GOAL 9",
+                            "label": "DC 9.2 — Risk management shall require regular systematic review and updating",
                              
                         },
                         "draggable": false,
@@ -586,7 +586,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 9.3 — Risks considered are only those reasonably mitigable through design, development or technical information → appartiene a SUBGOAL 9.1",
+                            "label": "DC 9.3 — Risks considered are only those reasonably mitigable through design, development or technical information",
                              
                         },
                         "draggable": false,
@@ -598,7 +598,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-9-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 9.4 — Risk measures must consider combined effects of all Section III requirements → appartiene a SUBGOAL 9.4",
+                            "label": "DC 9.4 — Risk measures must consider combined effects of all Section III requirements",
                              
                         },
                         "draggable": false,
@@ -610,7 +610,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-9-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 9.5 — Residual risk (per hazard and overall) must be judged acceptable → appartiene a SUBGOAL 9.4",
+                            "label": "DC 9.5 — Residual risk (per hazard and overall) must be judged acceptable",
                              
                         },
                         "draggable": false,
@@ -622,7 +622,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-9-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 9.6 — Risk elimination/reduction must be pursued as far as technically feasible through design → appartiene a SUBGOAL 9.4",
+                            "label": "DC 9.6 — Risk elimination/reduction must be pursued as far as technically feasible through design",
                              
                         },
                         "draggable": false,
@@ -634,7 +634,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-9-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 9.7 — Where risks cannot be eliminated, mitigation and control measures must be implemented → appartiene a SUBGOAL 9.4",
+                            "label": "DC 9.7 — Where risks cannot be eliminated, mitigation and control measures must be implemented",
                              
                         },
                         "draggable": false,
@@ -646,7 +646,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-9-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 9.8 — Information per Art. 13 and deployer training must be provided as risk measure → appartiene a SUBGOAL 9.4",
+                            "label": "DC 9.8 — Information per Art. 13 and deployer training must be provided as risk measure",
                              
                         },
                         "draggable": false,
@@ -658,7 +658,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-9-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 9.9 — Testing must be performed at any time during development and prior to market placement → appartiene a SUBGOAL 9.5",
+                            "label": "DC 9.9 — Testing must be performed at any time during development and prior to market placement",
                              
                         },
                         "draggable": false,
@@ -670,7 +670,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-9-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 9.10 — Testing may include real-world conditions per Art. 60 → appartiene a SUBGOAL 9.5",
+                            "label": "DC 9.10 — Testing may include real-world conditions per Art. 60",
                              
                         },
                         "draggable": false,
@@ -682,7 +682,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 9.11 — If other Union law requires internal risk management, Art. 9 aspects may be integrated into those procedures → appartiene a GOAL 9",
+                            "label": "DC 9.11 — If other Union law requires internal risk management, Art. 9 aspects may be integrated into those procedures",
                              
                         },
                         "draggable": false,
@@ -694,7 +694,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-9-4",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 9.1 — Risk management measures must minimise risks effectively while maintaining appropriate balance → appartiene a SUBGOAL 9.4",
+                            "label": "QC 9.1 — Risk management measures must minimise risks effectively while maintaining appropriate balance",
                              
                         },
                         "draggable": false,
@@ -706,7 +706,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-9-5",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 9.2 — Testing must ensure consistent performance for intended purpose → appartiene a SUBGOAL 9.5",
+                            "label": "QC 9.2 — Testing must ensure consistent performance for intended purpose",
                              
                         },
                         "draggable": false,
@@ -718,7 +718,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-9-5",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 9.3 — Testing must be carried out against pre-defined metrics and probabilistic thresholds appropriate to intended purpose → appartiene a SUBGOAL 9.5",
+                            "label": "QC 9.3 — Testing must be carried out against pre-defined metrics and probabilistic thresholds appropriate to intended purpose",
                              
                         },
                         "draggable": false,
@@ -730,7 +730,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-9-4",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 9.4 — Deployer's technical knowledge, experience, education and context must be considered in risk measures → appartiene a SUBGOAL 9.4",
+                            "label": "QC 9.4 — Deployer's technical knowledge, experience, education and context must be considered in risk measures",
                              
                         },
                         "draggable": false,
@@ -880,7 +880,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-10-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 10.1 — Data governance practices must cover: design choices, data collection, origin, preparation operations (annotation, labelling, cleaning, enrichment, aggregation) → appartiene a SUBGOAL 10.1",
+                            "label": "DC 10.1 — Data governance practices must cover: design choices, data collection, origin, preparation operations (annotation, labelling, cleaning, enrichment, aggregation)",
                              
                         },
                         "draggable": false,
@@ -892,7 +892,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-10-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 10.2 — Formulation of assumptions about what data measures and represents must be documented → appartiene a SUBGOAL 10.1",
+                            "label": "DC 10.2 — Formulation of assumptions about what data measures and represents must be documented",
                              
                         },
                         "draggable": false,
@@ -904,7 +904,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-10-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 10.3 — Availability, quantity and suitability of datasets must be assessed → appartiene a SUBGOAL 10.1",
+                            "label": "DC 10.3 — Availability, quantity and suitability of datasets must be assessed",
                              
                         },
                         "draggable": false,
@@ -916,7 +916,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-10-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 10.4 — Biases likely to affect health, safety, fundamental rights or leading to discrimination must be examined → appartiene a SUBGOAL 10.3",
+                            "label": "DC 10.4 — Biases likely to affect health, safety, fundamental rights or leading to discrimination must be examined",
                              
                         },
                         "draggable": false,
@@ -928,7 +928,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-10-6",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 10.5 — Special categories of personal data may be processed only if bias correction cannot be fulfilled by other data (including synthetic or anonymised) → appartiene a SUBGOAL 10.6",
+                            "label": "DC 10.5 — Special categories of personal data may be processed only if bias correction cannot be fulfilled by other data (including synthetic or anonymised)",
                              
                         },
                         "draggable": false,
@@ -940,7 +940,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-10-6",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 10.6 — Special categories of personal data must not be transmitted, transferred or accessed by other parties → appartiene a SUBGOAL 10.6",
+                            "label": "DC 10.6 — Special categories of personal data must not be transmitted, transferred or accessed by other parties",
                              
                         },
                         "draggable": false,
@@ -952,7 +952,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-10-6",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 10.7 — Special categories of personal data must be deleted once bias is corrected or retention period ends (whichever comes first) → appartiene a SUBGOAL 10.6",
+                            "label": "DC 10.7 — Special categories of personal data must be deleted once bias is corrected or retention period ends (whichever comes first)",
                              
                         },
                         "draggable": false,
@@ -964,7 +964,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-10-6",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 10.8 — Records of processing activities must document why special category data was strictly necessary → appartiene a SUBGOAL 10.6",
+                            "label": "DC 10.8 — Records of processing activities must document why special category data was strictly necessary",
                              
                         },
                         "draggable": false,
@@ -976,7 +976,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 10.9 — For AI systems not using model training, paragraphs 2–5 apply only to testing datasets → appartiene a GOAL 10",
+                            "label": "DC 10.9 — For AI systems not using model training, paragraphs 2–5 apply only to testing datasets",
                              
                         },
                         "draggable": false,
@@ -988,7 +988,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-10-2",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 10.1 — Datasets must have appropriate statistical properties, including regarding persons or groups the system is intended for → appartiene a SUBGOAL 10.2",
+                            "label": "QC 10.1 — Datasets must have appropriate statistical properties, including regarding persons or groups the system is intended for",
                              
                         },
                         "draggable": false,
@@ -1000,7 +1000,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-10-2",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 10.2 — Dataset characteristics may be met at individual dataset level or combination thereof → appartiene a SUBGOAL 10.2",
+                            "label": "QC 10.2 — Dataset characteristics may be met at individual dataset level or combination thereof",
                              
                         },
                         "draggable": false,
@@ -1012,7 +1012,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-10-6",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 10.3 — Special categories of personal data must be subject to state-of-the-art security and privacy-preserving measures including pseudonymisation → appartiene a SUBGOAL 10.6",
+                            "label": "QC 10.3 — Special categories of personal data must be subject to state-of-the-art security and privacy-preserving measures including pseudonymisation",
                              
                         },
                         "draggable": false,
@@ -1024,7 +1024,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-10-6",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 10.4 — Access to special categories of personal data must be strictly controlled, documented and limited to authorised persons with confidentiality obligations → appartiene a SUBGOAL 10.6",
+                            "label": "QC 10.4 — Access to special categories of personal data must be strictly controlled, documented and limited to authorised persons with confidentiality obligations",
                              
                         },
                         "draggable": false,
@@ -1036,7 +1036,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-10-6",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 10.5 — Technical limitations on re-use of special category personal data must be applied → appartiene a SUBGOAL 10.6",
+                            "label": "QC 10.5 — Technical limitations on re-use of special category personal data must be applied",
                              
                         },
                         "draggable": false,
@@ -1164,7 +1164,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-11",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 11.1 — Technical documentation must be drawn up before market placement or service deployment → appartiene a GOAL 11",
+                            "label": "DC 11.1 — Technical documentation must be drawn up before market placement or service deployment",
                              
                         },
                         "draggable": false,
@@ -1176,7 +1176,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-11",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 11.2 — Technical documentation must be kept up-to-date throughout the lifecycle → appartiene a GOAL 11",
+                            "label": "DC 11.2 — Technical documentation must be kept up-to-date throughout the lifecycle",
                              
                         },
                         "draggable": false,
@@ -1188,7 +1188,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-11-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 11.3 — Documentation must contain at minimum the elements of Annex IV → appartiene a SUBGOAL 11.3",
+                            "label": "DC 11.3 — Documentation must contain at minimum the elements of Annex IV",
                              
                         },
                         "draggable": false,
@@ -1200,7 +1200,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-11-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 11.4 — Where Union harmonisation legislation also applies, a single set of documentation must cover all requirements → appartiene a SUBGOAL 11.4",
+                            "label": "DC 11.4 — Where Union harmonisation legislation also applies, a single set of documentation must cover all requirements",
                              
                         },
                         "draggable": false,
@@ -1212,7 +1212,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-11-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 11.5 — SMEs and start-ups may provide Annex IV elements in simplified form using Commission-established form → appartiene a SUBGOAL 11.3",
+                            "label": "DC 11.5 — SMEs and start-ups may provide Annex IV elements in simplified form using Commission-established form",
                              
                         },
                         "draggable": false,
@@ -1224,7 +1224,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-11-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 11.6 — Notified bodies must accept the simplified form for conformity assessment purposes → appartiene a SUBGOAL 11.2",
+                            "label": "DC 11.6 — Notified bodies must accept the simplified form for conformity assessment purposes",
                              
                         },
                         "draggable": false,
@@ -1236,7 +1236,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-11-2",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 11.1 — Documentation must be clear and comprehensive → appartiene a SUBGOAL 11.2",
+                            "label": "QC 11.1 — Documentation must be clear and comprehensive",
                              
                         },
                         "draggable": false,
@@ -1248,7 +1248,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-11-2",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 11.2 — Documentation must be sufficient for authorities to assess compliance → appartiene a SUBGOAL 11.2",
+                            "label": "QC 11.2 — Documentation must be sufficient for authorities to assess compliance",
                              
                         },
                         "draggable": false,
@@ -1352,7 +1352,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-12",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 12.1 — Logging must be technically built into the system (automatic, not manual) → appartiene a GOAL 12",
+                            "label": "DC 12.1 — Logging must be technically built into the system (automatic, not manual)",
                              
                         },
                         "draggable": false,
@@ -1364,7 +1364,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-12",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 12.2 — Logging must cover the entire lifetime of the system → appartiene a GOAL 12",
+                            "label": "DC 12.2 — Logging must cover the entire lifetime of the system",
                              
                         },
                         "draggable": false,
@@ -1376,7 +1376,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-12-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 12.3 — For Annex III point 1(a) systems, logs must record at minimum: start/end date and time of each use → appartiene a SUBGOAL 12.4",
+                            "label": "DC 12.3 — For Annex III point 1(a) systems, logs must record at minimum: start/end date and time of each use",
                              
                         },
                         "draggable": false,
@@ -1388,7 +1388,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-12-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 12.4 — For Annex III point 1(a) systems, logs must record the reference database against which input data was checked → appartiene a SUBGOAL 12.4",
+                            "label": "DC 12.4 — For Annex III point 1(a) systems, logs must record the reference database against which input data was checked",
                              
                         },
                         "draggable": false,
@@ -1400,7 +1400,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-12-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 12.5 — For Annex III point 1(a) systems, logs must record input data for which search led to a match → appartiene a SUBGOAL 12.4",
+                            "label": "DC 12.5 — For Annex III point 1(a) systems, logs must record input data for which search led to a match",
                              
                         },
                         "draggable": false,
@@ -1412,7 +1412,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-12-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 12.6 — For Annex III point 1(a) systems, logs must record identification of natural persons involved in results verification (→ Art. 14(5)) → appartiene a SUBGOAL 12.4",
+                            "label": "DC 12.6 — For Annex III point 1(a) systems, logs must record identification of natural persons involved in results verification (→ Art. 14(5))",
                              
                         },
                         "draggable": false,
@@ -1424,7 +1424,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-12",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 12.1 — Logging capabilities must ensure a level of traceability appropriate to the intended purpose → appartiene a GOAL 12",
+                            "label": "QC 12.1 — Logging capabilities must ensure a level of traceability appropriate to the intended purpose",
                              
                         },
                         "draggable": false,
@@ -1561,7 +1561,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.1 — Transparency must be ensured by design and development → appartiene a GOAL 13",
+                            "label": "DC 13.1 — Transparency must be ensured by design and development",
                              
                         },
                         "draggable": false,
@@ -1573,7 +1573,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.2 — Instructions for use must be in appropriate digital format or otherwise → appartiene a SUBGOAL 13.2",
+                            "label": "DC 13.2 — Instructions for use must be in appropriate digital format or otherwise",
                              
                         },
                         "draggable": false,
@@ -1585,7 +1585,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.3 — Instructions must include identity and contact details of provider and authorised representative → appartiene a SUBGOAL 13.3",
+                            "label": "DC 13.3 — Instructions must include identity and contact details of provider and authorised representative",
                              
                         },
                         "draggable": false,
@@ -1597,7 +1597,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.4 — Instructions must include intended purpose of the system → appartiene a SUBGOAL 13.4",
+                            "label": "DC 13.4 — Instructions must include intended purpose of the system",
                              
                         },
                         "draggable": false,
@@ -1609,7 +1609,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.5 — Instructions must include level of accuracy, metrics, robustness and cybersecurity as tested and validated → appartiene a SUBGOAL 13.4",
+                            "label": "DC 13.5 — Instructions must include level of accuracy, metrics, robustness and cybersecurity as tested and validated",
                              
                         },
                         "draggable": false,
@@ -1621,7 +1621,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.6 — Instructions must include known/foreseeable circumstances leading to risks to health, safety or fundamental rights (→ Art. 9(2)) → appartiene a SUBGOAL 13.4",
+                            "label": "DC 13.6 — Instructions must include known/foreseeable circumstances leading to risks to health, safety or fundamental rights (→ Art. 9(2))",
                              
                         },
                         "draggable": false,
@@ -1633,7 +1633,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.7 — Instructions must include technical capabilities for explainability of output where applicable → appartiene a SUBGOAL 13.4",
+                            "label": "DC 13.7 — Instructions must include technical capabilities for explainability of output where applicable",
                              
                         },
                         "draggable": false,
@@ -1645,7 +1645,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.8 — Instructions must include performance regarding specific persons or groups where appropriate → appartiene a SUBGOAL 13.4",
+                            "label": "DC 13.8 — Instructions must include performance regarding specific persons or groups where appropriate",
                              
                         },
                         "draggable": false,
@@ -1657,7 +1657,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.9 — Instructions must include input data specifications and training/validation/testing dataset information where relevant → appartiene a SUBGOAL 13.4",
+                            "label": "DC 13.9 — Instructions must include input data specifications and training/validation/testing dataset information where relevant",
                              
                         },
                         "draggable": false,
@@ -1669,7 +1669,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.10 — Instructions must include information to enable deployers to interpret output appropriately → appartiene a SUBGOAL 13.4",
+                            "label": "DC 13.10 — Instructions must include information to enable deployers to interpret output appropriately",
                              
                         },
                         "draggable": false,
@@ -1681,7 +1681,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.11 — Instructions must include predetermined changes to system and performance identified at initial conformity assessment → appartiene a SUBGOAL 13.4",
+                            "label": "DC 13.11 — Instructions must include predetermined changes to system and performance identified at initial conformity assessment",
                              
                         },
                         "draggable": false,
@@ -1693,7 +1693,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.12 — Instructions must include human oversight measures and technical measures for output interpretation (→ Art. 14) → appartiene a SUBGOAL 13.5",
+                            "label": "DC 13.12 — Instructions must include human oversight measures and technical measures for output interpretation (→ Art. 14)",
                              
                         },
                         "draggable": false,
@@ -1705,7 +1705,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-6",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.13 — Instructions must include computational/hardware requirements, expected lifetime and maintenance measures including software update frequency → appartiene a SUBGOAL 13.6",
+                            "label": "DC 13.13 — Instructions must include computational/hardware requirements, expected lifetime and maintenance measures including software update frequency",
                              
                         },
                         "draggable": false,
@@ -1717,7 +1717,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.14 — Instructions must describe log collection, storage and interpretation mechanisms (→ Art. 12) where relevant → appartiene a SUBGOAL 13.7",
+                            "label": "DC 13.14 — Instructions must describe log collection, storage and interpretation mechanisms (→ Art. 12) where relevant",
                              
                         },
                         "draggable": false,
@@ -1729,7 +1729,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-2",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 13.1 — Instructions must be concise, complete, correct and clear → appartiene a SUBGOAL 13.2",
+                            "label": "QC 13.1 — Instructions must be concise, complete, correct and clear",
                              
                         },
                         "draggable": false,
@@ -1741,7 +1741,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-2",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 13.2 — Instructions must be relevant, accessible and comprehensible to deployers → appartiene a SUBGOAL 13.2",
+                            "label": "QC 13.2 — Instructions must be relevant, accessible and comprehensible to deployers",
                              
                         },
                         "draggable": false,
@@ -1753,7 +1753,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 13.3 — Transparency must be appropriate in type and degree to the system's intended purpose → appartiene a GOAL 13",
+                            "label": "QC 13.3 — Transparency must be appropriate in type and degree to the system's intended purpose",
                              
                         },
                         "draggable": false,
@@ -1913,7 +1913,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 14.1 — Human oversight must be ensured by design, including through appropriate human-machine interface tools → appartiene a GOAL 14",
+                            "label": "DC 14.1 — Human oversight must be ensured by design, including through appropriate human-machine interface tools",
                              
                         },
                         "draggable": false,
@@ -1925,7 +1925,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-14-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 14.2 — Oversight measures must be built into the system when technically feasible, before market placement → appartiene a SUBGOAL 14.1",
+                            "label": "DC 14.2 — Oversight measures must be built into the system when technically feasible, before market placement",
                              
                         },
                         "draggable": false,
@@ -1937,7 +1937,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-14-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 14.3 — Oversight measures must be identified before market placement and appropriate for deployer implementation → appartiene a SUBGOAL 14.2",
+                            "label": "DC 14.3 — Oversight measures must be identified before market placement and appropriate for deployer implementation",
                              
                         },
                         "draggable": false,
@@ -1949,7 +1949,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-14-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 14.4 — System must be provided to deployer in a way that enables assigned natural persons to monitor operation including anomalies, dysfunctions and unexpected performance → appartiene a SUBGOAL 14.3",
+                            "label": "DC 14.4 — System must be provided to deployer in a way that enables assigned natural persons to monitor operation including anomalies, dysfunctions and unexpected performance",
                              
                         },
                         "draggable": false,
@@ -1961,7 +1961,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-14-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 14.5 — System must provide means for oversight persons to correctly interpret output using available interpretation tools → appartiene a SUBGOAL 14.5",
+                            "label": "DC 14.5 — System must provide means for oversight persons to correctly interpret output using available interpretation tools",
                              
                         },
                         "draggable": false,
@@ -1973,7 +1973,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-14-6",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 14.6 — Oversight persons must be able in any situation to decide not to use the system or override its output → appartiene a SUBGOAL 14.6",
+                            "label": "DC 14.6 — Oversight persons must be able in any situation to decide not to use the system or override its output",
                              
                         },
                         "draggable": false,
@@ -1985,7 +1985,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-14-7",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 14.7 — System must include a stop button or similar procedure allowing safe halt → appartiene a SUBGOAL 14.7",
+                            "label": "DC 14.7 — System must include a stop button or similar procedure allowing safe halt",
                              
                         },
                         "draggable": false,
@@ -1997,7 +1997,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-14-8",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 14.8 — For Annex III point 1(a) systems: no action or decision shall be taken unless identification is separately verified and confirmed by at least two competent natural persons → appartiene a SUBGOAL 14.8",
+                            "label": "DC 14.8 — For Annex III point 1(a) systems: no action or decision shall be taken unless identification is separately verified and confirmed by at least two competent natural persons",
                              
                         },
                         "draggable": false,
@@ -2009,7 +2009,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-14-8",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 14.9 — Dual verification requirement for Annex III point 1(a) does not apply to law enforcement, migration, border control or asylum where Union or national law deems it disproportionate → appartiene a SUBGOAL 14.8",
+                            "label": "DC 14.9 — Dual verification requirement for Annex III point 1(a) does not apply to law enforcement, migration, border control or asylum where Union or national law deems it disproportionate",
                              
                         },
                         "draggable": false,
@@ -2021,7 +2021,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 14.1 — Oversight measures must be commensurate with risks, level of autonomy and context of use → appartiene a GOAL 14",
+                            "label": "QC 14.1 — Oversight measures must be commensurate with risks, level of autonomy and context of use",
                              
                         },
                         "draggable": false,
@@ -2033,7 +2033,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-14-3",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 14.2 — Oversight measures must be appropriate and proportionate to the role of the natural person assigned → appartiene a SUBGOAL 14.3",
+                            "label": "QC 14.2 — Oversight measures must be appropriate and proportionate to the role of the natural person assigned",
                              
                         },
                         "draggable": false,
@@ -2045,7 +2045,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-14-4",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 14.3 — Oversight persons must be made aware of automation bias risk, particularly where system provides recommendations for human decisions → appartiene a SUBGOAL 14.4",
+                            "label": "QC 14.3 — Oversight persons must be made aware of automation bias risk, particularly where system provides recommendations for human decisions",
                              
                         },
                         "draggable": false,
@@ -2057,7 +2057,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-14-8",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 14.4 — Dual verification persons must have necessary competence, training and authority → appartiene a SUBGOAL 14.8",
+                            "label": "QC 14.4 — Dual verification persons must have necessary competence, training and authority",
                              
                         },
                         "draggable": false,
@@ -2196,7 +2196,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 15.1 — Accuracy, robustness and cybersecurity must be achieved by design and development → appartiene a GOAL 15",
+                            "label": "DC 15.1 — Accuracy, robustness and cybersecurity must be achieved by design and development",
                              
                         },
                         "draggable": false,
@@ -2208,7 +2208,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-15-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 15.2 — Levels of accuracy and relevant accuracy metrics must be declared in instructions for use → appartiene a SUBGOAL 15.1",
+                            "label": "DC 15.2 — Levels of accuracy and relevant accuracy metrics must be declared in instructions for use",
                              
                         },
                         "draggable": false,
@@ -2220,7 +2220,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-15-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 15.3 — Technical and organisational measures must be taken to address resilience against errors, faults and inconsistencies → appartiene a SUBGOAL 15.2",
+                            "label": "DC 15.3 — Technical and organisational measures must be taken to address resilience against errors, faults and inconsistencies",
                              
                         },
                         "draggable": false,
@@ -2232,7 +2232,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-15-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 15.4 — Systems that continue to learn post-deployment must eliminate or reduce risk of biased outputs influencing future inputs (feedback loops) → appartiene a SUBGOAL 15.3",
+                            "label": "DC 15.4 — Systems that continue to learn post-deployment must eliminate or reduce risk of biased outputs influencing future inputs (feedback loops)",
                              
                         },
                         "draggable": false,
@@ -2244,7 +2244,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-15-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 15.5 — Feedback loops must be addressed with appropriate mitigation measures → appartiene a SUBGOAL 15.3",
+                            "label": "DC 15.5 — Feedback loops must be addressed with appropriate mitigation measures",
                              
                         },
                         "draggable": false,
@@ -2256,7 +2256,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-15-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 15.6 — Technical solutions for cybersecurity must include where appropriate measures against: data poisoning, model poisoning, adversarial examples/model evasion, confidentiality attacks, model flaws → appartiene a SUBGOAL 15.5",
+                            "label": "DC 15.6 — Technical solutions for cybersecurity must include where appropriate measures against: data poisoning, model poisoning, adversarial examples/model evasion, confidentiality attacks, model flaws",
                              
                         },
                         "draggable": false,
@@ -2268,7 +2268,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 15.1 — Performance must be consistent throughout the entire lifecycle → appartiene a GOAL 15",
+                            "label": "QC 15.1 — Performance must be consistent throughout the entire lifecycle",
                              
                         },
                         "draggable": false,
@@ -2280,7 +2280,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-15-2",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 15.2 — Robustness must be as high as possible regarding errors, faults or inconsistencies → appartiene a SUBGOAL 15.2",
+                            "label": "QC 15.2 — Robustness must be as high as possible regarding errors, faults or inconsistencies",
                              
                         },
                         "draggable": false,
@@ -2292,7 +2292,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-15-2",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 15.3 — Redundancy solutions (backup, fail-safe) may be used to achieve robustness → appartiene a SUBGOAL 15.2",
+                            "label": "QC 15.3 — Redundancy solutions (backup, fail-safe) may be used to achieve robustness",
                              
                         },
                         "draggable": false,
@@ -2304,7 +2304,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-15-4",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 15.4 — Cybersecurity technical solutions must be appropriate to relevant circumstances and risks → appartiene a SUBGOAL 15.4",
+                            "label": "QC 15.4 — Cybersecurity technical solutions must be appropriate to relevant circumstances and risks",
                              
                         },
                         "draggable": false,
@@ -2316,7 +2316,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-15-3",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 15.5 — Feedback loop risk must be eliminated or reduced as far as possible → appartiene a SUBGOAL 15.3",
+                            "label": "QC 15.5 — Feedback loop risk must be eliminated or reduced as far as possible",
                              
                         },
                         "draggable": false,
@@ -2520,7 +2520,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-16-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 16.1 — Provider identity (name, trade name/mark, contact address) must be indicated on system, packaging or documentation → appartiene a SUBGOAL 16.2",
+                            "label": "DC 16.1 — Provider identity (name, trade name/mark, contact address) must be indicated on system, packaging or documentation",
                              
                         },
                         "draggable": false,
@@ -2532,7 +2532,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-16-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 16.2 — Quality management system must comply with Art. 17 → appartiene a SUBGOAL 16.3",
+                            "label": "DC 16.2 — Quality management system must comply with Art. 17",
                              
                         },
                         "draggable": false,
@@ -2544,7 +2544,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-16-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 16.3 — Logs must be kept only when under provider control → appartiene a SUBGOAL 16.5",
+                            "label": "DC 16.3 — Logs must be kept only when under provider control",
                              
                         },
                         "draggable": false,
@@ -2556,7 +2556,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-16-6",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 16.4 — Conformity assessment must be completed prior to market placement or service deployment → appartiene a SUBGOAL 16.6",
+                            "label": "DC 16.4 — Conformity assessment must be completed prior to market placement or service deployment",
                              
                         },
                         "draggable": false,
@@ -2568,7 +2568,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-16-7",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 16.5 — EU declaration of conformity must be drawn up per Art. 47 → appartiene a SUBGOAL 16.7",
+                            "label": "DC 16.5 — EU declaration of conformity must be drawn up per Art. 47",
                              
                         },
                         "draggable": false,
@@ -2580,7 +2580,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-16-8",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 16.6 — CE marking must be affixed per Art. 48 → appartiene a SUBGOAL 16.8",
+                            "label": "DC 16.6 — CE marking must be affixed per Art. 48",
                              
                         },
                         "draggable": false,
@@ -2592,7 +2592,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-16-9",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 16.7 — Registration obligations per Art. 49(1) must be fulfilled → appartiene a SUBGOAL 16.9",
+                            "label": "DC 16.7 — Registration obligations per Art. 49(1) must be fulfilled",
                              
                         },
                         "draggable": false,
@@ -2604,7 +2604,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-16-10",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 16.8 — Corrective actions must be taken and information provided per Art. 20 → appartiene a SUBGOAL 16.10",
+                            "label": "DC 16.8 — Corrective actions must be taken and information provided per Art. 20",
                              
                         },
                         "draggable": false,
@@ -2616,7 +2616,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-16-11",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 16.9 — Conformity must be demonstrable to national competent authority upon reasoned request → appartiene a SUBGOAL 16.11",
+                            "label": "DC 16.9 — Conformity must be demonstrable to national competent authority upon reasoned request",
                              
                         },
                         "draggable": false,
@@ -2628,7 +2628,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-16-12",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 16.10 — System must comply with accessibility requirements per Directives 2016/2102 and 2019/882 → appartiene a SUBGOAL 16.12",
+                            "label": "DC 16.10 — System must comply with accessibility requirements per Directives 2016/2102 and 2019/882",
                              
                         },
                         "draggable": false,
@@ -2640,7 +2640,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-16-10",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 16.1 — Corrective actions must be necessary and proportionate to the non-conformity identified → appartiene a SUBGOAL 16.10",
+                            "label": "QC 16.1 — Corrective actions must be necessary and proportionate to the non-conformity identified",
                              
                         },
                         "draggable": false,
@@ -2652,7 +2652,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-16-11",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 16.2 — Demonstration of conformity must be provided upon reasoned request (not arbitrary) → appartiene a SUBGOAL 16.11",
+                            "label": "QC 16.2 — Demonstration of conformity must be provided upon reasoned request (not arbitrary)",
                              
                         },
                         "draggable": false,
@@ -2867,7 +2867,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 17.1 — QMS must be documented in written policies, procedures and instructions in a systematic and orderly manner → appartiene a GOAL 17",
+                            "label": "DC 17.1 — QMS must be documented in written policies, procedures and instructions in a systematic and orderly manner",
                              
                         },
                         "draggable": false,
@@ -2879,7 +2879,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-17-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 17.2 — Regulatory compliance strategy must include conformity assessment procedures and modification management → appartiene a SUBGOAL 17.1",
+                            "label": "DC 17.2 — Regulatory compliance strategy must include conformity assessment procedures and modification management",
                              
                         },
                         "draggable": false,
@@ -2891,7 +2891,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-17-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 17.3 — Test and validation procedures must specify frequency of execution → appartiene a SUBGOAL 17.4",
+                            "label": "DC 17.3 — Test and validation procedures must specify frequency of execution",
                              
                         },
                         "draggable": false,
@@ -2903,7 +2903,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-17-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 17.4 — Where harmonised standards are not fully applied, alternative means to ensure Section 2 compliance must be documented → appartiene a SUBGOAL 17.5",
+                            "label": "DC 17.4 — Where harmonised standards are not fully applied, alternative means to ensure Section 2 compliance must be documented",
                              
                         },
                         "draggable": false,
@@ -2915,7 +2915,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-17-6",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 17.5 — Data management systems must cover: acquisition, collection, analysis, labelling, storage, filtration, mining, aggregation, retention and all pre-market operations → appartiene a SUBGOAL 17.6",
+                            "label": "DC 17.5 — Data management systems must cover: acquisition, collection, analysis, labelling, storage, filtration, mining, aggregation, retention and all pre-market operations",
                              
                         },
                         "draggable": false,
@@ -2927,7 +2927,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-17-7",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 17.6 — Risk management system per Art. 9 must be integrated into QMS → appartiene a SUBGOAL 17.7",
+                            "label": "DC 17.6 — Risk management system per Art. 9 must be integrated into QMS",
                              
                         },
                         "draggable": false,
@@ -2939,7 +2939,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-17-8",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 17.7 — Post-market monitoring system must be set up, implemented and maintained per Art. 72 → appartiene a SUBGOAL 17.8",
+                            "label": "DC 17.7 — Post-market monitoring system must be set up, implemented and maintained per Art. 72",
                              
                         },
                         "draggable": false,
@@ -2951,7 +2951,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-17-9",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 17.8 — Serious incident reporting procedures must comply with Art. 73 → appartiene a SUBGOAL 17.9",
+                            "label": "DC 17.8 — Serious incident reporting procedures must comply with Art. 73",
                              
                         },
                         "draggable": false,
@@ -2963,7 +2963,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 17.9 — Providers subject to sectoral Union law QMS obligations may integrate Art. 17 aspects into existing QMS → appartiene a GOAL 17",
+                            "label": "DC 17.9 — Providers subject to sectoral Union law QMS obligations may integrate Art. 17 aspects into existing QMS",
                              
                         },
                         "draggable": false,
@@ -2975,7 +2975,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 17.10 — Financial institutions subject to Union financial services law internal governance rules are deemed compliant with QMS obligations except Art. 17(1)(g)(h)(i) → appartiene a GOAL 17",
+                            "label": "DC 17.10 — Financial institutions subject to Union financial services law internal governance rules are deemed compliant with QMS obligations except Art. 17(1)(g)(h)(i)",
                              
                         },
                         "draggable": false,
@@ -2987,7 +2987,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 17.1 — QMS implementation must be proportionate to the size of the provider organisation → appartiene a GOAL 17",
+                            "label": "QC 17.1 — QMS implementation must be proportionate to the size of the provider organisation",
                              
                         },
                         "draggable": false,
@@ -2999,7 +2999,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-17",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 17.2 — Degree of rigour and level of protection must be sufficient to ensure AI Act compliance regardless of organisation size → appartiene a GOAL 17",
+                            "label": "QC 17.2 — Degree of rigour and level of protection must be sufficient to ensure AI Act compliance regardless of organisation size",
                              
                         },
                         "draggable": false,
@@ -3011,7 +3011,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-17-13",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 17.3 — Accountability framework must clearly set out responsibilities for all QMS aspects across management and staff → appartiene a SUBGOAL 17.13",
+                            "label": "QC 17.3 — Accountability framework must clearly set out responsibilities for all QMS aspects across management and staff",
                              
                         },
                         "draggable": false,
@@ -3150,7 +3150,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 18.1 — All documentation must be kept for 10 years after market placement or service deployment → appartiene a GOAL 18",
+                            "label": "DC 18.1 — All documentation must be kept for 10 years after market placement or service deployment",
                              
                         },
                         "draggable": false,
@@ -3162,7 +3162,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 18.2 — Documentation must be kept at disposal of national competent authorities throughout the retention period → appartiene a GOAL 18",
+                            "label": "DC 18.2 — Documentation must be kept at disposal of national competent authorities throughout the retention period",
                              
                         },
                         "draggable": false,
@@ -3174,7 +3174,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 18.3 — Member States must determine conditions for documentation availability in case of provider bankruptcy or cessation of activity → appartiene a GOAL 18",
+                            "label": "DC 18.3 — Member States must determine conditions for documentation availability in case of provider bankruptcy or cessation of activity",
                              
                         },
                         "draggable": false,
@@ -3186,7 +3186,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-18-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 18.4 — Financial institutions subject to Union financial services law must maintain technical documentation as part of documentation kept under that law → appartiene a SUBGOAL 18.1",
+                            "label": "DC 18.4 — Financial institutions subject to Union financial services law must maintain technical documentation as part of documentation kept under that law",
                              
                         },
                         "draggable": false,
@@ -3198,7 +3198,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 18.1 — Documentation must remain accessible and retrievable throughout the entire 10-year retention period → appartiene a GOAL 18",
+                            "label": "QC 18.1 — Documentation must remain accessible and retrievable throughout the entire 10-year retention period",
                              
                         },
                         "draggable": false,
@@ -3210,7 +3210,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-18",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 18.2 — Continuity of documentation availability must be ensured even in case of bankruptcy or cessation of activity → appartiene a GOAL 18",
+                            "label": "QC 18.2 — Continuity of documentation availability must be ensured even in case of bankruptcy or cessation of activity",
                              
                         },
                         "draggable": false,
@@ -3315,7 +3315,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-19-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 19.1 — Logs must be kept only to the extent they are under provider control → appartiene a SUBGOAL 19.1",
+                            "label": "DC 19.1 — Logs must be kept only to the extent they are under provider control",
                              
                         },
                         "draggable": false,
@@ -3327,7 +3327,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-19-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 19.2 — Minimum log retention period is six months unless Union or national law provides otherwise → appartiene a SUBGOAL 19.2",
+                            "label": "DC 19.2 — Minimum log retention period is six months unless Union or national law provides otherwise",
                              
                         },
                         "draggable": false,
@@ -3339,7 +3339,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-19-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 19.3 — Applicable Union or national law on personal data protection may override retention period → appartiene a SUBGOAL 19.2",
+                            "label": "DC 19.3 — Applicable Union or national law on personal data protection may override retention period",
                              
                         },
                         "draggable": false,
@@ -3351,7 +3351,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-19-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 19.4 — Financial institutions must maintain logs as part of documentation under relevant financial services law → appartiene a SUBGOAL 19.3",
+                            "label": "DC 19.4 — Financial institutions must maintain logs as part of documentation under relevant financial services law",
                              
                         },
                         "draggable": false,
@@ -3363,7 +3363,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-19-2",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 19.1 — Log retention period must be appropriate to the intended purpose of the system, not just the minimum → appartiene a SUBGOAL 19.2",
+                            "label": "QC 19.1 — Log retention period must be appropriate to the intended purpose of the system, not just the minimum",
                              
                         },
                         "draggable": false,
@@ -3490,7 +3490,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-20",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 20.1 — Corrective actions must be taken immediately upon identifying or having reason to consider non-conformity → appartiene a SUBGOAL 20.2",
+                            "label": "DC 20.1 — Corrective actions must be taken immediately upon identifying or having reason to consider non-conformity",
                              
                         },
                         "draggable": false,
@@ -3502,7 +3502,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-20-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 20.2 — Corrective actions may include: restoring conformity, withdrawal, disabling or recall as appropriate → appartiene a SUBGOAL 20.2",
+                            "label": "DC 20.2 — Corrective actions may include: restoring conformity, withdrawal, disabling or recall as appropriate",
                              
                         },
                         "draggable": false,
@@ -3514,7 +3514,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-20-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 20.3 — Distributors, deployers, authorised representative and importers must be informed of non-conformity where applicable → appartiene a SUBGOAL 20.3",
+                            "label": "DC 20.3 — Distributors, deployers, authorised representative and importers must be informed of non-conformity where applicable",
                              
                         },
                         "draggable": false,
@@ -3526,7 +3526,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-20-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 20.4 — Where system presents risk per Art. 79(1), provider must immediately investigate causes in collaboration with reporting deployer where applicable → appartiene a SUBGOAL 20.4",
+                            "label": "DC 20.4 — Where system presents risk per Art. 79(1), provider must immediately investigate causes in collaboration with reporting deployer where applicable",
                              
                         },
                         "draggable": false,
@@ -3538,7 +3538,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-20-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 20.5 — Market surveillance authorities competent for the system must be informed immediately of risk per Art. 79(1) → appartiene a SUBGOAL 20.5",
+                            "label": "DC 20.5 — Market surveillance authorities competent for the system must be informed immediately of risk per Art. 79(1)",
                              
                         },
                         "draggable": false,
@@ -3550,7 +3550,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-20-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 20.6 — Notified body that issued certificate per Art. 44 must be informed where applicable → appartiene a SUBGOAL 20.5",
+                            "label": "DC 20.6 — Notified body that issued certificate per Art. 44 must be informed where applicable",
                              
                         },
                         "draggable": false,
@@ -3562,7 +3562,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-20-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 20.7 — Information to authorities must include nature of non-conformity and relevant corrective actions taken → appartiene a SUBGOAL 20.5",
+                            "label": "DC 20.7 — Information to authorities must include nature of non-conformity and relevant corrective actions taken",
                              
                         },
                         "draggable": false,
@@ -3574,7 +3574,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-20-4",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 20.1 — Investigation of causes must be immediate upon becoming aware of risk → appartiene a SUBGOAL 20.4",
+                            "label": "QC 20.1 — Investigation of causes must be immediate upon becoming aware of risk",
                              
                         },
                         "draggable": false,
@@ -3586,7 +3586,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-20-2",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 20.2 — Corrective actions must be appropriate to the nature and severity of the non-conformity → appartiene a SUBGOAL 20.2",
+                            "label": "QC 20.2 — Corrective actions must be appropriate to the nature and severity of the non-conformity",
                              
                         },
                         "draggable": false,
@@ -3598,7 +3598,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-20-3",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 20.3 — Communication to all relevant parties must be timely and complete → appartiene a SUBGOAL 20.3",
+                            "label": "QC 20.3 — Communication to all relevant parties must be timely and complete",
                              
                         },
                         "draggable": false,
@@ -3704,7 +3704,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-21",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 21.1 — Information and documentation must be provided only upon a reasoned request by competent authority → appartiene a GOAL 21",
+                            "label": "DC 21.1 — Information and documentation must be provided only upon a reasoned request by competent authority",
                              
                         },
                         "draggable": false,
@@ -3716,7 +3716,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-21-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 21.2 — Information must be provided in a language easily understood by the authority, in one of the official languages of the Union institutions as indicated by the Member State → appartiene a SUBGOAL 21.1",
+                            "label": "DC 21.2 — Information must be provided in a language easily understood by the authority, in one of the official languages of the Union institutions as indicated by the Member State",
                              
                         },
                         "draggable": false,
@@ -3728,7 +3728,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-21-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 21.3 — Log access must be provided only to the extent logs are under provider control → appartiene a SUBGOAL 21.2",
+                            "label": "DC 21.3 — Log access must be provided only to the extent logs are under provider control",
                              
                         },
                         "draggable": false,
@@ -3740,7 +3740,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-21",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 21.4 — Information obtained by competent authority must be treated per confidentiality obligations (→ Art. 78) → appartiene a GOAL 21",
+                            "label": "DC 21.4 — Information obtained by competent authority must be treated per confidentiality obligations (→ Art. 78)",
                              
                         },
                         "draggable": false,
@@ -3752,7 +3752,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-21-1",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 21.1 — Documentation provided must be sufficient to demonstrate conformity with all Section 2 requirements → appartiene a SUBGOAL 21.1",
+                            "label": "QC 21.1 — Documentation provided must be sufficient to demonstrate conformity with all Section 2 requirements",
                              
                         },
                         "draggable": false,
@@ -3764,7 +3764,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-21-1",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 21.2 — Language used must be easily understandable by the authority → appartiene a SUBGOAL 21.1",
+                            "label": "QC 21.2 — Language used must be easily understandable by the authority",
                              
                         },
                         "draggable": false,
@@ -3912,7 +3912,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-22-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 22.1 — Authorised representative must be appointed by written mandate before market availability in the Union → appartiene a SUBGOAL 22.1",
+                            "label": "DC 22.1 — Authorised representative must be appointed by written mandate before market availability in the Union",
                              
                         },
                         "draggable": false,
@@ -3924,7 +3924,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-22-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 22.2 — Authorised representative must be established in the Union → appartiene a SUBGOAL 22.1",
+                            "label": "DC 22.2 — Authorised representative must be established in the Union",
                              
                         },
                         "draggable": false,
@@ -3936,7 +3936,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-22-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 22.3 — Copy of mandate must be provided to market surveillance authorities upon request in an official Union language → appartiene a SUBGOAL 22.2",
+                            "label": "DC 22.3 — Copy of mandate must be provided to market surveillance authorities upon request in an official Union language",
                              
                         },
                         "draggable": false,
@@ -3948,7 +3948,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-22-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 22.4 — Documentation must be kept for 10 years after market placement or service deployment → appartiene a SUBGOAL 22.4",
+                            "label": "DC 22.4 — Documentation must be kept for 10 years after market placement or service deployment",
                              
                         },
                         "draggable": false,
@@ -3960,7 +3960,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-22-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 22.5 — Documentation to keep includes: provider contact details, EU declaration of conformity, technical documentation, notified body certificate if applicable → appartiene a SUBGOAL 22.4",
+                            "label": "DC 22.5 — Documentation to keep includes: provider contact details, EU declaration of conformity, technical documentation, notified body certificate if applicable",
                              
                         },
                         "draggable": false,
@@ -3972,7 +3972,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-22-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 22.6 — Log access must be provided only to extent logs are under provider control → appartiene a SUBGOAL 22.5",
+                            "label": "DC 22.6 — Log access must be provided only to extent logs are under provider control",
                              
                         },
                         "draggable": false,
@@ -3984,7 +3984,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-22-8",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 22.7 — Authorised representative must terminate mandate if provider acts contrary to AI Act obligations → appartiene a SUBGOAL 22.8",
+                            "label": "DC 22.7 — Authorised representative must terminate mandate if provider acts contrary to AI Act obligations",
                              
                         },
                         "draggable": false,
@@ -3996,7 +3996,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-22-8",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 22.8 — Upon mandate termination, relevant market surveillance authority and notified body must be immediately informed with reasons → appartiene a SUBGOAL 22.8",
+                            "label": "DC 22.8 — Upon mandate termination, relevant market surveillance authority and notified body must be immediately informed with reasons",
                              
                         },
                         "draggable": false,
@@ -4008,7 +4008,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-22-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 22.9 — Mandate must empower authorised representative to be addressed by competent authorities in addition to or instead of provider → appartiene a SUBGOAL 22.2",
+                            "label": "DC 22.9 — Mandate must empower authorised representative to be addressed by competent authorities in addition to or instead of provider",
                              
                         },
                         "draggable": false,
@@ -4020,7 +4020,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-22-5",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 22.1 — Information and documentation provided to authorities must be sufficient to demonstrate Section 2 conformity → appartiene a SUBGOAL 22.5",
+                            "label": "QC 22.1 — Information and documentation provided to authorities must be sufficient to demonstrate Section 2 conformity",
                              
                         },
                         "draggable": false,
@@ -4032,7 +4032,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-22-6",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 22.2 — Cooperation with authorities must be effective in reducing and mitigating risks → appartiene a SUBGOAL 22.6",
+                            "label": "QC 22.2 — Cooperation with authorities must be effective in reducing and mitigating risks",
                              
                         },
                         "draggable": false,
@@ -4044,7 +4044,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-22-8",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 22.3 — Termination of mandate must be immediate upon identifying provider non-compliance → appartiene a SUBGOAL 22.8",
+                            "label": "QC 22.3 — Termination of mandate must be immediate upon identifying provider non-compliance",
                              
                         },
                         "draggable": false,
@@ -4237,7 +4237,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 23.1 — All four conformity verifications (SUBGOAL 23.1–23.4) must be completed before market placement → appartiene a GOAL 23",
+                            "label": "DC 23.1 — All four conformity verifications (SUBGOAL 23.1–23.4) must be completed before market placement",
                              
                         },
                         "draggable": false,
@@ -4249,7 +4249,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-23-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 23.2 — Non-conforming or falsified systems must not be placed on market until conformity is restored → appartiene a SUBGOAL 23.5",
+                            "label": "DC 23.2 — Non-conforming or falsified systems must not be placed on market until conformity is restored",
                              
                         },
                         "draggable": false,
@@ -4261,7 +4261,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-23-6",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 23.3 — Where system presents risk per Art. 79(1), provider, authorised representative and market surveillance authorities must be informed → appartiene a SUBGOAL 23.6",
+                            "label": "DC 23.3 — Where system presents risk per Art. 79(1), provider, authorised representative and market surveillance authorities must be informed",
                              
                         },
                         "draggable": false,
@@ -4273,7 +4273,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-23-7",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 23.4 — Importer identity must be indicated on system, packaging or accompanying documentation where applicable → appartiene a SUBGOAL 23.7",
+                            "label": "DC 23.4 — Importer identity must be indicated on system, packaging or accompanying documentation where applicable",
                              
                         },
                         "draggable": false,
@@ -4285,7 +4285,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-23-8",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 23.5 — Storage and transport conditions must not jeopardise Section 2 compliance while system is under importer responsibility → appartiene a SUBGOAL 23.8",
+                            "label": "DC 23.5 — Storage and transport conditions must not jeopardise Section 2 compliance while system is under importer responsibility",
                              
                         },
                         "draggable": false,
@@ -4297,7 +4297,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-23-9",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 23.6 — Retention period for certificate, instructions for use and EU declaration of conformity is 10 years after market placement or service deployment → appartiene a SUBGOAL 23.9",
+                            "label": "DC 23.6 — Retention period for certificate, instructions for use and EU declaration of conformity is 10 years after market placement or service deployment",
                              
                         },
                         "draggable": false,
@@ -4309,7 +4309,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-23-9",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 23.7 — Certificate from notified body must be retained where applicable → appartiene a SUBGOAL 23.9",
+                            "label": "DC 23.7 — Certificate from notified body must be retained where applicable",
                              
                         },
                         "draggable": false,
@@ -4321,7 +4321,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-23-10",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 23.8 — Information provided to authorities must include documentation referred to in paragraph 5 → appartiene a SUBGOAL 23.10",
+                            "label": "DC 23.8 — Information provided to authorities must include documentation referred to in paragraph 5",
                              
                         },
                         "draggable": false,
@@ -4333,7 +4333,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-23-10",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 23.9 — Technical documentation must be made available to competent authorities → appartiene a SUBGOAL 23.10",
+                            "label": "DC 23.9 — Technical documentation must be made available to competent authorities",
                              
                         },
                         "draggable": false,
@@ -4345,7 +4345,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-23",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 23.1 — Information and documentation provided to authorities must be in a language easily understood by them → appartiene a SUBGOAL 23.10",
+                            "label": "QC 23.1 — Information and documentation provided to authorities must be in a language easily understood by them",
                              
                         },
                         "draggable": false,
@@ -4357,7 +4357,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-23-11",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 23.2 — Documentation must be sufficient to demonstrate Section 2 conformity → appartiene a SUBGOAL 23.10",
+                            "label": "QC 23.2 — Documentation must be sufficient to demonstrate Section 2 conformity",
                              
                         },
                         "draggable": false,
@@ -4369,7 +4369,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-23-11",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 23.3 — Cooperation with authorities must be effective in reducing and mitigating risks → appartiene a SUBGOAL 23.11",
+                            "label": "QC 23.3 — Cooperation with authorities must be effective in reducing and mitigating risks",
                              
                         },
                         "draggable": false,
@@ -4381,7 +4381,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-23-8",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 23.4 — Storage and transport conditions must be actively monitored throughout importer responsibility period → appartiene a SUBGOAL 23.8",
+                            "label": "QC 23.4 — Storage and transport conditions must be actively monitored throughout importer responsibility period",
                              
                         },
                         "draggable": false,
@@ -4553,7 +4553,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-24-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 24.1 — Verification of CE marking, EU declaration of conformity, instructions for use and provider/importer obligations must be completed before market availability → appartiene a SUBGOAL 24.1",
+                            "label": "DC 24.1 — Verification of CE marking, EU declaration of conformity, instructions for use and provider/importer obligations must be completed before market availability",
                              
                         },
                         "draggable": false,
@@ -4565,7 +4565,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-24-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 24.2 — Non-conforming systems must not be made available on market until conformity is restored → appartiene a SUBGOAL 24.2",
+                            "label": "DC 24.2 — Non-conforming systems must not be made available on market until conformity is restored",
                              
                         },
                         "draggable": false,
@@ -4577,7 +4577,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-24-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 24.3 — Where system presents risk per Art. 79(1), provider or importer must be informed → appartiene a SUBGOAL 24.3",
+                            "label": "DC 24.3 — Where system presents risk per Art. 79(1), provider or importer must be informed",
                              
                         },
                         "draggable": false,
@@ -4589,7 +4589,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-24-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 24.4 — Storage and transport conditions must not jeopardise Section 2 compliance while under distributor responsibility → appartiene a SUBGOAL 24.4",
+                            "label": "DC 24.4 — Storage and transport conditions must not jeopardise Section 2 compliance while under distributor responsibility",
                              
                         },
                         "draggable": false,
@@ -4601,7 +4601,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-24-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 24.5 — Corrective actions may include: restoring conformity, withdrawal or recall → appartiene a SUBGOAL 24.5",
+                            "label": "DC 24.5 — Corrective actions may include: restoring conformity, withdrawal or recall",
                              
                         },
                         "draggable": false,
@@ -4613,7 +4613,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-24-6",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 24.6 — Where system presents risk per Art. 79(1), provider or importer and competent authorities must be immediately informed with details of non-compliance and corrective actions → appartiene a SUBGOAL 24.6",
+                            "label": "DC 24.6 — Where system presents risk per Art. 79(1), provider or importer and competent authorities must be immediately informed with details of non-compliance and corrective actions",
                              
                         },
                         "draggable": false,
@@ -4625,7 +4625,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-24-7",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 24.7 — Information provided to authorities must cover all actions pursuant to paragraphs 1–4 → appartiene a SUBGOAL 24.7",
+                            "label": "DC 24.7 — Information provided to authorities must cover all actions pursuant to paragraphs 1–4",
                              
                         },
                         "draggable": false,
@@ -4637,7 +4637,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-24-7",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 24.1 — Information to competent authorities must be sufficient to demonstrate Section 2 conformity → appartiene a SUBGOAL 24.7",
+                            "label": "QC 24.1 — Information to competent authorities must be sufficient to demonstrate Section 2 conformity",
                              
                         },
                         "draggable": false,
@@ -4649,7 +4649,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-24-6",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 24.2 — Notification to provider/importer and authorities must be immediate where risk is identified → appartiene a SUBGOAL 24.6",
+                            "label": "QC 24.2 — Notification to provider/importer and authorities must be immediate where risk is identified",
                              
                         },
                         "draggable": false,
@@ -4661,7 +4661,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-24-8",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 24.3 — Cooperation with authorities must be effective in reducing and mitigating risks → appartiene a SUBGOAL 24.8",
+                            "label": "QC 24.3 — Cooperation with authorities must be effective in reducing and mitigating risks",
                              
                         },
                         "draggable": false,
@@ -4673,7 +4673,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-24-4",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 24.4 — Storage and transport conditions must be actively monitored throughout distributor responsibility period → appartiene a SUBGOAL 24.4",
+                            "label": "QC 24.4 — Storage and transport conditions must be actively monitored throughout distributor responsibility period",
                              
                         },
                         "draggable": false,
@@ -4823,7 +4823,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-25-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 25.1 — Affixing own name or trademark to system already on market triggers full provider obligations per Art. 16 → appartiene a SUBGOAL 25.1",
+                            "label": "DC 25.1 — Affixing own name or trademark to system already on market triggers full provider obligations per Art. 16",
                              
                         },
                         "draggable": false,
@@ -4835,7 +4835,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-25-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 25.2 — Substantial modification triggering continued high-risk classification per Art. 6 transfers provider obligations → appartiene a SUBGOAL 25.2",
+                            "label": "DC 25.2 — Substantial modification triggering continued high-risk classification per Art. 6 transfers provider obligations",
                              
                         },
                         "draggable": false,
@@ -4847,7 +4847,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-25-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 25.3 — Modification of intended purpose causing high-risk classification per Art. 6 transfers provider obligations → appartiene a SUBGOAL 25.3",
+                            "label": "DC 25.3 — Modification of intended purpose causing high-risk classification per Art. 6 transfers provider obligations",
                              
                         },
                         "draggable": false,
@@ -4859,7 +4859,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-25-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 25.4 — Initial provider ceases to be considered provider upon role transfer → appartiene a SUBGOAL 25.4",
+                            "label": "DC 25.4 — Initial provider ceases to be considered provider upon role transfer",
                              
                         },
                         "draggable": false,
@@ -4871,7 +4871,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-25-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 25.5 — Initial provider must make available necessary information, technical access and assistance to new provider → appartiene a SUBGOAL 25.4",
+                            "label": "DC 25.5 — Initial provider must make available necessary information, technical access and assistance to new provider",
                              
                         },
                         "draggable": false,
@@ -4883,7 +4883,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-25-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 25.6 — DC 25.5 does not apply if initial provider has clearly specified system is not to be changed into high-risk → appartiene a SUBGOAL 25.4",
+                            "label": "DC 25.6 — DC 25.5 does not apply if initial provider has clearly specified system is not to be changed into high-risk",
                              
                         },
                         "draggable": false,
@@ -4895,7 +4895,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-25-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 25.7 — Product manufacturer is considered provider when high-risk AI system is placed on market or put into service under manufacturer name or trademark → appartiene a SUBGOAL 25.5",
+                            "label": "DC 25.7 — Product manufacturer is considered provider when high-risk AI system is placed on market or put into service under manufacturer name or trademark",
                              
                         },
                         "draggable": false,
@@ -4907,7 +4907,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-25-6",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 25.8 — Written agreement with third party suppliers must specify: necessary information, capabilities, technical access and other assistance → appartiene a SUBGOAL 25.6",
+                            "label": "DC 25.8 — Written agreement with third party suppliers must specify: necessary information, capabilities, technical access and other assistance",
                              
                         },
                         "draggable": false,
@@ -4919,7 +4919,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-25-6",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 25.9 — Written agreement obligation does not apply to third parties making available tools/services/processes/components under free and open-source licence (excluding GPAI models) → appartiene a SUBGOAL 25.6",
+                            "label": "DC 25.9 — Written agreement obligation does not apply to third parties making available tools/services/processes/components under free and open-source licence (excluding GPAI models)",
                              
                         },
                         "draggable": false,
@@ -4931,7 +4931,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-25",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 25.10 — Intellectual property rights, confidential business information and trade secrets must be observed and protected throughout role transfers → appartiene a GOAL 25",
+                            "label": "DC 25.10 — Intellectual property rights, confidential business information and trade secrets must be observed and protected throughout role transfers",
                              
                         },
                         "draggable": false,
@@ -4943,7 +4943,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-25-4",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 25.1 — Information, technical access and assistance provided by initial provider must be reasonably expected and sufficient for new provider to fulfil AI Act obligations → appartiene a SUBGOAL 25.4",
+                            "label": "QC 25.1 — Information, technical access and assistance provided by initial provider must be reasonably expected and sufficient for new provider to fulfil AI Act obligations",
                              
                         },
                         "draggable": false,
@@ -4955,7 +4955,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-25-6",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 25.2 — Written agreement with third party must be based on generally acknowledged state of the art → appartiene a SUBGOAL 25.6",
+                            "label": "QC 25.2 — Written agreement with third party must be based on generally acknowledged state of the art",
                              
                         },
                         "draggable": false,
@@ -4967,7 +4967,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-25-4",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 25.3 — Cooperation between initial and new provider must be close and continuous → appartiene a SUBGOAL 25.4",
+                            "label": "QC 25.3 — Cooperation between initial and new provider must be close and continuous",
                              
                         },
                         "draggable": false,
@@ -5218,7 +5218,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.1 — Technical and organisational measures must ensure use in accordance with instructions for use → appartiene a SUBGOAL 26.1",
+                            "label": "DC 26.1 — Technical and organisational measures must ensure use in accordance with instructions for use",
                              
                         },
                         "draggable": false,
@@ -5230,7 +5230,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.2 — Human oversight must be assigned to natural persons with necessary competence, training, authority and support → appartiene a SUBGOAL 26.2",
+                            "label": "DC 26.2 — Human oversight must be assigned to natural persons with necessary competence, training, authority and support",
                              
                         },
                         "draggable": false,
@@ -5242,7 +5242,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.3 — Input data relevance and representativeness obligation applies only when deployer exercises control over input data → appartiene a SUBGOAL 26.3",
+                            "label": "DC 26.3 — Input data relevance and representativeness obligation applies only when deployer exercises control over input data",
                              
                         },
                         "draggable": false,
@@ -5254,7 +5254,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.4 — Where risk per Art. 79(1) is identified, provider or distributor and market surveillance authority must be informed without undue delay and use must be suspended → appartiene a SUBGOAL 26.5",
+                            "label": "DC 26.4 — Where risk per Art. 79(1) is identified, provider or distributor and market surveillance authority must be informed without undue delay and use must be suspended",
                              
                         },
                         "draggable": false,
@@ -5266,7 +5266,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-6",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.5 — Upon serious incident, provider must be informed first, then importer or distributor and market surveillance authorities → appartiene a SUBGOAL 26.6",
+                            "label": "DC 26.5 — Upon serious incident, provider must be informed first, then importer or distributor and market surveillance authorities",
                              
                         },
                         "draggable": false,
@@ -5278,7 +5278,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-6",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.6 — Where provider cannot be reached, Art. 73 applies mutatis mutandis → appartiene a SUBGOAL 26.6",
+                            "label": "DC 26.6 — Where provider cannot be reached, Art. 73 applies mutatis mutandis",
                              
                         },
                         "draggable": false,
@@ -5290,7 +5290,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-7",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.7 — Logs must be kept for minimum six months unless Union or national law provides otherwise → appartiene a SUBGOAL 26.7",
+                            "label": "DC 26.7 — Logs must be kept for minimum six months unless Union or national law provides otherwise",
                              
                         },
                         "draggable": false,
@@ -5302,7 +5302,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-7",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.8 — Log retention period must be appropriate to intended purpose → appartiene a SUBGOAL 26.7",
+                            "label": "DC 26.8 — Log retention period must be appropriate to intended purpose",
                              
                         },
                         "draggable": false,
@@ -5314,7 +5314,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.9 — Financial institution deployers fulfil monitoring obligation by complying with internal governance rules under Union financial services law → appartiene a SUBGOAL 26.4",
+                            "label": "DC 26.9 — Financial institution deployers fulfil monitoring obligation by complying with internal governance rules under Union financial services law",
                              
                         },
                         "draggable": false,
@@ -5326,7 +5326,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-7",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.10 — Financial institution deployers must maintain logs as part of documentation under Union financial services law → appartiene a SUBGOAL 26.7",
+                            "label": "DC 26.10 — Financial institution deployers must maintain logs as part of documentation under Union financial services law",
                              
                         },
                         "draggable": false,
@@ -5338,7 +5338,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-8",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.11 — Worker information must be provided before putting system into service at workplace, per Union and national law → appartiene a SUBGOAL 26.8",
+                            "label": "DC 26.11 — Worker information must be provided before putting system into service at workplace, per Union and national law",
                              
                         },
                         "draggable": false,
@@ -5350,7 +5350,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-9",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.12 — Public authority deployers must not use unregistered systems and must inform provider or distributor → appartiene a SUBGOAL 26.9",
+                            "label": "DC 26.12 — Public authority deployers must not use unregistered systems and must inform provider or distributor",
                              
                         },
                         "draggable": false,
@@ -5362,7 +5362,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-11",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.13 — Post-remote biometric identification requires ex-ante or max 48h judicial or administrative authorisation → appartiene a SUBGOAL 26.11",
+                            "label": "DC 26.13 — Post-remote biometric identification requires ex-ante or max 48h judicial or administrative authorisation",
                              
                         },
                         "draggable": false,
@@ -5374,7 +5374,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-11",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.14 — If authorisation for biometric identification is rejected, use must stop immediately and personal data must be deleted → appartiene a SUBGOAL 26.11",
+                            "label": "DC 26.14 — If authorisation for biometric identification is rejected, use must stop immediately and personal data must be deleted",
                              
                         },
                         "draggable": false,
@@ -5386,7 +5386,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-11",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.15 — Post-remote biometric identification must not be used in untargeted way without link to criminal offence → appartiene a SUBGOAL 26.11",
+                            "label": "DC 26.15 — Post-remote biometric identification must not be used in untargeted way without link to criminal offence",
                              
                         },
                         "draggable": false,
@@ -5398,7 +5398,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-11",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.16 — Each use of post-remote biometric identification must be documented in police file and made available to authorities upon request → appartiene a SUBGOAL 26.11",
+                            "label": "DC 26.16 — Each use of post-remote biometric identification must be documented in police file and made available to authorities upon request",
                              
                         },
                         "draggable": false,
@@ -5410,7 +5410,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-11",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.17 — Annual reports on post-remote biometric identification use must be submitted to market surveillance and data protection authorities → appartiene a SUBGOAL 26.11",
+                            "label": "DC 26.17 — Annual reports on post-remote biometric identification use must be submitted to market surveillance and data protection authorities",
                              
                         },
                         "draggable": false,
@@ -5422,7 +5422,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-12",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.18 — Natural persons subject to Annex III system decisions must be informed, except where law enforcement Art. 13 Directive 2016/680 applies → appartiene a SUBGOAL 26.12",
+                            "label": "DC 26.18 — Natural persons subject to Annex III system decisions must be informed, except where law enforcement Art. 13 Directive 2016/680 applies",
                              
                         },
                         "draggable": false,
@@ -5434,7 +5434,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 26.19 — Sensitive operational data of law enforcement deployers is exempt from monitoring reporting obligation → appartiene a SUBGOAL 26.4",
+                            "label": "DC 26.19 — Sensitive operational data of law enforcement deployers is exempt from monitoring reporting obligation",
                              
                         },
                         "draggable": false,
@@ -5446,7 +5446,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-2",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 26.1 — Human oversight persons must have necessary competence, training and authority appropriate to the system → appartiene a SUBGOAL 26.2",
+                            "label": "QC 26.1 — Human oversight persons must have necessary competence, training and authority appropriate to the system",
                              
                         },
                         "draggable": false,
@@ -5458,7 +5458,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-3",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 26.2 — Input data must be relevant and sufficiently representative in view of intended purpose → appartiene a SUBGOAL 26.3",
+                            "label": "QC 26.2 — Input data must be relevant and sufficiently representative in view of intended purpose",
                              
                         },
                         "draggable": false,
@@ -5470,7 +5470,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-5",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 26.3 — Notification of risk must be without undue delay → appartiene a SUBGOAL 26.5",
+                            "label": "QC 26.3 — Notification of risk must be without undue delay",
                              
                         },
                         "draggable": false,
@@ -5482,7 +5482,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-6",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 26.4 — Notification of serious incident to provider must be immediate → appartiene a SUBGOAL 26.6",
+                            "label": "QC 26.4 — Notification of serious incident to provider must be immediate",
                              
                         },
                         "draggable": false,
@@ -5494,7 +5494,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-26",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 26.5 — Log retention period must be appropriate to intended purpose beyond minimum six months where needed → appartiene a SUBGOAL 26.7",
+                            "label": "QC 26.5 — Log retention period must be appropriate to intended purpose beyond minimum six months where needed",
                              
                         },
                         "draggable": false,
@@ -5506,7 +5506,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-26-13",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 26.6 — Cooperation with authorities must be effective in implementing the Regulation → appartiene a SUBGOAL 26.13",
+                            "label": "QC 26.6 — Cooperation with authorities must be effective in implementing the Regulation",
                              
                         },
                         "draggable": false,
@@ -5705,7 +5705,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-50-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 50.1 — Providers must design systems interacting with natural persons to inform them of AI interaction unless obvious to a reasonably well-informed, observant and circumspect person → appartiene a SUBGOAL 50.1",
+                            "label": "DC 50.1 — Providers must design systems interacting with natural persons to inform them of AI interaction unless obvious to a reasonably well-informed, observant and circumspect person",
                              
                         },
                         "draggable": false,
@@ -5717,7 +5717,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-50-1",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 50.2 — Obligation of DC 50.1 does not apply to systems authorised by law for criminal offence detection/prevention/investigation/prosecution unless available for public reporting → appartiene a SUBGOAL 50.1",
+                            "label": "DC 50.2 — Obligation of DC 50.1 does not apply to systems authorised by law for criminal offence detection/prevention/investigation/prosecution unless available for public reporting",
                              
                         },
                         "draggable": false,
@@ -5729,7 +5729,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-50-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 50.3 — Synthetic content outputs must be marked in machine-readable format detectable as artificially generated or manipulated → appartiene a SUBGOAL 50.2",
+                            "label": "DC 50.3 — Synthetic content outputs must be marked in machine-readable format detectable as artificially generated or manipulated",
                              
                         },
                         "draggable": false,
@@ -5741,7 +5741,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-50-2",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 50.4 — Marking obligation does not apply where system performs assistive function for standard editing or does not substantially alter input data or semantics, or where authorised by law for criminal offence purposes → appartiene a SUBGOAL 50.2",
+                            "label": "DC 50.4 — Marking obligation does not apply where system performs assistive function for standard editing or does not substantially alter input data or semantics, or where authorised by law for criminal offence purposes",
                              
                         },
                         "draggable": false,
@@ -5753,7 +5753,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-50-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 50.5 — Deployers of emotion recognition or biometric categorisation systems must inform exposed natural persons of system operation → appartiene a SUBGOAL 50.3",
+                            "label": "DC 50.5 — Deployers of emotion recognition or biometric categorisation systems must inform exposed natural persons of system operation",
                              
                         },
                         "draggable": false,
@@ -5765,7 +5765,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-50-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 50.6 — Personal data processed by emotion recognition or biometric categorisation systems must comply with GDPR, Regulation 2018/1725 and Directive 2016/680 → appartiene a SUBGOAL 50.3",
+                            "label": "DC 50.6 — Personal data processed by emotion recognition or biometric categorisation systems must comply with GDPR, Regulation 2018/1725 and Directive 2016/680",
                              
                         },
                         "draggable": false,
@@ -5777,7 +5777,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-50-3",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 50.7 — Obligation of DC 50.5 does not apply to systems permitted by law for criminal offence detection/prevention/investigation with appropriate safeguards → appartiene a SUBGOAL 50.3",
+                            "label": "DC 50.7 — Obligation of DC 50.5 does not apply to systems permitted by law for criminal offence detection/prevention/investigation with appropriate safeguards",
                              
                         },
                         "draggable": false,
@@ -5789,7 +5789,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-50-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 50.8 — Deployers of deep fake systems must disclose artificial generation or manipulation of content → appartiene a SUBGOAL 50.4",
+                            "label": "DC 50.8 — Deployers of deep fake systems must disclose artificial generation or manipulation of content",
                              
                         },
                         "draggable": false,
@@ -5801,7 +5801,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-50-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 50.9 — Deep fake disclosure obligation does not apply where authorised by law for criminal offence purposes → appartiene a SUBGOAL 50.4",
+                            "label": "DC 50.9 — Deep fake disclosure obligation does not apply where authorised by law for criminal offence purposes",
                              
                         },
                         "draggable": false,
@@ -5813,7 +5813,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-50-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 50.10 — For artistic, creative, satirical or fictional works, disclosure is limited to appropriate indication not hampering display or enjoyment → appartiene a SUBGOAL 50.4",
+                            "label": "DC 50.10 — For artistic, creative, satirical or fictional works, disclosure is limited to appropriate indication not hampering display or enjoyment",
                              
                         },
                         "draggable": false,
@@ -5825,7 +5825,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-50-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 50.11 — AI-generated text published to inform public must be disclosed as artificially generated unless authorised by law for criminal offence purposes or subject to human review/editorial control with editorial responsibility → appartiene a SUBGOAL 50.5",
+                            "label": "DC 50.11 — AI-generated text published to inform public must be disclosed as artificially generated unless authorised by law for criminal offence purposes or subject to human review/editorial control with editorial responsibility",
                              
                         },
                         "draggable": false,
@@ -5837,7 +5837,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 50.12 — All information per paragraphs 1–4 must be provided at the latest at the time of first interaction or exposure → appartiene a GOAL 50",
+                            "label": "DC 50.12 — All information per paragraphs 1–4 must be provided at the latest at the time of first interaction or exposure",
                              
                         },
                         "draggable": false,
@@ -5849,7 +5849,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 50.13 — Art. 50 obligations are without prejudice to Chapter III requirements and other Union or national transparency obligations → appartiene a GOAL 50",
+                            "label": "DC 50.13 — Art. 50 obligations are without prejudice to Chapter III requirements and other Union or national transparency obligations",
                              
                         },
                         "draggable": false,
@@ -5861,7 +5861,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 50.1 — Information to natural persons must be provided in a clear and distinguishable manner → appartiene a GOAL 50",
+                            "label": "QC 50.1 — Information to natural persons must be provided in a clear and distinguishable manner",
                              
                         },
                         "draggable": false,
@@ -5873,7 +5873,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-50",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 50.2 — Information must conform to applicable accessibility requirements → appartiene a GOAL 50",
+                            "label": "QC 50.2 — Information must conform to applicable accessibility requirements",
                              
                         },
                         "draggable": false,
@@ -5885,7 +5885,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-50-2",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 50.3 — Technical solutions for marking synthetic content must be effective, interoperable, robust and reliable as far as technically feasible → appartiene a SUBGOAL 50.2",
+                            "label": "QC 50.3 — Technical solutions for marking synthetic content must be effective, interoperable, robust and reliable as far as technically feasible",
                              
                         },
                         "draggable": false,
@@ -5897,7 +5897,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-50-2",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 50.4 — Technical solutions must take into account specificities and limitations of content types, implementation costs and state of the art → appartiene a SUBGOAL 50.2",
+                            "label": "QC 50.4 — Technical solutions must take into account specificities and limitations of content types, implementation costs and state of the art",
                              
                         },
                         "draggable": false,
@@ -6128,7 +6128,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 27.1 — Assessment must be performed prior to deployment, not after → appartiene a GOAL 27",
+                            "label": "DC 27.1 — Assessment must be performed prior to deployment, not after",
                              
                         },
                         "draggable": false,
@@ -6140,7 +6140,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 27.2 — Obligation applies to deployers that are: bodies governed by public law, private entities providing public services, or deployers of Annex III points 5(b) and 5(c) systems → appartiene a GOAL 27",
+                            "label": "DC 27.2 — Obligation applies to deployers that are: bodies governed by public law, private entities providing public services, or deployers of Annex III points 5(b) and 5(c) systems",
                              
                         },
                         "draggable": false,
@@ -6152,7 +6152,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 27.3 — Obligation does not apply to high-risk AI systems in area listed in Annex III point 2 → appartiene a GOAL 27",
+                            "label": "DC 27.3 — Obligation does not apply to high-risk AI systems in area listed in Annex III point 2",
                              
                         },
                         "draggable": false,
@@ -6164,7 +6164,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 27.4 — Assessment obligation applies to first use of system; in similar cases deployer may rely on previously conducted assessments or provider assessments → appartiene a GOAL 27",
+                            "label": "DC 27.4 — Assessment obligation applies to first use of system; in similar cases deployer may rely on previously conducted assessments or provider assessments",
                              
                         },
                         "draggable": false,
@@ -6176,7 +6176,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-27-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 27.5 — Specific risks must take into account information provided by provider per Art. 13 → appartiene a SUBGOAL 27.4",
+                            "label": "DC 27.5 — Specific risks must take into account information provided by provider per Art. 13",
                              
                         },
                         "draggable": false,
@@ -6188,7 +6188,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-27-6",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 27.6 — Measures upon risk materialisation must include internal governance arrangements and complaint mechanisms → appartiene a SUBGOAL 27.6",
+                            "label": "DC 27.6 — Measures upon risk materialisation must include internal governance arrangements and complaint mechanisms",
                              
                         },
                         "draggable": false,
@@ -6200,7 +6200,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-27-7",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 27.7 — Market surveillance authority must be notified of results using AI Office template → appartiene a SUBGOAL 27.7",
+                            "label": "DC 27.7 — Market surveillance authority must be notified of results using AI Office template",
                              
                         },
                         "draggable": false,
@@ -6212,7 +6212,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-27-7",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 27.8 — Deployers exempt per Art. 46(1) are exempt from notification obligation → appartiene a SUBGOAL 27.7",
+                            "label": "DC 27.8 — Deployers exempt per Art. 46(1) are exempt from notification obligation",
                              
                         },
                         "draggable": false,
@@ -6224,7 +6224,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-27-9",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 27.9 — Where DPIA under Art. 35 GDPR or Art. 27 Directive 2016/680 already covers obligations, fundamental rights impact assessment must complement (not replace) it → appartiene a SUBGOAL 27.9",
+                            "label": "DC 27.9 — Where DPIA under Art. 35 GDPR or Art. 27 Directive 2016/680 already covers obligations, fundamental rights impact assessment must complement (not replace) it",
                              
                         },
                         "draggable": false,
@@ -6236,7 +6236,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-27-8",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 27.10 — Deployer must update assessment when any element listed in paragraph 1 has changed or is no longer up to date → appartiene a SUBGOAL 27.8",
+                            "label": "DC 27.10 — Deployer must update assessment when any element listed in paragraph 1 has changed or is no longer up to date",
                              
                         },
                         "draggable": false,
@@ -6248,7 +6248,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-27",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 27.1 — Assessment must be sufficiently detailed to cover all six elements of paragraph 1 → appartiene a GOAL 27",
+                            "label": "QC 27.1 — Assessment must be sufficiently detailed to cover all six elements of paragraph 1",
                              
                         },
                         "draggable": false,
@@ -6260,7 +6260,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-27-4",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 27.2 — Risk identification must be specific to categories of affected persons in the specific deployment context → appartiene a SUBGOAL 27.4",
+                            "label": "QC 27.2 — Risk identification must be specific to categories of affected persons in the specific deployment context",
                              
                         },
                         "draggable": false,
@@ -6272,7 +6272,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-27-8",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 27.3 — Update of assessment must be timely when changes are identified during use → appartiene a SUBGOAL 27.8",
+                            "label": "QC 27.3 — Update of assessment must be timely when changes are identified during use",
                              
                         },
                         "draggable": false,
@@ -6284,7 +6284,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-27-9",
                         "data": {
                             "isHidden": false,
-                            "label": "QC 27.4 — Fundamental rights impact assessment must complement and not duplicate data protection impact assessment → appartiene a SUBGOAL 27.9",
+                            "label": "QC 27.4 — Fundamental rights impact assessment must complement and not duplicate data protection impact assessment",
                              
                         },
                         "draggable": false,
