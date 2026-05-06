@@ -4,9 +4,9 @@ const LAYER_SUBGOAL = 3;
 /** Tutti i tipi diversi da root / goal / subgoal stanno da qui in giù (sotto i subgoal). */
 const MIN_LAYER_OTHER = 4;
 
-const GAP_X = 48;
-const GAP_Y = 300;
-const MARGIN_X = 48;
+const GAP_X = 40;
+const GAP_Y = 400;
+const MARGIN_X = 20;
 const MARGIN_Y = 40;
 
 const DEFAULT_SIZE_BY_TYPE = {
@@ -214,7 +214,7 @@ const applyLayeredPositions = (roots, rows, layerById) => {
                 rowMaxH = Math.max(rowMaxH, height);
                 node.position = {x: MARGIN_X, y: yCursor};
             }
-            yCursor += rowMaxH + GAP_Y;
+            yCursor += rowMaxH + GAP_Y + 500;
             continue;
         }
 

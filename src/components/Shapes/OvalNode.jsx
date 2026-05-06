@@ -15,8 +15,8 @@ const OvalNode = ({data, type: reactFlowType}) => {
         return null;
     })();
     const nodeStyle = {
-        width: data.width || 240,
-        height: data.height || 80,
+        width: data.width || 300,
+        height: data.height || 120,
         borderRadius: "50%",
         padding: 2,
         backgroundColor: data.type === "tactic" ? "#f1ae80" : "#8bc1f6",
@@ -46,7 +46,7 @@ const OvalNode = ({data, type: reactFlowType}) => {
             {data.bottom &&
                 <Handle type="target" position={Position.Bottom} id={"oval_target_bottom"} isConnectable={false}/>}
             <div className={"block"}>
-                <p className={"text-xs text-center font-bold"}>
+                <p className={"text-sm text-center font-bold"}>
                     {!data.titleDisable && goalSubgoalLabel !== null && (
                         <>
                             {`<<${goalSubgoalLabel}>>`}

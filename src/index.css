@@ -55,6 +55,25 @@ button {
     background: #1a1a1a;
 }
 
+.explain-activity-button {
+    background: #1a1a1a !important;
+    border-color: #facc15 !important;
+    border-width: 2px !important;
+    border-style: solid !important;
+    color: #ffffff !important;
+}
+
+.explain-activity-button:hover {
+    background: #111827 !important;
+    border-color: #facc15 !important;
+}
+
+.explain-activity-button:focus,
+.explain-activity-button:focus-visible {
+    outline: none !important;
+    box-shadow: 0 0 0 2px #facc15 !important;
+}
+
 .phase-button-completed {
     background: #1a1a1a !important;
     border-color: #fb923c !important;

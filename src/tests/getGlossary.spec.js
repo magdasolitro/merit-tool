@@ -11,4 +11,8 @@ describe("Get the node glossary from Agon Framework", () => {
         const message = "Term not available.";
         expect(getGlossary(label)).toBe(message);
     })
+    it("Should handle undefined term", () => {
+        const message = "Term not available.";
+        expect(getGlossary(undefined)).toBe(message);
+    })
 })

@@ -1,4 +1,4 @@
-import {useCallback, useEffect} from "react";
+import {useCallback, useEffect, useState} from "react";
 import ReactFlow, {addEdge, Background, Controls, MiniMap, useEdgesState, useNodesState} from "reactflow";
 import "reactflow/dist/style.css";
 import CircleNode from "../../components/Shapes/CircleNode.jsx";
@@ -26,6 +26,7 @@ export default function PhaseOne() {
     const {edgeState, nodeState} = phaseOneState;
     const [nodes, setNodes, onNodesChange] = useNodesState(nodeState);
     const [edges, setEdges, onEdgesChange] = useEdgesState(edgeState);
+    const [showHelp, setShowHelp] = useState(false);
     const dispatch = useDispatch();
 
     const defaultEdgeOptions = {
@@ -217,7 +218,62 @@ export default function PhaseOne() {
     );
 
     return (
-        <div style={{width: "100vw", height: "93vh"}}>
+        <div style={{width: "100vw", height: "93vh", position: "relative"}}>
+            <div style={{position: "absolute", top: 12, right: 18, zIndex: 20}}>
+                {!showHelp ? (
+                    <button
+                        type="button"
+                        className={"font-semibold text-lg phase-button explain-activity-button"}
+                        onClick={() => setShowHelp(true)}
+                    >
+                        Explain Activity
+                    </button>
+                ) : (
+                    <div
+                        style={{
+                            width: 420,
+                            maxWidth: "36vw",
+                            background: "rgba(15, 23, 42, 0.95)",
+                            color: "#e5e7eb",
+                            border: "2px solid #facc15",
+                            borderRadius: 10,
+                            padding: "14px 16px 14px 16px",
+                            boxShadow: "0 10px 24px rgba(0,0,0,0.35)",
+                            position: "relative",
+                        }}
+                    >
+                        <button
+                            type="button"
+                            aria-label="Close help"
+                            onClick={() => setShowHelp(false)}
+                            style={{
+                                position: "absolute",
+                                top: 8,
+                                right: 10,
+                                background: "transparent",
+                                border: "none",
+                                color: "#facc15",
+                                fontSize: 20,
+                                lineHeight: 1,
+                                cursor: "pointer",
+                                padding: 0,
+                            }}
+                        >
+                            ×
+                        </button>
+                        <p style={{margin: "0 24px 8px 0", fontWeight: 700, color: "#facc15"}}>Phase 1 - Context Characterization</p>
+                        <p style={{margin: "0 0 8px 0", fontSize: 14}}>
+                        <strong>What will I do in this phase?</strong><br/> In this phase you define the context in which your system operates.
+                        </p>
+                        <p style={{margin: "0 0 8px 0", fontSize: 14}}>
+                            <strong>What are context factors?</strong> <br/>Context factors are conditions, constraints or variables that influence the regulatory obligations that your system must comply with. By selecting them, you will filter out the relevant regulations to analyse in the last phase.
+                        </p>
+                        <p style={{margin: 0, fontSize: 14}}>
+                            <strong>How to select the relevant context factors? </strong> <br/> Black nodes represent <strong>macro-categories</strong> that group together similar context factors, while white nodes represent the actual <strong>context factors</strong>. <br/>If you are not interested in considering an entire macro-category of context factors, you can collapse it by clicking on it. With the remaining context factors, click on those that are relevant to your system: you will see an edge connecting them to the result node, indicating that only those factors will be taken into account in the next phase.
+                        </p>
+                    </div>
+                )}
+            </div>
             <ReactFlow
                 nodes={nodes}
                 edges={edges}

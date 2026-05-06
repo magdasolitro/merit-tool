@@ -34,7 +34,7 @@ const HexagonNode2 = ({data}) => {
     return (
         <div style={nodeStyle}>
             {!noTopHandle && <Handle type="target" position={Position.Top} id={"hexagon2_top"} isConnectable={false}/>}
-            <p className={"text-xs text-center"} style={labelStyle}>{data.label}</p>
+            <p className={"text-sm text-center"} style={labelStyle}>{data.label}</p>
             <Handle type="source" position={Position.Bottom} id={"hexagon2_bottom"} className={"custom-handle"}
                     isConnectable={false}/>
         </div>

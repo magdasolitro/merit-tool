@@ -31,8 +31,6 @@ const nodeTypes = {
     "context-factor": RectangleNode,
 };
 const edgeTypes = {dotted: DottedEdge, straight: StraightEdge};
-const TREE_STACK_GAP_Y = 220;
-const AI_ACT_LINK_GAP_Y = 140;
 
 const flattenTreeNodes = (treeNodes) => {
     const flatNodes = [];
@@ -62,82 +60,8 @@ const flattenTreeNodes = (treeNodes) => {
 };
 
 const applyAiActLinksToFlatNodes = (flatNodes) => {
-    const nodes = flatNodes.map((node) => ({
-        ...node,
-        position: {x: Number(node?.position?.x ?? 0), y: Number(node?.position?.y ?? 0)},
-    }));
+    const nodes = flatNodes.map((node) => ({...node}));
     const nodeById = new Map(nodes.map((node) => [node.id, node]));
-    const childrenByParent = new Map();
-
-    nodes.forEach((node) => {
-        if (!node.parentId) {
-            return;
-        }
-        if (!childrenByParent.has(node.parentId)) {
-            childrenByParent.set(node.parentId, []);
-        }
-        childrenByParent.get(node.parentId).push(node.id);
-    });
-
-    const shiftSubtree = (rootId, dx, dy) => {
-        const stack = [rootId];
-        while (stack.length > 0) {
-            const currentId = stack.pop();
-            const currentNode = nodeById.get(currentId);
-            if (!currentNode) {
-                continue;
-            }
-            currentNode.position = {
-                x: currentNode.position.x + dx,
-                y: currentNode.position.y + dy,
-            };
-            const children = childrenByParent.get(currentId) ?? [];
-            children.forEach((childId) => stack.push(childId));
-        }
-    };
-
-    const findAiActSubtreeRootId = (nodeId) => {
-        let currentId = nodeId;
-
-        while (true) {
-            const currentNode = nodeById.get(currentId);
-            if (!currentNode) {
-                return nodeId;
-            }
-
-            const parentId = currentNode.parentId;
-            if (!parentId || parentId.startsWith("gdpr:")) {
-                return currentId;
-            }
-
-            const parentNode = nodeById.get(parentId);
-            if (parentNode?.type === "root") {
-                return currentId;
-            }
-
-            currentId = parentId;
-        }
-    };
-
-    const getSubtreeMaxY = (rootId) => {
-        const stack = [rootId];
-        let maxY = -Infinity;
-
-        while (stack.length > 0) {
-            const currentId = stack.pop();
-            const currentNode = nodeById.get(currentId);
-            if (!currentNode || currentNode.id.startsWith("gdpr:")) {
-                continue;
-            }
-
-            maxY = Math.max(maxY, Number(currentNode.position?.y ?? 0));
-            const children = childrenByParent.get(currentId) ?? [];
-            children.forEach((childId) => stack.push(childId));
-        }
-
-        return Number.isFinite(maxY) ? maxY : 0;
-    };
-
     const linkEdges = [];
     nodes.forEach((node) => {
         if (!node.aiActLink || !node.id.startsWith("gdpr:")) {
@@ -148,17 +72,12 @@ const applyAiActLinksToFlatNodes = (flatNodes) => {
             return;
         }
 
-        const aiActSubtreeRootId = findAiActSubtreeRootId(aiActTarget.id);
-        const aiActSubtreeBottomY = getSubtreeMaxY(aiActSubtreeRootId);
-        const targetX = Number(aiActTarget.position?.x ?? 0);
-        const targetY = aiActSubtreeBottomY + AI_ACT_LINK_GAP_Y;
-        shiftSubtree(node.id, targetX - node.position.x, targetY - node.position.y);
-
         linkEdges.push({
             id: `${aiActTarget.id}->${node.id}:link`,
             source: aiActTarget.id,
             target: node.id,
-            type: "straight",
+            type: "dotted",
+            style: {stroke: "#ffffff"},
         });
     });
 
@@ -188,32 +107,6 @@ const namespaceTree = (treeNodes, prefix) => {
         };
     };
     return treeNodes.map(walk);
-};
-
-const getMaxTreeY = (treeNodes) => {
-    let maxY = -Infinity;
-    const walk = (node) => {
-        maxY = Math.max(maxY, Number(node?.position?.y ?? 0));
-        if (Array.isArray(node?.children)) {
-            node.children.forEach(walk);
-        }
-    };
-    treeNodes.forEach(walk);
-    return Number.isFinite(maxY) ? maxY : 0;
-};
-
-const shiftTreeY = (treeNodes, offsetY) => {
-    const walk = (node) => {
-        node.position = {
-            x: Number(node?.position?.x ?? 0),
-            y: Number(node?.position?.y ?? 0) + offsetY,
-        };
-        if (Array.isArray(node?.children)) {
-            node.children.forEach(walk);
-        }
-    };
-    treeNodes.forEach(walk);
-    return treeNodes;
 };
 
 const buildVisibleAIActTree = (hiddenPhaseOneLeafIds) => {
@@ -253,6 +146,23 @@ const collectDescendantsByType = (node, type, acc = []) => {
     return acc;
 };
 
+const subtreeHasAiActLink = (node) => {
+    if (!node) {
+        return false;
+    }
+    if (Boolean(node.aiActLink)) {
+        return true;
+    }
+    if (!Array.isArray(node.children)) {
+        return false;
+    }
+    return node.children.some(subtreeHasAiActLink);
+};
+
+const filterGDPRRootsWithAiActLinks = (roots) => (
+    (Array.isArray(roots) ? roots : []).filter(subtreeHasAiActLink)
+);
+
 export default function PhaseResult() {
     const dispatch = useDispatch();
     const phaseOneNodeState = useSelector((state) => state.phaseOne?.nodeState ?? []);
@@ -280,14 +190,10 @@ export default function PhaseResult() {
         }
 
         const visibleGDPRTree = normalizeGDPRTreePositions(raw_GDPRNodes);
-        const namespacedGDPRTree = namespaceTree(visibleGDPRTree ?? GDPRNodes, "gdpr:");
+        const linkedGDPRTree = filterGDPRRootsWithAiActLinks(visibleGDPRTree ?? GDPRNodes);
+        const namespacedGDPRTree = namespaceTree(linkedGDPRTree, "gdpr:");
 
-        const aiActBottomY = getMaxTreeY(visibleAIActTree);
-        const gdprRootY = Number(namespacedGDPRTree[0]?.position?.y ?? 0);
-        const gdprOffsetY = aiActBottomY + TREE_STACK_GAP_Y - gdprRootY;
-        const shiftedGDPRTree = shiftTreeY(namespacedGDPRTree, gdprOffsetY);
-
-        return [...visibleAIActTree, ...shiftedGDPRTree];
+        return [...visibleAIActTree, ...namespacedGDPRTree];
     }, [hiddenPhaseOneLeafIds, phaseThreeSelectedNodeIds]);
 
     const graph = useMemo(() => {

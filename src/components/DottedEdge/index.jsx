@@ -1,7 +1,18 @@
-import React from 'react';
-import {EdgeLabelRenderer, BaseEdge, getStraightPath} from 'reactflow';
+import React from "react";
+import {BaseEdge, EdgeLabelRenderer, getStraightPath} from "reactflow";
 
-const DottedEdge = ({id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, data, markerStart}) => {
+const DottedEdge = ({
+    id,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
+    data,
+    markerStart,
+    style,
+}) => {
     const [edgePath, labelX, labelY] = getStraightPath({
         sourceX,
         sourceY,
@@ -17,8 +28,9 @@ const DottedEdge = ({id, sourceX, sourceY, targetX, targetY, sourcePosition, tar
                       className={"stroke-white"}
                       style={{
                           strokeWidth: 4,
-                          strokeDasharray: '5 5',
-                          pointerEvents: 'none',
+                          strokeDasharray: "5 5",
+                          pointerEvents: "none",
+                          ...style,
                       }}
                       markerStart={markerStart}
             />

@@ -3,8 +3,8 @@ import {Handle, Position} from "reactflow";
 
 const RectangleNode = ({data}) => {
     const nodeStyle = {
-        width: data.sizeX || 180,
-        minHeight: data.sizeY || 90,
+        width: data.sizeX || 220,
+        minHeight: data.sizeY || 100,
         borderRadius: "12px",
         cursor: data.isConnectable ? "pointer" : "default",
         padding: "8px 10px",
@@ -24,7 +24,7 @@ const RectangleNode = ({data}) => {
     return (
         <div style={nodeStyle}>
             {!noTopHandle && <Handle type="target" position={Position.Top} id={"rectangle_top"} isConnectable={false}/>}
-            <p className={"text-xs text-center"}>{data.label}</p>
+            <p className={"text-sm text-center"}>{data.label}</p>
             <Handle type="source" position={Position.Bottom} id={"rectangle_bottom"} className={"custom-handle"}
                     isConnectable={false}/>
         </div>

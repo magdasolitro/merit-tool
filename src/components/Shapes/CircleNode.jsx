@@ -41,7 +41,7 @@ const CircleNode = ({data}) => {
                 </div>
             )}
             {!noTopHandle && <Handle type="target" position={Position.Top} id={"circle_top"} isConnectable={false}/>}
-            <p className={"text-xs text-center"}>{data.label}</p>
+            <p className={"text-sm text-center"}>{data.label}</p>
             <Handle type="source" position={Position.Bottom} id={"circle_bottom"} className={"custom-handle"}
                     isConnectable={false}/>
         </div>

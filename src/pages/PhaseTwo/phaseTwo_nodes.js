@@ -56,13 +56,5 @@ export const initialNodes2  = [
         position: {x: 3000, y: 800},
         data: {label: "Data Quality, Integrity & Provenance", isConnectable: true, isChosen: true,},
         draggable: false
-    },
-
-    // // final layer
-    // {
-    //     id: "phase-two-result",
-    //     type: "hexagon",
-    //     position: {x: 2125, y: 1000},
-    //     draggable: true,
-    // },
+    }
 ];

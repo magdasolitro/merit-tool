@@ -8,10 +8,10 @@ export const initialNodes3 = [
             draggable: false
         },
         {
-            id: "ehds",
+            id: "aiact",
             type: "regulation",
             position: {x: 2200, y: 800},
-            data: {label: "EHDS", background: "black", isConnectable: true, isChosen: false,},
+            data: {label: "EU AI Act", background: "black", isConnectable: true, isChosen: false,},
             draggable: false
         },
         {

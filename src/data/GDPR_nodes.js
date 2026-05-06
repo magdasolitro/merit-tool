@@ -1,290 +1,19 @@
-const LAYER_ROOT = 1;
-const LAYER_GOAL = 2;
-const LAYER_SUBGOAL = 3;
-/** Tutti i tipi diversi da root / goal / subgoal stanno da qui in giù (sotto i subgoal). */
-const MIN_LAYER_OTHER = 4;
+import {
+    normalizeTreePositions as normalizeAIActTreePositions,
+    raw_AIActNodes,
+} from "../pages/PhaseResult/AIAct_nodes.js";
 
-const GAP_X = 48;
-const GAP_Y = 300;
-const MARGIN_X = 48;
-const MARGIN_Y = 40;
+const GAP_X = 20;
+const GAP_Y = 350;
+const ARTICLE_GAP_Y = 500;
 
 const DEFAULT_SIZE_BY_TYPE = {
-    root: {width: 100, height: 100},
     goal: {width: 240, height: 80},
     subgoal: {width: 240, height: 80},
     "domain-constraint": {width: 300, height: 96},
     "quality-constraint": {width: 120, height: 120},
     "context-factor": {width: 180, height: 90},
 };
-
-const getChildren = (node) => (Array.isArray(node?.children) ? node.children : []);
-
-const estimateNodeSize = (node) => {
-    const base = DEFAULT_SIZE_BY_TYPE[node?.type] ?? {width: 200, height: 80};
-    const label = String(node?.data?.label ?? "");
-    const extraW = Math.min(220, Math.max(0, Math.floor((label.length - 36) * 3.2)));
-    return {width: base.width + extraW, height: base.height};
-};
-
-const deepCloneForest = (forest) => JSON.parse(JSON.stringify(forest));
-
-const buildParentIdToNode = (roots, map = new Map()) => {
-    const walk = (node) => {
-        map.set(node.id, node);
-        getChildren(node).forEach(walk);
-    };
-    roots.forEach(walk);
-    return map;
-};
-
-const collectPreorderMeta = (roots) => {
-    const rows = [];
-    let preorder = 0;
-    const walk = (node, activeGoalId) => {
-        const goalAncestorId = node.type === "goal" ? node.id : activeGoalId;
-        rows.push({node, preorder: preorder++, goalAncestorId});
-        const nextGoal = node.type === "goal" ? node.id : activeGoalId;
-        getChildren(node).forEach((ch) => walk(ch, nextGoal));
-    };
-    roots.forEach((r) => walk(r, null));
-    return rows;
-};
-
-const fixedLayerForType = (type) => {
-    if (type === "root") {
-        return LAYER_ROOT;
-    }
-    if (type === "goal") {
-        return LAYER_GOAL;
-    }
-    if (type === "subgoal") {
-        return LAYER_SUBGOAL;
-    }
-    return null;
-};
-
-const depthByParentId = (nodeId, idToNode, memo = new Map(), visiting = new Set()) => {
-    if (memo.has(nodeId)) {
-        return memo.get(nodeId);
-    }
-    if (visiting.has(nodeId)) {
-        return 0;
-    }
-    visiting.add(nodeId);
-    const n = idToNode.get(nodeId);
-    if (!n?.parentId) {
-        memo.set(nodeId, 0);
-        visiting.delete(nodeId);
-        return 0;
-    }
-    const d = 1 + depthByParentId(n.parentId, idToNode, memo, visiting);
-    visiting.delete(nodeId);
-    memo.set(nodeId, d);
-    return d;
-};
-
-const assignSemanticLayers = (rows, idToNode) => {
-    const layerById = new Map();
-    const others = [];
-
-    for (const {node} of rows) {
-        const fixed = fixedLayerForType(node.type);
-        if (fixed != null) {
-            layerById.set(node.id, fixed);
-        } else {
-            others.push(node);
-        }
-    }
-
-    others.sort((a, b) => depthByParentId(a.id, idToNode) - depthByParentId(b.id, idToNode));
-
-    const parentLayer = (parentId) => {
-        if (!parentId) {
-            return LAYER_ROOT;
-        }
-        const p = idToNode.get(parentId);
-        if (!p) {
-            return LAYER_ROOT;
-        }
-        const assigned = layerById.get(parentId);
-        if (assigned != null) {
-            return assigned;
-        }
-        const fx = fixedLayerForType(p.type);
-        if (fx != null) {
-            return fx;
-        }
-        return LAYER_SUBGOAL;
-    };
-
-    for (const node of others) {
-        const pl = parentLayer(node.parentId);
-        layerById.set(node.id, Math.max(MIN_LAYER_OTHER, pl + 1));
-    }
-
-    return layerById;
-};
-
-const maxSubtreeBandWidthForGoal = (goalId, sortedLayerKeys, layers) => {
-    const gRow = [...layers.values()]
-        .flat()
-        .find((r) => r.node?.id === goalId && r.node?.type === "goal");
-    let maxW = gRow ? estimateNodeSize(gRow.node).width : 240;
-
-    for (const L of sortedLayerKeys) {
-        if (L < LAYER_SUBGOAL) {
-            continue;
-        }
-        const bucket = layers.get(L) ?? [];
-        const group = bucket.filter((r) => r.goalAncestorId === goalId);
-        if (group.length === 0) {
-            continue;
-        }
-        group.sort((a, b) => a.preorder - b.preorder);
-        let sum = 0;
-        for (let i = 0; i < group.length; i += 1) {
-            sum += estimateNodeSize(group[i].node).width;
-            if (i < group.length - 1) {
-                sum += GAP_X;
-            }
-        }
-        maxW = Math.max(maxW, sum);
-    }
-    return maxW;
-};
-
-const horizontalBoundsExcludingRoot = (roots) => {
-    let minX = Infinity;
-    let maxX = -Infinity;
-    const walk = (node) => {
-        if (node.type === "root") {
-            getChildren(node).forEach(walk);
-            return;
-        }
-        const {width} = estimateNodeSize(node);
-        const x = Number(node?.position?.x ?? 0);
-        minX = Math.min(minX, x);
-        maxX = Math.max(maxX, x + width);
-        getChildren(node).forEach(walk);
-    };
-    roots.forEach(walk);
-    return {minX, maxX};
-};
-
-const applyLayeredPositions = (roots, rows, layerById) => {
-    const layers = new Map();
-    for (const row of rows) {
-        const L = layerById.get(row.node.id) ?? LAYER_ROOT;
-        if (!layers.has(L)) {
-            layers.set(L, []);
-        }
-        layers.get(L).push(row);
-    }
-
-    const sortedKeys = [...layers.keys()].sort((a, b) => a - b);
-    const rootNode = roots.find((n) => n.type === "root");
-    const goals =
-        rootNode && Array.isArray(rootNode.children) ? rootNode.children.filter((c) => c.type === "goal") : [];
-
-    let yCursor = MARGIN_Y;
-
-    for (const L of sortedKeys) {
-        const bucket = layers.get(L);
-
-        if (L === LAYER_ROOT) {
-            let rowMaxH = 0;
-            for (const {node} of bucket) {
-                const {height} = estimateNodeSize(node);
-                rowMaxH = Math.max(rowMaxH, height);
-                node.position = {x: MARGIN_X, y: yCursor};
-            }
-            yCursor += rowMaxH + GAP_Y;
-            continue;
-        }
-
-        if (L === LAYER_GOAL) {
-            let rowMaxH = 0;
-            let xCol = MARGIN_X;
-            for (const G of goals) {
-                const colW = maxSubtreeBandWidthForGoal(G.id, sortedKeys, layers);
-                const {width: wG, height: hG} = estimateNodeSize(G);
-                rowMaxH = Math.max(rowMaxH, hG);
-                G.position = {x: xCol + (colW - wG) / 2, y: yCursor};
-                xCol += colW + GAP_X;
-            }
-            yCursor += rowMaxH + GAP_Y;
-            continue;
-        }
-
-        const byGoal = new Map();
-        for (const row of bucket) {
-            const gid = row.goalAncestorId;
-            if (gid == null) {
-                continue;
-            }
-            if (!byGoal.has(gid)) {
-                byGoal.set(gid, []);
-            }
-            byGoal.get(gid).push(row);
-        }
-
-        let rowMaxH = 0;
-        for (const G of goals) {
-            const group = (byGoal.get(G.id) ?? []).slice().sort((a, b) => a.preorder - b.preorder);
-            for (const r of group) {
-                rowMaxH = Math.max(rowMaxH, estimateNodeSize(r.node).height);
-            }
-        }
-
-        for (const G of goals) {
-            const group = (byGoal.get(G.id) ?? []).slice().sort((a, b) => a.preorder - b.preorder);
-            if (group.length === 0) {
-                continue;
-            }
-            let pack = 0;
-            const lefts = [];
-            for (let i = 0; i < group.length; i += 1) {
-                const r = group[i];
-                const w = estimateNodeSize(r.node).width;
-                lefts.push(pack);
-                pack += w + (i < group.length - 1 ? GAP_X : 0);
-            }
-            const totalW = pack;
-            const {width: wGoal} = estimateNodeSize(G);
-            const goalCx = G.position.x + wGoal / 2;
-            const offset = goalCx - totalW / 2;
-            for (let i = 0; i < group.length; i += 1) {
-                const r = group[i];
-                r.node.position = {x: offset + lefts[i], y: yCursor};
-            }
-        }
-
-        yCursor += rowMaxH + GAP_Y;
-    }
-
-    if (rootNode?.position) {
-        const {minX, maxX} = horizontalBoundsExcludingRoot(roots);
-        if (Number.isFinite(minX) && Number.isFinite(maxX) && maxX >= minX) {
-            const rw = estimateNodeSize(rootNode).width;
-            rootNode.position.x = (minX + maxX) / 2 - rw / 2;
-        }
-    }
-};
-
-export function normalizeTreePositions(forest) {
-    const roots = deepCloneForest(forest);
-    if (!roots.length) {
-        return roots;
-    }
-
-    const idToNode = buildParentIdToNode(roots);
-    const rows = collectPreorderMeta(roots);
-    const layerById = assignSemanticLayers(rows, idToNode);
-    applyLayeredPositions(roots, rows, layerById);
-
-    return roots;
-}
 
 const node = (id, type, label, parentId = null, aiActLink = null) => ({
     id,
@@ -295,6 +24,207 @@ const node = (id, type, label, parentId = null, aiActLink = null) => ({
     children: null,
     ...(aiActLink ? {aiActLink} : {}),
 });
+
+const getChildren = (n) => (Array.isArray(n?.children) ? n.children : []);
+const deepClone = (v) => JSON.parse(JSON.stringify(v));
+
+const estimateNodeSize = (n) => {
+    const base = DEFAULT_SIZE_BY_TYPE[n?.type] ?? {width: 200, height: 80};
+    const label = String(n?.data?.label ?? "");
+    const extraW = Math.min(220, Math.max(0, Math.floor((label.length - 36) * 3.2)));
+    return {width: base.width + extraW, height: base.height};
+};
+
+const normalizeParentIdsFromStructure = (goalRoot) => {
+    const walk = (node, parentId = null) => {
+        if (parentId) {
+            node.parentId = parentId;
+        } else {
+            delete node.parentId;
+        }
+        getChildren(node).forEach((child) => walk(child, node.id));
+    };
+    walk(goalRoot, null);
+};
+
+const localLayoutGoalTree = (goalRoot) => {
+    const goal = goalRoot;
+    const subgoals = [];
+    const leaves = [];
+
+    const walk = (node) => {
+        getChildren(node).forEach((child) => {
+            if (child.type === "subgoal") {
+                subgoals.push(child);
+            } else {
+                leaves.push(child);
+            }
+            walk(child);
+        });
+    };
+    walk(goal);
+
+    const {width: goalW, height: goalH} = estimateNodeSize(goal);
+    goal.position = {x: 0, y: 0};
+
+    let subgoalPackWidth = 0;
+    for (let i = 0; i < subgoals.length; i += 1) {
+        subgoalPackWidth += estimateNodeSize(subgoals[i]).width;
+        if (i < subgoals.length - 1) {
+            subgoalPackWidth += GAP_X;
+        }
+    }
+
+    const subgoalY = goalH + GAP_Y;
+    let subgoalStartX = (goalW - subgoalPackWidth) / 2;
+    for (const sg of subgoals) {
+        const {width: w} = estimateNodeSize(sg);
+        sg.position = {x: subgoalStartX, y: subgoalY};
+        subgoalStartX += w + GAP_X;
+    }
+
+    const leafY = subgoalY + (subgoals.length > 0 ? estimateNodeSize(subgoals[0]).height : goalH) + GAP_Y;
+    let leafPackWidth = 0;
+    for (let i = 0; i < leaves.length; i += 1) {
+        leafPackWidth += estimateNodeSize(leaves[i]).width;
+        if (i < leaves.length - 1) {
+            leafPackWidth += GAP_X;
+        }
+    }
+    let leafStartX = (goalW - leafPackWidth) / 2;
+    for (const leaf of leaves) {
+        const {width: w} = estimateNodeSize(leaf);
+        leaf.position = {x: leafStartX, y: leafY};
+        leafStartX += w + GAP_X;
+    }
+
+    const stack = [goal];
+    while (stack.length > 0) {
+        const current = stack.pop();
+        const children = getChildren(current);
+        children.forEach((ch) => stack.push(ch));
+        if (!current.position) {
+            const parentY = Number(current?.parentId ? 0 : goal.position.y);
+            current.position = {x: 0, y: parentY + GAP_Y};
+        }
+    }
+};
+
+const collectSubtreeNodes = (root) => {
+    const result = [];
+    const stack = [root];
+    while (stack.length > 0) {
+        const n = stack.pop();
+        result.push(n);
+        getChildren(n).forEach((ch) => stack.push(ch));
+    }
+    return result;
+};
+
+const subtreeBounds = (root) => {
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
+    for (const n of collectSubtreeNodes(root)) {
+        const {width, height} = estimateNodeSize(n);
+        const x = Number(n?.position?.x ?? 0);
+        const y = Number(n?.position?.y ?? 0);
+        minX = Math.min(minX, x);
+        maxX = Math.max(maxX, x + width);
+        minY = Math.min(minY, y);
+        maxY = Math.max(maxY, y + height);
+    }
+    return {minX, maxX, minY, maxY};
+};
+
+const shiftSubtree = (root, dx, dy) => {
+    for (const n of collectSubtreeNodes(root)) {
+        n.position = {
+            x: Number(n?.position?.x ?? 0) + dx,
+            y: Number(n?.position?.y ?? 0) + dy,
+        };
+    }
+};
+
+const buildAiActIndexes = () => {
+    const aiTree = normalizeAIActTreePositions(raw_AIActNodes);
+    const byId = new Map();
+    const goalAncestorById = new Map();
+    const nodesByGoal = new Map();
+
+    const walk = (node, goalAncestorId = null) => {
+        const nextGoal = node.type === "goal" ? node.id : goalAncestorId;
+        byId.set(node.id, node);
+        goalAncestorById.set(node.id, nextGoal);
+        if (nextGoal) {
+            if (!nodesByGoal.has(nextGoal)) {
+                nodesByGoal.set(nextGoal, []);
+            }
+            nodesByGoal.get(nextGoal).push(node);
+        }
+        getChildren(node).forEach((child) => walk(child, nextGoal));
+    };
+
+    aiTree.forEach((root) => walk(root, null));
+    return {byId, goalAncestorById, nodesByGoal};
+};
+
+const findFirstAiActLinkInSubtree = (goalRoot) => {
+    const stack = [goalRoot];
+    while (stack.length > 0) {
+        const n = stack.pop();
+        if (n.aiActLink) {
+            return n.aiActLink;
+        }
+        getChildren(n).forEach((ch) => stack.push(ch));
+    }
+    return null;
+};
+
+export function normalizeTreePositions(forest) {
+    const roots = deepClone(forest);
+    if (!roots.length) {
+        return roots;
+    }
+
+    const {goalAncestorById, nodesByGoal} = buildAiActIndexes();
+
+    let fallbackX = 0;
+    let fallbackY = 0;
+
+    for (const goalRoot of roots) {
+        normalizeParentIdsFromStructure(goalRoot);
+        localLayoutGoalTree(goalRoot);
+
+        const linkTargetId = findFirstAiActLinkInSubtree(goalRoot);
+        if (!linkTargetId || !goalAncestorById.has(linkTargetId)) {
+            const bounds = subtreeBounds(goalRoot);
+            shiftSubtree(goalRoot, fallbackX - bounds.minX, fallbackY - bounds.minY);
+            fallbackX += (bounds.maxX - bounds.minX) + GAP_X;
+            continue;
+        }
+
+        const aiGoalId = goalAncestorById.get(linkTargetId);
+        const aiNodesInGoal = nodesByGoal.get(aiGoalId) ?? [];
+        let aiSubtreeBottomY = -Infinity;
+        const aiTargetNode = aiNodesInGoal.find((n) => n.id === linkTargetId);
+        const aiTargetX = Number(aiTargetNode?.position?.x ?? 0);
+
+        aiNodesInGoal.forEach((n) => {
+            const {height} = estimateNodeSize(n);
+            aiSubtreeBottomY = Math.max(aiSubtreeBottomY, Number(n?.position?.y ?? 0) + height);
+        });
+
+        const bounds = subtreeBounds(goalRoot);
+        const goalCenterX = Number(goalRoot?.position?.x ?? 0) + estimateNodeSize(goalRoot).width / 2;
+        const dx = aiTargetX - goalCenterX;
+        const dy = (Number.isFinite(aiSubtreeBottomY) ? aiSubtreeBottomY : 0) + ARTICLE_GAP_Y - bounds.minY;
+        shiftSubtree(goalRoot, dx, dy);
+    }
+
+    return roots;
+}
 
 export const raw_GDPRNodes = [
     {

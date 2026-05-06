@@ -4,7 +4,8 @@ import Card from "../Card";
 import {getGlossary} from "../../utils/getGlossary.js";
 import {useSelector} from "react-redux";
 
-const PrinciplesOval = ({data}) => {
+const PrinciplesOval = ({id, data}) => {
+    const glossaryKey = id ?? data.label;
     const nodeStyle = {
         width: data.width || 240,
         height: data.height || 80,
@@ -29,7 +30,7 @@ const PrinciplesOval = ({data}) => {
                 <img src={"/assets/cross.png"} style={{position: "absolute"}} alt={"hidden"}/>
             }
             <NodeToolbar isVisible={isVisible} position={Position.Left}>
-                <Card title={data.label} message={getGlossary(data.label)} width={data.width * 2 || 480}/>
+                <Card title={data.label} message={getGlossary(glossaryKey) || getGlossary(data.label)} width={data.width * 2 || 480}/>
             </NodeToolbar>
             {!noTopHandle && <Handle type="target" position={Position.Top} id={"principles_oval_target_top"} isConnectable={false}/>}
             {data.left && <Handle type="target" position={Position.Left} id={"principles_oval_target_left"} isConnectable={false}/>}
@@ -37,7 +38,7 @@ const PrinciplesOval = ({data}) => {
             {data.bottom &&
                 <Handle type="target" position={Position.Bottom} id={"principles_oval_target_bottom"} isConnectable={false}/>}
             <div className={"block"}>
-                <p className={"text-xs text-center font-bold"}>
+                <p className={"text-sm text-center font-bold"}>
                     {!data.titleDisable && <>
                         &lt;&lt;{data.type === "tactic" ? "Tactic" : "Principle"}&gt;&gt;
                         <br/>
