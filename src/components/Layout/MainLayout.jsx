@@ -165,6 +165,16 @@ export default function MainLayout() {
                                     Result
                                 </Button>
                             </li>
+                            {currentPhase !== 4 &&
+                                <li style={{marginLeft: "3cm"}}>
+                                    <Button animate className={"font-semibold text-lg custom-button"}
+                                        // buttonProps={{onMouseEnter: () => bleeps.hover?.play()}}
+                                            disabled={!nextPhaseEnabled}
+                                            onClick={goToNextPhase}>
+                                        { currentPhase === 4 ? "Finalize" : "Next Phase"}
+                                    </Button>
+                                </li>
+                            }
                             {/*<li>
                                 <Button animate className={"font-semibold text-lg phase-button phase-5"}
                                         disabled={currentPhase < 5}
@@ -174,20 +184,9 @@ export default function MainLayout() {
                                 </Button>
                             </li>*/}
                         </ul> 
-                        {currentPhase !== 5 &&
-                            <div className="flex items-center lg:order-2">
-                                <Button animate className={"font-semibold text-lg custom-button"}
-                                    // buttonProps={{onMouseEnter: () => bleeps.hover?.play()}}
-                                        disabled={!nextPhaseEnabled}
-                                        onClick={goToNextPhase}>
-                                    Next Phase
-                                    {/*{ currentPhase !== 5 ? "Next Phase" : "Finalize"}*/}
-                                </Button>
-                            </div>
-                        }
-                        <div className="flex items-center lg:order-2">
+                        {/* <div className="flex items-center lg:order-2">
                             <div className={"w-10"}/>
-                            {/*<DownloadButton/>*/}
+                            <DownloadButton/>
                             <div className={"w-4"}/>
                             <Button animate className={"font-semibold text-lg custom-button upload"}
                                     layer={"control"}
@@ -200,15 +199,15 @@ export default function MainLayout() {
                                     onClick={saveAsJson}>
                                 <FaDownload size={"1.2em"}/>
                             </Button>
-                        </div>
-                        <div className="flex flex-col items-center lg:order-2 text-cyan-400">
+                        </div> */}
+                        {/* <div className="flex flex-col items-center lg:order-2 text-cyan-400">
                             <Text manager="decipher" easing="outSine" fixed>Info</Text>
                             <label className="switch">
                                 <input type="checkbox" checked={infoToggle} onChange={() => dispatch(toggleInfo())}/>
                                 <span className={`slider`}>
                                 </span>
                             </label>
-                        </div>
+                        </div> */}
                         <div className="flex flex-col items-center lg:order-2">
                             <label className="switch">
                                 <img className="sun" onClick={handleThemeChange}
