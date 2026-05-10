@@ -11,7 +11,7 @@ export const initialNodes3 = [
             id: "aiact",
             type: "regulation",
             position: {x: 2200, y: 800},
-            data: {label: "EU AI Act", background: "black", isConnectable: true, isChosen: false,},
+            data: {label: "EU AI Act", background: "black", isConnectable: false, isChosen: true,},
             draggable: false
         },
         {

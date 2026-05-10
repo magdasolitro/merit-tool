@@ -53,7 +53,7 @@ export default function PhaseThree() {
 
     const connectToBase = useCallback((event, element) => {
         const clickedNode = nodes.find(node => node.id === element.id);
-        if (!clickedNode.data.isConnectable) {
+        if (!clickedNode || clickedNode.id === "aiact" || !clickedNode.data.isConnectable) {
             return;
         }
         dispatch(updateNodes3(element.id))
@@ -111,7 +111,7 @@ export default function PhaseThree() {
                             <strong>What are regulatory frameworks?</strong> <br/>Each node represents a regulation (e.g. GDPR, EU AI Act, MDR). Move your mouse over a node to see its description.
                         </p>
                         <p style={{margin: 0, fontSize: 14}}>
-                            <strong>How to select the relevant regulations?</strong> <br/>All regulations are selected by default. You can deselect a regulation by clicking on it: a red cross will appear on top of it, signalling that it will not be considered in the final analysis.
+                            <strong>How to select the relevant regulations?</strong> <br/>The EU AI Act is always included. You may deselect GDPR or MDR by clicking them: a red cross indicates they will be excluded from the final analysis.
                         </p>
                     </div>
                 )}

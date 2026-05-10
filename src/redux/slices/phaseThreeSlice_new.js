@@ -39,6 +39,9 @@ export const phaseThreeSlice = createSlice({
             state.selectedNodes = visibleNodeIds.map((id) => PhaseThreeKeyValue[id] || id);
         },
         updateNodes3: (state, action) => {
+            if (action.payload === "aiact") {
+                return;
+            }
             state.nodeState = state.nodeState.map(node => {
                 if (node.id === action.payload) {
                     if (node.data?.isConnectable) {

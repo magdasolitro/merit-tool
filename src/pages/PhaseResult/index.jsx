@@ -8,11 +8,11 @@ import OvalNode from "../../components/Shapes/OvalNode.jsx";
 import DottedEdge from "../../components/DottedEdge/index.jsx";
 import StraightEdge from "../../components/StraightEdge/index.jsx";
 import {
+    estimateNodeSize,
     normalizeTreePositions as normalizeAIActTreePositions,
     raw_AIActNodes,
 } from "./AIAct_nodes.js";
 import {
-    GDPRNodes,
     normalizeTreePositions as normalizeGDPRTreePositions,
     raw_GDPRNodes,
 } from "../../data/GDPR_nodes.js";
@@ -146,26 +146,136 @@ const collectDescendantsByType = (node, type, acc = []) => {
     return acc;
 };
 
-const subtreeHasAiActLink = (node) => {
-    if (!node) {
-        return false;
-    }
-    if (Boolean(node.aiActLink)) {
-        return true;
-    }
-    if (!Array.isArray(node.children)) {
-        return false;
-    }
-    return node.children.some(subtreeHasAiActLink);
+/** Vertical gap between bottom of AI Act drawing box and top of GDPR goal roots (3 cm in CSS px at 96dpi). */
+const GDPR_GAP_BELOW_AI_ACT_CM = 10;
+const CM_TO_CSS_PX = 96 / 2.54;
+
+const collectForestMaxBottomY = (forestRoots) => {
+    let maxBottom = -Infinity;
+    const walk = (node) => {
+        const y = Number(node?.position?.y ?? 0);
+        const {height} = estimateNodeSize(node);
+        maxBottom = Math.max(maxBottom, y + height);
+        (Array.isArray(node.children) ? node.children : []).forEach(walk);
+    };
+    (Array.isArray(forestRoots) ? forestRoots : []).forEach((root) => walk(root));
+    return Number.isFinite(maxBottom) ? maxBottom : 0;
 };
 
-const filterGDPRRootsWithAiActLinks = (roots) => (
-    (Array.isArray(roots) ? roots : []).filter(subtreeHasAiActLink)
-);
+const shiftSubtreeBy = (node, dx, dy) => {
+    if (!node) {
+        return;
+    }
+    node.position = {
+        x: Number(node?.position?.x ?? 0) + dx,
+        y: Number(node?.position?.y ?? 0) + dy,
+    };
+    (Array.isArray(node.children) ? node.children : []).forEach((ch) => shiftSubtreeBy(ch, dx, dy));
+};
+
+/**
+ * Ensures every GDPR goal root sits strictly below all AI Act nodes, with at least gapPx clearance.
+ */
+const positionGdprForestBelowAiAct = (gdprForestRoots, aiActForestRoots, gapPx) => {
+    const roots = Array.isArray(gdprForestRoots) ? gdprForestRoots : [];
+    if (roots.length === 0) {
+        return;
+    }
+    const aiBottom = collectForestMaxBottomY(aiActForestRoots);
+    let minRootTopY = Infinity;
+    roots.forEach((root) => {
+        minRootTopY = Math.min(minRootTopY, Number(root?.position?.y ?? 0));
+    });
+    if (!Number.isFinite(minRootTopY)) {
+        return;
+    }
+    const deltaY = aiBottom + gapPx - minRootTopY;
+    if (deltaY <= 0) {
+        return;
+    }
+    roots.forEach((root) => shiftSubtreeBy(root, 0, deltaY));
+};
+
+const getContextFactorVisibilityRules = (selectedPhaseOneNodeIds) => {
+    const selectedIds = new Set(Array.isArray(selectedPhaseOneNodeIds) ? selectedPhaseOneNodeIds : []);
+    const blockedRootIds = new Set();
+    const unlockedRootIds = new Set();
+
+    phaseOneInitialNodes
+        .filter((node) => node?.data?.isConnectable)
+        .forEach((cfNode) => {
+            const isSelected = selectedIds.has(cfNode.id);
+            const hasBlocks = Array.isArray(cfNode.blocks) && cfNode.blocks.length > 0;
+            const hasUnlocks = Array.isArray(cfNode.unlocks) && cfNode.unlocks.length > 0;
+
+            if (hasBlocks && !isSelected) {
+                cfNode.blocks.forEach((id) => blockedRootIds.add(id));
+            }
+
+            if (hasUnlocks && isSelected) {
+                cfNode.unlocks.forEach((id) => unlockedRootIds.add(id));
+            }
+        });
+
+    return {blockedRootIds, unlockedRootIds};
+};
+
+const collectSubtreeIdsByRootIds = (treeNodes, rootIds) => {
+    const idsToCollect = new Set(rootIds);
+    const collectedIds = new Set();
+
+    const visitSubtree = (node) => {
+        if (!node) {
+            return;
+        }
+        collectedIds.add(node.id);
+        if (Array.isArray(node.children)) {
+            node.children.forEach(visitSubtree);
+        }
+    };
+
+    const walk = (node) => {
+        if (!node) {
+            return;
+        }
+        if (idsToCollect.has(node.id)) {
+            visitSubtree(node);
+            return;
+        }
+        if (Array.isArray(node.children)) {
+            node.children.forEach(walk);
+        }
+    };
+
+    (Array.isArray(treeNodes) ? treeNodes : []).forEach(walk);
+    return collectedIds;
+};
+
+const filterTreeByHiddenNodeIds = (treeNodes, hiddenNodeIds) => {
+    const prune = (node) => {
+        if (!node || hiddenNodeIds.has(node.id)) {
+            return null;
+        }
+
+        const children = Array.isArray(node.children)
+            ? node.children.map(prune).filter(Boolean)
+            : node.children;
+
+        return {
+            ...node,
+            children,
+        };
+    };
+
+    return (Array.isArray(treeNodes) ? treeNodes : [])
+        .map(prune)
+        .filter(Boolean);
+};
 
 export default function PhaseResult() {
     const dispatch = useDispatch();
     const phaseOneNodeState = useSelector((state) => state.phaseOne?.nodeState ?? []);
+    const phaseOneSelectedNodeIds = useSelector((state) => state.phaseOne?.selectedNodeIds ?? []);
     const phaseThreeSelectedNodeIds = useSelector((state) => state.phaseThreeNew?.selectedNodeIds ?? []);
 
     const hiddenPhaseOneLeafIds = useMemo(() => {
@@ -183,18 +293,29 @@ export default function PhaseResult() {
 
     const visibleTree = useMemo(() => {
         const showGDPR = phaseThreeSelectedNodeIds.includes("gdpr");
-        const visibleAIActTree = buildVisibleAIActTree(hiddenPhaseOneLeafIds);
+        const baseVisibleAIActTree = buildVisibleAIActTree(hiddenPhaseOneLeafIds);
+        const {blockedRootIds, unlockedRootIds} = getContextFactorVisibilityRules(phaseOneSelectedNodeIds);
+        const blockedIdsWithDescendants = collectSubtreeIdsByRootIds(baseVisibleAIActTree, blockedRootIds);
+        const unlockedIdsWithDescendants = collectSubtreeIdsByRootIds(baseVisibleAIActTree, unlockedRootIds);
+        const effectiveHiddenNodeIds = new Set(
+            [...blockedIdsWithDescendants].filter((nodeId) => !unlockedIdsWithDescendants.has(nodeId))
+        );
+        const visibleAIActTree = filterTreeByHiddenNodeIds(baseVisibleAIActTree, effectiveHiddenNodeIds);
 
         if (!showGDPR) {
             return visibleAIActTree;
         }
 
         const visibleGDPRTree = normalizeGDPRTreePositions(raw_GDPRNodes);
-        const linkedGDPRTree = filterGDPRRootsWithAiActLinks(visibleGDPRTree ?? GDPRNodes);
-        const namespacedGDPRTree = namespaceTree(linkedGDPRTree, "gdpr:");
+        const namespacedGDPRTree = namespaceTree(visibleGDPRTree, "gdpr:");
+        positionGdprForestBelowAiAct(
+            namespacedGDPRTree,
+            visibleAIActTree,
+            GDPR_GAP_BELOW_AI_ACT_CM * CM_TO_CSS_PX
+        );
 
         return [...visibleAIActTree, ...namespacedGDPRTree];
-    }, [hiddenPhaseOneLeafIds, phaseThreeSelectedNodeIds]);
+    }, [hiddenPhaseOneLeafIds, phaseOneSelectedNodeIds, phaseThreeSelectedNodeIds]);
 
     const graph = useMemo(() => {
         const baseNodes = flattenTreeNodes(visibleTree);
