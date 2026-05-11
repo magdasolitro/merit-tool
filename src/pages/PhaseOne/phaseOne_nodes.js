@@ -208,7 +208,7 @@ const rawInitialNodes = [
             id: "cf-10-2",
             type: "circle",
             position: {x: 5200, y: 500},
-            data: {label: "CF 10.2 - special_category_data_used", background: "wblockshite", isConnectable: true, isChosen: false},
+            data: {label: "CF 10.2 - special_category_data_used", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["subgoal-10-6", "dc-10-5", "dc-10-6", "dc-10-7", "dc-10-8", "qc-10-3", "qc-10-4", "qc-10-5"]
             // unlocks: ["?"]

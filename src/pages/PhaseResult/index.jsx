@@ -32,6 +32,57 @@ const nodeTypes = {
 };
 const edgeTypes = {dotted: DottedEdge, straight: StraightEdge};
 
+/** Maps AI Act / regulation tree node id → distinct CF labels that list it in unlocks (Phase 1 selection). */
+const buildUnlockContributorLabelsByTargetId = (selectedCfIds) => {
+    const selected = new Set(Array.isArray(selectedCfIds) ? selectedCfIds : []);
+    const map = new Map();
+
+    phaseOneInitialNodes.forEach((node) => {
+        if (!node?.data?.isConnectable || !selected.has(node.id)) {
+            return;
+        }
+        const unlocks = Array.isArray(node.unlocks) ? node.unlocks : [];
+        if (unlocks.length === 0) {
+            return;
+        }
+        const cfName = node.data?.label ?? node.id;
+        unlocks.forEach((targetId) => {
+            if (typeof targetId !== "string") {
+                return;
+            }
+            if (!map.has(targetId)) {
+                map.set(targetId, []);
+            }
+            map.get(targetId).push(cfName);
+        });
+    });
+
+    map.forEach((labels, key) => {
+        map.set(key, [...new Set(labels)].sort((a, b) => a.localeCompare(b)));
+    });
+
+    return map;
+};
+
+const mergeUnlockContributorHintsIntoFlatNodes = (flatNodes, contributorByTargetId) => {
+    if (!contributorByTargetId || contributorByTargetId.size === 0) {
+        return flatNodes;
+    }
+    return flatNodes.map((node) => {
+        const labels = contributorByTargetId.get(node.id);
+        if (!labels?.length) {
+            return node;
+        }
+        return {
+            ...node,
+            data: {
+                ...node.data,
+                unlockContributorLabels: labels,
+            },
+        };
+    });
+};
+
 const flattenTreeNodes = (treeNodes) => {
     const flatNodes = [];
     const getChildren = (node) => Array.isArray(node?.children) ? node.children : [];
@@ -318,14 +369,18 @@ export default function PhaseResult() {
     }, [hiddenPhaseOneLeafIds, phaseOneSelectedNodeIds, phaseThreeSelectedNodeIds]);
 
     const graph = useMemo(() => {
-        const baseNodes = flattenTreeNodes(visibleTree);
+        const contributorByTargetId = buildUnlockContributorLabelsByTargetId(phaseOneSelectedNodeIds);
+        const baseNodes = mergeUnlockContributorHintsIntoFlatNodes(
+            flattenTreeNodes(visibleTree),
+            contributorByTargetId
+        );
         const {nodes, linkEdges} = applyAiActLinksToFlatNodes(baseNodes);
         const hierarchyEdges = collectEdgesFromFlatNodes(nodes);
         return {
             nodes,
             edges: [...hierarchyEdges, ...linkEdges],
         };
-    }, [visibleTree]);
+    }, [visibleTree, phaseOneSelectedNodeIds]);
 
     useEffect(() => {
         dispatch(setCurrentPhase(4));

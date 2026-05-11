@@ -1,7 +1,14 @@
 import React from "react";
 import {Handle, Position} from "reactflow";
+import UnlockContributorHint from "./UnlockContributorHint.jsx";
 
 const RectangleNode = ({data}) => {
+    const outerStyle = {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+    };
+
     const nodeStyle = {
         width: data.sizeX || 220,
         minHeight: data.sizeY || 100,
@@ -22,11 +29,14 @@ const RectangleNode = ({data}) => {
     const noTopHandle = data.top === "no";
 
     return (
-        <div style={nodeStyle}>
-            {!noTopHandle && <Handle type="target" position={Position.Top} id={"rectangle_top"} isConnectable={false}/>}
-            <p className={"text-sm text-center"}>{data.label}</p>
-            <Handle type="source" position={Position.Bottom} id={"rectangle_bottom"} className={"custom-handle"}
-                    isConnectable={false}/>
+        <div style={outerStyle}>
+            <div style={nodeStyle}>
+                {!noTopHandle && <Handle type="target" position={Position.Top} id={"rectangle_top"} isConnectable={false}/>}
+                <p className={"text-sm text-center"}>{data.label}</p>
+                <Handle type="source" position={Position.Bottom} id={"rectangle_bottom"} className={"custom-handle"}
+                        isConnectable={false}/>
+            </div>
+            <UnlockContributorHint labels={data.unlockContributorLabels} compact/>
         </div>
     );
 };

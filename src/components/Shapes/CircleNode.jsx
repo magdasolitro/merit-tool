@@ -1,7 +1,14 @@
 import React from "react";
 import {Handle, Position} from "reactflow";
+import UnlockContributorHint from "./UnlockContributorHint.jsx";
 
 const CircleNode = ({data}) => {
+    const outerStyle = {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+    };
+
     const nodeStyle = {
         width: data.size || 100,
         height: data.size || 100,
@@ -16,34 +23,38 @@ const CircleNode = ({data}) => {
         justifyContent: "center",
         alignItems: "center",
         position: "relative",
+        boxSizing: "border-box",
     };
     const noTopHandle = data.top === "no";
     return (
-        <div style={nodeStyle}>
-            {data.isHidden && (
-                <div
-                    style={{
-                        position: "absolute",
-                        inset: 0,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        pointerEvents: "none",
-                        backgroundColor: "rgba(220, 38, 38, 0.15)",
-                        color: "#dc2626",
-                        fontWeight: 900,
-                        fontSize: "6rem",
-                        lineHeight: 1,
-                        borderRadius: "50%",
-                    }}
-                >
-                    ×
-                </div>
-            )}
-            {!noTopHandle && <Handle type="target" position={Position.Top} id={"circle_top"} isConnectable={false}/>}
-            <p className={"text-sm text-center"}>{data.label}</p>
-            <Handle type="source" position={Position.Bottom} id={"circle_bottom"} className={"custom-handle"}
-                    isConnectable={false}/>
+        <div style={outerStyle}>
+            <div style={nodeStyle}>
+                {data.isHidden && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            inset: 0,
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            pointerEvents: "none",
+                            backgroundColor: "rgba(220, 38, 38, 0.15)",
+                            color: "#dc2626",
+                            fontWeight: 900,
+                            fontSize: "6rem",
+                            lineHeight: 1,
+                            borderRadius: "50%",
+                        }}
+                    >
+                        ×
+                    </div>
+                )}
+                {!noTopHandle && <Handle type="target" position={Position.Top} id={"circle_top"} isConnectable={false}/>}
+                <p className={"text-sm text-center"}>{data.label}</p>
+                <Handle type="source" position={Position.Bottom} id={"circle_bottom"} className={"custom-handle"}
+                        isConnectable={false}/>
+            </div>
+            <UnlockContributorHint labels={data.unlockContributorLabels} compact/>
         </div>
     );
 };

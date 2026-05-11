@@ -3,6 +3,7 @@ import {Handle, NodeToolbar, Position} from "reactflow";
 import Card from "../Card";
 import {getGlossary} from "../../utils/getGlossary.js";
 import {useSelector} from "react-redux";
+import UnlockContributorHint from "./UnlockContributorHint.jsx";
 
 const OvalNode = ({data, type: reactFlowType}) => {
     const goalSubgoalLabel = (() => {
@@ -14,6 +15,11 @@ const OvalNode = ({data, type: reactFlowType}) => {
         }
         return null;
     })();
+    const outerStyle = {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+    };
     const nodeStyle = {
         width: data.width || 300,
         height: data.height || 120,
@@ -24,50 +30,56 @@ const OvalNode = ({data, type: reactFlowType}) => {
         outlineOffset: "10px",
         color: "black",
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        position: "relative",
+        boxSizing: "border-box",
     };
     const noTopHandle = data.top === "no";
     const [isVisible, setVisible] = useState(false);
     const {infoToggle} = useSelector((state) => state.phaseStatus);
 
     return (
-        <div style={nodeStyle} onMouseEnter={() => infoToggle && setVisible(true)}
-             onMouseLeave={() => infoToggle && setVisible(false)}>
-            {data.isHidden &&
-                <img src={"/assets/cross.png"} style={{position: "absolute"}} alt={"hidden"}/>
-            }
-            <NodeToolbar isVisible={isVisible} position={Position.Left}>
-                <Card title={data.label} message={getGlossary(data.label)} width={data.width * 2 || 480}/>
-            </NodeToolbar>
-            {!noTopHandle && <Handle type="target" position={Position.Top} id={"oval_target_top"} isConnectable={false}/>}
-            {data.left && <Handle type="target" position={Position.Left} id={"oval_target_left"} isConnectable={false}/>}
-            {data.right && <Handle type="target" position={Position.Right} id={"oval_target_right"} isConnectable={false}/>}
-            {data.bottom &&
-                <Handle type="target" position={Position.Bottom} id={"oval_target_bottom"} isConnectable={false}/>}
-            <div className={"block"}>
-                <p className={"text-sm text-center font-bold"}>
-                    {!data.titleDisable && goalSubgoalLabel !== null && (
-                        <>
-                            {`<<${goalSubgoalLabel}>>`}
-                            <br/>
-                        </>
-                    )}
-                    {data.label}
-                    <br/>
-                    {data.num}
-                </p>
+        <div style={outerStyle}>
+            <div style={nodeStyle} onMouseEnter={() => infoToggle && setVisible(true)}
+                 onMouseLeave={() => infoToggle && setVisible(false)}>
+                {data.isHidden &&
+                    <img src={"/assets/cross.png"} style={{position: "absolute"}} alt={"hidden"}/>
+                }
+                <NodeToolbar isVisible={isVisible} position={Position.Left}>
+                    <Card title={data.label} message={getGlossary(data.label)} width={data.width * 2 || 480}/>
+                </NodeToolbar>
+                {!noTopHandle && <Handle type="target" position={Position.Top} id={"oval_target_top"} isConnectable={false}/>}
+                {data.left && <Handle type="target" position={Position.Left} id={"oval_target_left"} isConnectable={false}/>}
+                {data.right && <Handle type="target" position={Position.Right} id={"oval_target_right"} isConnectable={false}/>}
+                {data.bottom &&
+                    <Handle type="target" position={Position.Bottom} id={"oval_target_bottom"} isConnectable={false}/>}
+                <div className={"block"}>
+                    <p className={"text-sm text-center font-bold"}>
+                        {!data.titleDisable && goalSubgoalLabel !== null && (
+                            <>
+                                {`<<${goalSubgoalLabel}>>`}
+                                <br/>
+                            </>
+                        )}
+                        {data.label}
+                        <br/>
+                        {data.num}
+                    </p>
+                </div>
+                <Handle type="source" position={Position.Bottom} id={"oval_source_bottom"} className={"custom-handle"}
+                        isConnectable={false}
+                />
+                {data.sourceLeft &&
+                    <Handle type="source" position={Position.Left} id={"oval_source_left"} isConnectable={false}/>}
+                {data.sourceRight &&
+                    <Handle type="source" position={Position.Right} id={"oval_source_right"} isConnectable={false}/>}
+                {data.sourceTop &&
+                    <Handle type="source" position={Position.Top} id={"oval_source_top"} isConnectable={false}/>
+                }
             </div>
-            <Handle type="source" position={Position.Bottom} id={"oval_source_bottom"} className={"custom-handle"}
-                    isConnectable={false}
-            />
-            {data.sourceLeft &&
-                <Handle type="source" position={Position.Left} id={"oval_source_left"} isConnectable={false}/>}
-            {data.sourceRight &&
-                <Handle type="source" position={Position.Right} id={"oval_source_right"} isConnectable={false}/>}
-            {data.sourceTop &&
-                <Handle type="source" position={Position.Top} id={"oval_source_top"} isConnectable={false}/>
-            }
+            <UnlockContributorHint labels={data.unlockContributorLabels}/>
         </div>
     );
 };
