@@ -14,13 +14,13 @@ export const initialNodes3 = [
             data: {label: "EU AI Act", background: "black", isConnectable: false, isChosen: true,},
             draggable: false
         },
-        {
-            id: "mdr",  
-            type: "regulation",
-            position: {x: 2600, y: 800},
-            data: {label: "MDR", background: "black", isConnectable: true, isChosen: false,},
-            draggable: false
-        },
+        // {
+        //     id: "mdr",  
+        //     type: "regulation",
+        //     position: {x: 2600, y: 800},
+        //     data: {label: "MDR", background: "black", isConnectable: true, isChosen: false,},
+        //     draggable: false
+        // },
         
     //     // final layer
     //     {

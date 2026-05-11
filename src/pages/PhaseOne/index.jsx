@@ -11,33 +11,38 @@ import {useDispatch, useSelector} from "react-redux";
 import {connectEdge, setNodeState} from "../../redux/slices/phaseOneSlice.js";
 import {setCurrentPhase, setNextPhaseEnabled} from "../../redux/slices/phaseStatusSlice.js";
 import DottedEdge from "../../components/DottedEdge";
-import {initialNodes} from "./phaseOne_nodes.js";
 
-const nodeTypes = {circle: CircleNode, operator: OperatorNode, hexagon: HexagonNode};
-const edgeTypes = {floating: FloatingEdge, straight: StraightEdge, dotted: DottedEdge};
-const ROOT_NODE_ID = "context-factors";
+const nodeTypes = {
+    "context-factor": CircleNode,
+    operator: OperatorNode,
+    hexagon: HexagonNode,
+};
+
+const edgeTypes = {
+    floating: FloatingEdge,
+    straight: StraightEdge,
+    dotted: DottedEdge,
+};
+
 const RESULT_NODE_ID = "phase-one-result";
 
 export default function PhaseOne() {
+    const dispatch = useDispatch();
     const phaseOneState = useSelector((state) => state.phaseOne);
     const {edgeState, nodeState} = phaseOneState;
     const [nodes, setNodes, onNodesChange] = useNodesState(nodeState);
     const [edges, setEdges, onEdgesChange] = useEdgesState(edgeState);
     const [showHelp, setShowHelp] = useState(false);
-    const dispatch = useDispatch();
 
     const defaultEdgeOptions = {
         style: {strokeWidth: 2, stroke: "white"},
         type: "floating",
     };
 
-    // Entering phase one should not reset phase one itself.
-    // We only set active phase and clear later phases if needed.
     useEffect(() => {
         dispatch(setCurrentPhase(1));
     }, [dispatch]);
 
-    // Sync local ReactFlow state with persisted Redux state.
     useEffect(() => {
         setNodes(nodeState);
     }, [nodeState, setNodes]);
@@ -50,7 +55,6 @@ export default function PhaseOne() {
         dispatch(setNodeState(nodes));
     }, [dispatch, nodes]);
 
-    // Keep selected IDs in Redux derived from current edges.
     useEffect(() => {
         dispatch(setNextPhaseEnabled(true));
         dispatch(connectEdge(edges));
@@ -153,13 +157,13 @@ export default function PhaseOne() {
                         </button>
                         <p style={{margin: "0 24px 8px 0", fontWeight: 700, color: "#facc15"}}>Phase 1 - Context Characterization</p>
                         <p style={{margin: "0 0 8px 0", fontSize: 14}}>
-                        <strong>What will I do in this phase?</strong><br/> In this phase you define the context in which your system operates.
+                            <strong>What will I do in this phase?</strong><br/> In this phase you define the context in which your system operates.
                         </p>
                         <p style={{margin: "0 0 8px 0", fontSize: 14}}>
                             <strong>What are context factors?</strong> <br/>Context factors are conditions, constraints or variables that influence the regulatory obligations that your system must comply with. By selecting them, you will filter out the relevant regulations to analyse in the last phase.
                         </p>
                         <p style={{margin: 0, fontSize: 14}}>
-                            <strong>How to select the relevant context factors? </strong> <br/> Black nodes represent <strong>macro-categories</strong> that group together similar context factors, while white nodes represent the actual <strong>context factors</strong>. <br/>If you are not interested in considering an entire macro-category of context factors, you can collapse it by clicking on it. With the remaining context factors, click on those that are relevant to your system: you will see an edge connecting them to the result node, indicating that only those factors will be taken into account in the next phase.
+                            <strong>How to select the relevant context factors?</strong> <br/>Click a context factor to connect it to the result node (or click again to disconnect). Only connected factors are taken into account in the next phases.
                         </p>
                     </div>
                 )}

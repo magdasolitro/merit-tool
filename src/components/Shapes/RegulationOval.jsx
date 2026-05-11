@@ -12,8 +12,6 @@ const RegulationOval = ({id, data}) => {
         borderRadius: "50%",
         padding: "8px 16px",
         backgroundColor: "#bae6fd",
-        outline: data.isChosen ? "4px solid #5D803F" : data.isChosen && "4px solid #ED7D30",
-        outlineOffset: "10px",
         color: "black",
         display: "flex",
         justifyContent: "center",

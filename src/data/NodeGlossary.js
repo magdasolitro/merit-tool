@@ -18,7 +18,9 @@ export const NodeGlossary = [
             "data-quality": "It requires the maintenance of secure, high-integrity data pipelines from training to inference."
         }
     },{
-        type: "principle", glossary: {
+        // TODO LIVIA: inserire descrizione context factors
+        type: "context-factor", glossary: {
+            "cf-9-1": "blablabla"
         }
     },
 ]

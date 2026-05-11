@@ -1,8 +1,14 @@
-import React from "react";
-import {Handle, Position} from "reactflow";
+import React, {useMemo, useState} from "react";
+import {Handle, NodeToolbar, Position} from "reactflow";
+import Card from "../Card";
+import {getGlossary} from "../../utils/getGlossary.js";
 import UnlockContributorHint from "./UnlockContributorHint.jsx";
 
-const CircleNode = ({data}) => {
+const CircleNode = ({id, data}) => {
+    const [isGlossaryVisible, setGlossaryVisible] = useState(false);
+    const glossaryMessage = useMemo(() => (id != null ? getGlossary(id) : "Term not available."), [id]);
+    const hasGlossaryEntry = glossaryMessage !== "Term not available.";
+    const showGlossaryOnHover = Boolean(data?.isConnectable) || hasGlossaryEntry;
     const outerStyle = {
         display: "flex",
         flexDirection: "column",
@@ -28,7 +34,20 @@ const CircleNode = ({data}) => {
     const noTopHandle = data.top === "no";
     return (
         <div style={outerStyle}>
-            <div style={nodeStyle}>
+            <div
+                style={nodeStyle}
+                onMouseEnter={() => showGlossaryOnHover && setGlossaryVisible(true)}
+                onMouseLeave={() => showGlossaryOnHover && setGlossaryVisible(false)}
+            >
+                {showGlossaryOnHover && (
+                    <NodeToolbar isVisible={isGlossaryVisible} position={Position.Left}>
+                        <Card
+                            title={data.label ?? id}
+                            message={glossaryMessage}
+                            width={data.width ? data.width * 2 : 420}
+                        />
+                    </NodeToolbar>
+                )}
                 {data.isHidden && (
                     <div
                         style={{

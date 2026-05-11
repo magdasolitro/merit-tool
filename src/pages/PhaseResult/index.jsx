@@ -160,6 +160,73 @@ const namespaceTree = (treeNodes, prefix) => {
     return treeNodes.map(walk);
 };
 
+/** Single GDPR regulation root (like AI_Act_Compliance); raw ids before `gdpr:` namespace. */
+const GDPR_REGULATION_ROOT_ID = "gdpr-regulation-root";
+const GDPR_ROOT_TO_GOALS_GAP_PX = 1000;
+
+const deepCloneForestRoots = (roots) => JSON.parse(JSON.stringify(roots ?? []));
+
+const collectForestBounds = (forestRoots) => {
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
+    const visit = (node) => {
+        if (!node) {
+            return;
+        }
+        const x = Number(node?.position?.x ?? 0);
+        const y = Number(node?.position?.y ?? 0);
+        const {width, height} = estimateNodeSize(node);
+        minX = Math.min(minX, x);
+        maxX = Math.max(maxX, x + width);
+        minY = Math.min(minY, y);
+        maxY = Math.max(maxY, y + height);
+        (Array.isArray(node.children) ? node.children : []).forEach(visit);
+    };
+    (Array.isArray(forestRoots) ? forestRoots : []).forEach(visit);
+    return {minX, maxX, minY, maxY};
+};
+
+/**
+ * Wraps positioned GDPR goal trees under one root node labeled "GDPR", then namespaces (gdpr:…).
+ * Root is placed horizontally centered above the goals, with a vertical gap (like AI Act root above goals).
+ */
+const buildGdprForestWithRegulationRoot = (visibleGdprGoalRoots) => {
+    const goals = deepCloneForestRoots(visibleGdprGoalRoots);
+    if (goals.length === 0) {
+        return null;
+    }
+    goals.forEach((goalRoot) => {
+        goalRoot.parentId = GDPR_REGULATION_ROOT_ID;
+    });
+
+    const metaRoot = {
+        id: GDPR_REGULATION_ROOT_ID,
+        type: "root",
+        data: {
+            isHidden: false,
+            label: "GDPR",
+            top: "no",
+        },
+        draggable: false,
+        children: goals,
+    };
+
+    const {minX, maxX, minY} = collectForestBounds(goals);
+    if (Number.isFinite(minX) && Number.isFinite(minY)) {
+        const rootSize = estimateNodeSize(metaRoot);
+        const centerX = (minX + maxX) / 2;
+        metaRoot.position = {
+            x: centerX - rootSize.width / 2,
+            y: minY - GDPR_ROOT_TO_GOALS_GAP_PX - rootSize.height,
+        };
+    }
+
+    const namespaced = namespaceTree([metaRoot], "gdpr:");
+    return namespaced[0] ?? null;
+};
+
 const buildVisibleAIActTree = (hiddenPhaseOneLeafIds) => {
     const baseTree = hiddenPhaseOneLeafIds.size === 0
         ? raw_AIActNodes
@@ -358,14 +425,17 @@ export default function PhaseResult() {
         }
 
         const visibleGDPRTree = normalizeGDPRTreePositions(raw_GDPRNodes);
-        const namespacedGDPRTree = namespaceTree(visibleGDPRTree, "gdpr:");
+        const gdprTreeWithRoot = buildGdprForestWithRegulationRoot(visibleGDPRTree);
+        if (!gdprTreeWithRoot) {
+            return visibleAIActTree;
+        }
         positionGdprForestBelowAiAct(
-            namespacedGDPRTree,
+            [gdprTreeWithRoot],
             visibleAIActTree,
             GDPR_GAP_BELOW_AI_ACT_CM * CM_TO_CSS_PX
         );
 
-        return [...visibleAIActTree, ...namespacedGDPRTree];
+        return [...visibleAIActTree, gdprTreeWithRoot];
     }, [hiddenPhaseOneLeafIds, phaseOneSelectedNodeIds, phaseThreeSelectedNodeIds]);
 
     const graph = useMemo(() => {

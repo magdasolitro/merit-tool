@@ -152,7 +152,7 @@ const layoutPhaseOneNodesFromEdges = (rawNodes, edges) => {
 const rawInitialNodes = [
         {
             id: "context-factors",
-            type: "circle",
+            type: "context-factor",
             data: {label: "Context Factors", top: "no"},
             draggable: false
         },
@@ -160,8 +160,8 @@ const rawInitialNodes = [
         // 2nd layer
         {
             id: "cf-9-1",
-            type: "circle",
-            position: {x: 4200, y: 500},
+            type: "context-factor",
+            position: {x: 3900, y: 500},
             data: {label: "CF 9.1 - is_post_market_phase", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["subgoal-9-3"],
@@ -169,8 +169,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-9-2",
-            type: "circle",
-            position: {x: 4400, y: 500},
+            type: "context-factor",
+            position: {x: 4100, y: 500},
             data: {label: "CF 9.2 - foreseeable_misuse_scenarios", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["subgoal-9-2"],
@@ -178,8 +178,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-9-3",
-            type: "circle",
-            position: {x: 4600, y: 500},
+            type: "context-factor",
+            position: {x: 4300, y: 500},
             data: {label: "CF 9.3 - vulnerable_groups_exposure", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["subgoal-9-6", "dc-9-12"],
@@ -187,8 +187,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-9-4",
-            type: "circle",
-            position: {x: 4800, y: 500},
+            type: "context-factor",
+            position: {x: 4500, y: 500},
             data: {label: "CF 9.4 - existing_union_risk_management", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["subgoal-9-11"],
@@ -197,8 +197,8 @@ const rawInitialNodes = [
 
         {
             id: "cf-10-1",
-            type: "circle",
-            position: {x: 5000, y: 500},
+            type: "context-factor",
+            position: {x: 4700, y: 500},
             data: {label: "CF 10.1 - uses_model_training", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["subgoal-10-1", "subgoal-10-3", "subgoal-10-4", "subgoal-10-5", "subgoal-10-9"],
@@ -206,8 +206,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-10-2",
-            type: "circle",
-            position: {x: 5200, y: 500},
+            type: "context-factor",
+            position: {x: 4900, y: 500},
             data: {label: "CF 10.2 - special_category_data_used", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["subgoal-10-6", "dc-10-5", "dc-10-6", "dc-10-7", "dc-10-8", "qc-10-3", "qc-10-4", "qc-10-5"]
@@ -215,8 +215,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-10-3",
-            type: "circle",
-            position: {x: 5400, y: 500},
+            type: "context-factor",
+            position: {x: 5100, y: 500},
             data: {label: "CF 10.3 - deployment_context_specific", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["subgoal-10-5", "dc-10-13"],
@@ -224,8 +224,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-13-1",
-            type: "circle",
-            position: {x: 5600, y: 500},
+            type: "context-factor",
+            position: {x: 5300, y: 500},
             data: {label: "CF 13.1 - explainability_capability", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["dc-13-7"],
@@ -233,8 +233,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-13-2",
-            type: "circle",
-            position: {x: 5825, y: 500},
+            type: "context-factor",
+            position: {x: 5500, y: 500},
             data: {label: "CF 13.2 - predetermined_changes", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["dc-13-11"],
@@ -242,8 +242,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-13-3",
-            type: "circle",
-            position: {x: 6000, y: 500},
+            type: "context-factor",
+            position: {x: 5725, y: 500},
             data: {label: "CF 13.3 - specific_population_performance", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["dc-13-8"],
@@ -252,8 +252,8 @@ const rawInitialNodes = [
 
         {
             id: "cf-14-1",
-            type: "circle",
-            position: {x: 6200, y: 500},
+            type: "context-factor",
+            position: {x: 5900, y: 500},
             data: {label: "CF 14.3 - output_is_reccomendation", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["subgoal-14-4", "qc-14-3"],
@@ -261,8 +261,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-14-2",
-            type: "circle",
-            position: {x: 6400, y: 500},
+            type: "context-factor",
+            position: {x: 6100, y: 500},
             data: {label: "CF 14.2 - annex_III_point_1a", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["subgoal-14-8", "dc-14-8", "qc-14-4"],
@@ -270,8 +270,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-14-3",
-            type: "circle",
-            position: {x: 6600, y: 500},
+            type: "context-factor",
+            position: {x: 6300, y: 500},
             data: {label: "CF 14.3 - law_enforcement_migration_border_asylum_use", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["dc-14-9"],
@@ -279,8 +279,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-14-4",
-            type: "circle",
-            position: {x: 6800, y: 500},
+            type: "context-factor",
+            position: {x: 6500, y: 500},
             data: {label: "CF 14.4 - stop_mechanism_feasibility", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["subgoal-14-7", "dc-14-7"],
@@ -288,8 +288,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-15-1",
-            type: "circle",
-            position: {x: 7000, y: 500},
+            type: "context-factor",
+            position: {x: 6700, y: 500},
             data: {label: "CF 15.1 - continuous_learning", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["subgoal-15-3", "dc-15-4", "dc-15-5", "qc-15-5"],
@@ -297,8 +297,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-15-2",
-            type: "circle",
-            position: {x: 7200, y: 500},
+            type: "context-factor",
+            position: {x: 6900, y: 500},
             data: {label: "CF 15.2 - threat_data_poisoning", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["dc-14-9"],
@@ -306,8 +306,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-15-3",
-            type: "circle",
-            position: {x: 7400, y: 500},
+            type: "context-factor",
+            position: {x: 7100, y: 500},
             data: {label: "CF 15.3 - threat_data_poisoning", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["dc-15-6"],
@@ -315,8 +315,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-15-4",
-            type: "circle",
-            position: {x: 7600, y: 500},
+            type: "context-factor",
+            position: {x: 7300, y: 500},
             data: {label: "CF 15.4 - threat_model_poisoning", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["dc-15-6"],
@@ -324,8 +324,8 @@ const rawInitialNodes = [
         },
         {   
             id: "cf-15-5",
-            type: "circle",
-            position: {x: 7800, y: 500},
+            type: "context-factor",
+            position: {x: 7500, y: 500},
             data: {label: "CF 15.5 - threat_adversarial", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["dc-15-6"],
@@ -333,8 +333,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-15-6",
-            type: "circle",
-            position: {x: 8000, y: 500},
+            type: "context-factor",
+            position: {x: 7700, y: 500},
             data: {label: "CF 15.6 - threat_confidentiality", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["dc-15-6"],
@@ -342,8 +342,8 @@ const rawInitialNodes = [
         },
         {
             id: "cf-15-7",
-            type: "circle",
-            position: {x: 8200, y: 500},
+            type: "context-factor",
+            position: {x: 7900, y: 500},
             data: {label: "CF 15.7 - threat_model_flaws", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["dc-15-6"],
@@ -355,7 +355,7 @@ const rawInitialNodes = [
         {
             id: "phase-one-result",
             type: "hexagon",
-            position: {x: 5800, y: 1500},
+            position: {x: 5800, y: 1200},
             draggable: true,
         },
     ];

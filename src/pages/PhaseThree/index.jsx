@@ -127,6 +127,7 @@ export default function PhaseThree() {
                 defaultEdgeOptions={defaultEdgeOptions}
                 connectionLineComponent={ConnectionLine}
                 deleteKeyCode={''}
+                elementsSelectable={false}
                 onNodeClick={connectToBase}
                 fitView
                 maxZoom={1.5}
