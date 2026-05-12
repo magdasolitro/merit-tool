@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Button from "arwes/lib/Button/index.js";
 import {useDispatch, useSelector, useStore} from "react-redux";
 import {Outlet, useNavigate} from "react-router-dom";
@@ -13,6 +13,7 @@ export default function MainLayout() {
     const {nextPhaseEnabled, currentPhase, infoToggle, phase3Value} = useSelector((state) => state.phaseStatus);
     const dispatch = useDispatch();
     const store = useStore();
+    const [finalizeSaveDialogOpen, setFinalizeSaveDialogOpen] = useState(false);
 
     const saveAsJson = () => {
         const json = JSON.stringify(store.getState(), null, 2);
@@ -24,6 +25,54 @@ export default function MainLayout() {
         document.body.appendChild(link);
         link.click();
     }
+
+    const downloadFinalPhaseGraphJson = () => {
+        const snap = store.getState().phaseStatus.finalPhaseExportSnapshot;
+        const nodes = snap?.nodes ?? [];
+        const edges = snap?.edges ?? [];
+        const payload = {
+            exportedAt: new Date().toISOString(),
+            nodes,
+            edges,
+        };
+        const json = JSON.stringify(payload, null, 2);
+        const blob = new Blob([json], {type: "application/json"});
+        const href = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = href;
+        const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+        link.download = `x-reg-final-graph-${stamp}.json`;
+        document.body.appendChild(link);
+        link.click();
+        URL.revokeObjectURL(href);
+        link.remove();
+    }
+
+    const openFinalizeSaveDialog = () => {
+        setFinalizeSaveDialogOpen(true);
+    };
+
+    const closeFinalizeSaveDialog = () => {
+        setFinalizeSaveDialogOpen(false);
+    };
+
+    const confirmFinalizeSave = () => {
+        downloadFinalPhaseGraphJson();
+        setFinalizeSaveDialogOpen(false);
+    };
+
+    useEffect(() => {
+        if (!finalizeSaveDialogOpen) {
+            return undefined;
+        }
+        const onKeyDown = (e) => {
+            if (e.key === "Escape") {
+                setFinalizeSaveDialogOpen(false);
+            }
+        };
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, [finalizeSaveDialogOpen]);
 
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
@@ -95,9 +144,6 @@ export default function MainLayout() {
             case 3:
                 navigate("result-phase");
                 break;
-            case 4:
-                navigate("final-phase");
-                break;
             default:
                 break;
         }
@@ -113,9 +159,6 @@ export default function MainLayout() {
     }
     const goToPhase4 = () => {
         navigate("result-phase");
-    }
-    const goToPhase5 = () => {
-        navigate("final-phase");
     }
     const getPhaseLayer = (phaseNumber) => {
         if (currentPhase === phaseNumber) {
@@ -133,7 +176,7 @@ export default function MainLayout() {
     return (
         <div className="holy-grail bg-slate-400 dark:bg-slate-900">
             <header>
-                <nav className=" bg-zinc-900 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+                <nav className="relative z-50 bg-zinc-900 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
                     <div className="flex flex-wrap justify-between items-center mx-auto">
                         <a href="/" className="flex items-center">
                             <img src="/assets/logo.png" className="mr-3 h-6 sm:h-9" alt="Flowbite Logo"/>
@@ -167,22 +210,14 @@ export default function MainLayout() {
                                         disabled={currentPhase < 4}
                                         onClick={goToPhase4}
                                         layer={getPhaseLayer(4)}>
-                                    Phase 4
-                                </Button>
-                            </li>
-                            <li>
-                                <Button animate className={getPhaseButtonClass("font-semibold text-lg phase-button phase-5", 5)}
-                                        disabled={currentPhase < 5}
-                                        onClick={goToPhase5}
-                                        layer={getPhaseLayer(5)}>
                                     Result
                                 </Button>
                             </li>
                             <li style={{marginLeft: "3cm"}}>
                                 <Button animate className={"font-semibold text-lg custom-button"}
-                                        disabled={currentPhase === 5 || !nextPhaseEnabled}
-                                        onClick={goToNextPhase}>
-                                    {currentPhase === 5 ? "Finalize" : "Next Phase"}
+                                        disabled={currentPhase < 4 ? !nextPhaseEnabled : false}
+                                        onClick={currentPhase === 4 ? openFinalizeSaveDialog : goToNextPhase}>
+                                    {currentPhase === 4 ? "Finalize" : "Next Phase"}
                                 </Button>
                             </li>
                         </ul> 
@@ -221,9 +256,42 @@ export default function MainLayout() {
                     </div>
                 </nav>
             </header>
-            <main className="holy-grail__main">
+            <main className="holy-grail__main min-h-0">
                 <Outlet/>
             </main>
+            {finalizeSaveDialogOpen ? (
+                <div
+                    className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 p-4"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="finalize-save-dialog-title"
+                >
+                    <div
+                        className="w-full max-w-md rounded-lg border border-zinc-600 bg-zinc-800 p-6 text-zinc-100 shadow-xl"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <p id="finalize-save-dialog-title" className="mb-6 text-lg font-medium">
+                            Do you want to save your results?
+                        </p>
+                        <div className="flex justify-end gap-3">
+                            <button
+                                type="button"
+                                className="rounded-md border border-zinc-500 bg-zinc-700 px-4 py-2 text-sm font-semibold text-white hover:bg-zinc-600"
+                                onClick={closeFinalizeSaveDialog}
+                            >
+                                No
+                            </button>
+                            <button
+                                type="button"
+                                className="rounded-md border border-cyan-600 bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-600"
+                                onClick={confirmFinalizeSave}
+                            >
+                                Yes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ) : null}
             <Tooltip anchorSelect=".download-img" place="bottom">
                 Click to download image!
             </Tooltip>
@@ -243,10 +311,7 @@ export default function MainLayout() {
                 Regulatory Framework
             </Tooltip>
             <Tooltip anchorSelect=".phase-4" place="bottom">
-                Article Analysis
-            </Tooltip>
-            <Tooltip anchorSelect=".phase-5" place="bottom">
-                Solution Model
+                Result — review your model and finalize
             </Tooltip>
         </div>
     );

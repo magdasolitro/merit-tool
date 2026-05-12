@@ -94,11 +94,13 @@ button:focus-visible {
 .holy-grail {
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 }
 
 .holy-grail__main {
     /* Take the remaining height */
     flex-grow: 1;
+    min-height: 0;
 
     /* Layout the left sidebar, main content and right sidebar */
     display: flex;

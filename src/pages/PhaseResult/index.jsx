@@ -1,7 +1,11 @@
 import {useCallback, useEffect, useMemo} from "react";
 import ReactFlow, {Background, Controls, MiniMap} from "reactflow";
 import {useDispatch, useSelector} from "react-redux";
-import {setCurrentPhase, setNextPhaseEnabled} from "../../redux/slices/phaseStatusSlice.js";
+import {
+    setCurrentPhase,
+    setFinalPhaseExportSnapshot,
+    setNextPhaseEnabled,
+} from "../../redux/slices/phaseStatusSlice.js";
 import {toggleEliminatedGoal} from "../../redux/slices/resultGoalEliminationSlice.js";
 
 import "reactflow/dist/style.css";
@@ -87,6 +91,15 @@ export default function PhaseResult() {
         dispatch(setCurrentPhase(4));
         dispatch(setNextPhaseEnabled(true));
     }, [dispatch]);
+
+    useEffect(() => {
+        dispatch(
+            setFinalPhaseExportSnapshot({
+                nodes: graph.nodes,
+                edges: graph.edges,
+            })
+        );
+    }, [dispatch, graph]);
 
     return (
         <div style={{width: "100vw", height: "93vh"}}>

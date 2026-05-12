@@ -4,7 +4,6 @@ import Intro from "../pages/Intro";
 import PhaseTwo from "../pages/PhaseTwo";
 import PhaseThree from "../pages/PhaseThree";
 import PhaseResult from "../pages/PhaseResult";
-import PhaseFinalSummary from "../pages/PhaseFinalSummary";
 import MainLayout from "../components/Layout/MainLayout.jsx";
 
 const routes = [
@@ -35,10 +34,6 @@ const routes = [
             {
                 path: "result-phase",
                 element: <PhaseResult/>
-            },
-            {
-                path: "final-phase",
-                element: <PhaseFinalSummary/>
             }
         ]
     },

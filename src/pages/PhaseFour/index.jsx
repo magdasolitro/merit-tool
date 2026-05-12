@@ -17,8 +17,8 @@ export default function PhaseFour() {
     const {nodeState, edgeState} = useSelector((state) => state.phaseTwo);
     const {phaseFourNodes} = useSelector((state) => state.phaseFour);
     const {selectedTacticNodes} = useSelector((state) => state.phaseThree);
-    const [nodes, setNodes, onNodesChange] = useNodesState([]);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(edgeState);
+    const [nodes, setNodes] = useNodesState([]);
+    const [edges] = useEdgesState(edgeState);
     const dispatch = useDispatch();
 
 

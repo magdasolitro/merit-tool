@@ -6,6 +6,8 @@ const initialState = {
     uploaded: 0,
     phase3Value: "Phase 3(a)",
     infoToggle: true,
+    /** Last React Flow graph from Result (phase 4) — used by Finalize download. */
+    finalPhaseExportSnapshot: null,
 }
 export const phaseStatusSlice = createSlice({
     name: 'phaseStatus',
@@ -27,10 +29,20 @@ export const phaseStatusSlice = createSlice({
         // },
         toggleInfo: (state) => {
             state.infoToggle = !state.infoToggle;
-        }
+        },
+        setFinalPhaseExportSnapshot: (state, action) => {
+            state.finalPhaseExportSnapshot = action.payload;
+        },
     },
 });
 
-export const {setNextPhaseEnabled, setCurrentPhase, setPhase3Value, setPhaseStatusState, toggleInfo} = phaseStatusSlice.actions;
+export const {
+    setNextPhaseEnabled,
+    setCurrentPhase,
+    setPhase3Value,
+    setPhaseStatusState,
+    toggleInfo,
+    setFinalPhaseExportSnapshot,
+} = phaseStatusSlice.actions;
 
 export default phaseStatusSlice.reducer;
