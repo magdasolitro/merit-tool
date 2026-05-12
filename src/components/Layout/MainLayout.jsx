@@ -165,16 +165,14 @@ export default function MainLayout() {
                                     Result
                                 </Button>
                             </li>
-                            {currentPhase !== 4 &&
-                                <li style={{marginLeft: "3cm"}}>
-                                    <Button animate className={"font-semibold text-lg custom-button"}
-                                        // buttonProps={{onMouseEnter: () => bleeps.hover?.play()}}
-                                            disabled={!nextPhaseEnabled}
-                                            onClick={goToNextPhase}>
-                                        { currentPhase === 4 ? "Finalize" : "Next Phase"}
-                                    </Button>
-                                </li>
-                            }
+                            <li style={{marginLeft: "3cm"}}>
+                                <Button animate className={"font-semibold text-lg custom-button"}
+                                    // buttonProps={{onMouseEnter: () => bleeps.hover?.play()}}
+                                        disabled={!nextPhaseEnabled}
+                                        onClick={goToNextPhase}>
+                                    { currentPhase === 4 ? "Finalize" : "Next Phase"}
+                                </Button>
+                            </li>
                             {/*<li>
                                 <Button animate className={"font-semibold text-lg phase-button phase-5"}
                                         disabled={currentPhase < 5}
