@@ -51,9 +51,6 @@ export default function MainLayout() {
                 if (data.phaseOne) {
                     dispatch(setPhaseOneState(data.phaseOne));
                 }
-                // if (data.phaseTwo) {
-                //     dispatch(setPhaseTwoState(data.phaseTwo));
-                // }
             };
             reader.readAsText(file);
         };
@@ -98,6 +95,11 @@ export default function MainLayout() {
             case 3:
                 navigate("result-phase");
                 break;
+            case 4:
+                navigate("final-phase");
+                break;
+            default:
+                break;
         }
     }
     const goToPhase1 = () => {
@@ -111,6 +113,9 @@ export default function MainLayout() {
     }
     const goToPhase4 = () => {
         navigate("result-phase");
+    }
+    const goToPhase5 = () => {
+        navigate("final-phase");
     }
     const getPhaseLayer = (phaseNumber) => {
         if (currentPhase === phaseNumber) {
@@ -158,29 +163,28 @@ export default function MainLayout() {
                                 </Button>
                             </li>                          
                             <li>
-                                <Button animate className={"font-semibold text-lg phase-button phase-4"}
+                                <Button animate className={getPhaseButtonClass("font-semibold text-lg phase-button phase-4", 4)}
                                         disabled={currentPhase < 4}
                                         onClick={goToPhase4}
-                                        layer={currentPhase === 4 ? "success" : "secondary"}>
+                                        layer={getPhaseLayer(4)}>
+                                    Phase 4
+                                </Button>
+                            </li>
+                            <li>
+                                <Button animate className={getPhaseButtonClass("font-semibold text-lg phase-button phase-5", 5)}
+                                        disabled={currentPhase < 5}
+                                        onClick={goToPhase5}
+                                        layer={getPhaseLayer(5)}>
                                     Result
                                 </Button>
                             </li>
                             <li style={{marginLeft: "3cm"}}>
                                 <Button animate className={"font-semibold text-lg custom-button"}
-                                    // buttonProps={{onMouseEnter: () => bleeps.hover?.play()}}
-                                        disabled={!nextPhaseEnabled}
+                                        disabled={currentPhase === 5 || !nextPhaseEnabled}
                                         onClick={goToNextPhase}>
-                                    { currentPhase === 4 ? "Finalize" : "Next Phase"}
+                                    {currentPhase === 5 ? "Finalize" : "Next Phase"}
                                 </Button>
                             </li>
-                            {/*<li>
-                                <Button animate className={"font-semibold text-lg phase-button phase-5"}
-                                        disabled={currentPhase < 5}
-                                        onClick={goToPhase5}
-                                        layer={currentPhase === 5 ? "success" : "secondary"}>
-                                    Phase E
-                                </Button>
-                            </li>*/}
                         </ul> 
                         {/* <div className="flex items-center lg:order-2">
                             <div className={"w-10"}/>
@@ -239,11 +243,11 @@ export default function MainLayout() {
                 Regulatory Framework
             </Tooltip>
             <Tooltip anchorSelect=".phase-4" place="bottom">
-                Result Presentation and Solution Model 
+                Article Analysis
             </Tooltip>
-            {/* <Tooltip anchorSelect=".phase-5" place="bottom">
-                Context-Based Operationalization via Gamification
-            </Tooltip> */}
+            <Tooltip anchorSelect=".phase-5" place="bottom">
+                Solution Model
+            </Tooltip>
         </div>
     );
 }

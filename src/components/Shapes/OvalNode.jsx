@@ -40,11 +40,52 @@ const OvalNode = ({data, type: reactFlowType}) => {
     const [isVisible, setVisible] = useState(false);
     const {infoToggle} = useSelector((state) => state.phaseStatus);
 
+    const phaseFourEliminatedCross =
+        data.goalEliminatedPhase4 && (reactFlowType === "goal" || data.type === "goal") ? (
+            <div
+                aria-hidden
+                style={{
+                    position: "absolute",
+                    inset: 0,
+                    borderRadius: "inherit",
+                    zIndex: 4,
+                    pointerEvents: "none",
+                    background: "rgba(185, 28, 28, 0.18)",
+                    overflow: "hidden",
+                }}
+            >
+                <div
+                    style={{
+                        position: "absolute",
+                        left: "50%",
+                        top: "50%",
+                        width: "145%",
+                        height: 7,
+                        background: "#dc2626",
+                        boxShadow: "0 0 3px rgba(127, 29, 29, 0.9)",
+                        transform: "translate(-50%, -50%) rotate(45deg)",
+                    }}
+                />
+                <div
+                    style={{
+                        position: "absolute",
+                        left: "50%",
+                        top: "50%",
+                        width: "145%",
+                        height: 7,
+                        background: "#dc2626",
+                        boxShadow: "0 0 3px rgba(127, 29, 29, 0.9)",
+                        transform: "translate(-50%, -50%) rotate(-45deg)",
+                    }}
+                />
+            </div>
+        ) : null;
+
     return (
         <div style={outerStyle}>
             <div style={nodeStyle} onMouseEnter={() => infoToggle && setVisible(true)}
                  onMouseLeave={() => infoToggle && setVisible(false)}>
-                {data.isHidden &&
+                {data.isHidden && !data.goalEliminatedPhase4 &&
                     <img src={"/assets/cross.png"} style={{position: "absolute"}} alt={"hidden"}/>
                 }
                 <NodeToolbar isVisible={isVisible} position={Position.Left}>
@@ -55,7 +96,7 @@ const OvalNode = ({data, type: reactFlowType}) => {
                 {data.right && <Handle type="target" position={Position.Right} id={"oval_target_right"} isConnectable={false}/>}
                 {data.bottom &&
                     <Handle type="target" position={Position.Bottom} id={"oval_target_bottom"} isConnectable={false}/>}
-                <div className={"block"}>
+                <div className={"block"} style={{position: "relative", zIndex: 1}}>
                     <p className={"text-sm text-center font-bold"}>
                         {!data.titleDisable && goalSubgoalLabel !== null && (
                             <>
@@ -68,6 +109,7 @@ const OvalNode = ({data, type: reactFlowType}) => {
                         {data.num}
                     </p>
                 </div>
+                {phaseFourEliminatedCross}
                 <Handle type="source" position={Position.Bottom} id={"oval_source_bottom"} className={"custom-handle"}
                         isConnectable={false}
                 />
