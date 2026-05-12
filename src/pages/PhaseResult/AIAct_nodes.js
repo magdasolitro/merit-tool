@@ -349,7 +349,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
-                            "label": "SUBGOAL 9.3 — Evaluate risks arising from post-market monitoring data (→ Art. 72)"
+                            "label": "SUBGOAL 9.3 — Evaluate risks arising from post-market monitoring data"
                         },
                         "draggable": false,
                         "children": null
@@ -585,7 +585,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 9.1 — is_post_market — the system is in post-market phase",
+                            "label": "CF 9.1 — is_post_market — ",
                              
                         },
                         "draggable": false,
@@ -597,7 +597,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 9.2 — foreseeable_misuse_scenarios — scenarios of improper use are reasonably predictable",
+                            "label": "CF 9.2 — foreseeable_misuse_scenarios — ",
                              
                         },
                         "draggable": false,
@@ -609,7 +609,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 9.3 — vulnerable_groups_exposure — the system is exposed to vulnerable groups (e.g. minors)",
+                            "label": "CF 9.3 — vulnerable_groups_exposure — ",
                              
                         },
                         "draggable": false,
@@ -621,7 +621,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-9",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 9.4 — existing_union_risk_management — there are already risk management procedures under other EU law (e.g. MDR)",
+                            "label": "CF 9.4 — existing_union_risk_management — ",
                              
                         },
                         "draggable": false,
@@ -879,7 +879,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 10.1 — training_technique — il sistema usa tecniche di training su modelli o no (cambia applicabilità paragrafi 2–5)",
+                            "label": "CF 10.1 — training_technique — ",
                              
                         },
                         "draggable": false,
@@ -891,7 +891,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 10.2 — data_origin — provenienza dei dati (es. cartelle cliniche, immagini diagnostiche) e scopo originale della raccolta",
+                            "label": "CF 10.2 — data_origin — ",
                              
                         },
                         "draggable": false,
@@ -903,7 +903,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 10.3 — special_category_data_used — il sistema tratta categorie speciali di dati personali (es. dati sanitari)",
+                            "label": "CF 10.3 — special_category_data_used — ",
                              
                         },
                         "draggable": false,
@@ -915,7 +915,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 10.4 — deployment_context — setting geografico, contestuale, comportamentale o funzionale specifico",
+                            "label": "CF 10.4 — deployment_context — ",
                              
                         },
                         "draggable": false,
@@ -927,7 +927,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-10",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 10.5 — target_population — caratteristiche delle persone o gruppi su cui il sistema è usato (es. pazienti oncologici)",
+                            "label": "CF 10.5 — target_population — ",
                              
                         },
                         "draggable": false,
@@ -951,7 +951,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
-                            "label": "SUBGOAL 13.1 — Ensure appropriate type and degree of transparency to achieve compliance with provider and deployer obligations (Section 3)"
+                            "label": "SUBGOAL 13.1 — Ensure appropriate type and degree of transparency to achieve compliance with provider and deployer obligations"
                         },
                         "draggable": false,
                         "children": null
@@ -995,7 +995,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
-                            "label": "SUBGOAL 13.5 — Document human oversight measures (→ Art. 14)"
+                            "label": "SUBGOAL 13.5 — Document human oversight measures"
                         },
                         "draggable": false,
                         "children": null
@@ -1017,7 +1017,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
-                            "label": "SUBGOAL 13.7 — Describe mechanisms for deployers to collect, store and interpret logs (→ Art. 12)"
+                            "label": "SUBGOAL 13.7 — Describe mechanisms for deployers to collect, store and interpret logs"
                         },
                         "draggable": false,
                         "children": null
@@ -1088,7 +1088,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-4",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.6 — Instructions must include known/foreseeable circumstances leading to risks to health, safety or fundamental rights (→ Art. 9(2))",
+                            "label": "DC 13.6 — Instructions must include known/foreseeable circumstances leading to risks to health, safety or fundamental rights",
                              
                         },
                         "draggable": false,
@@ -1160,7 +1160,7 @@ export const raw_AIActNodes = [
                         "parentId": "subgoal-13-5",
                         "data": {
                             "isHidden": false,
-                            "label": "DC 13.12 — Instructions must include human oversight measures and technical measures for output interpretation (→ Art. 14)",
+                            "label": "DC 13.12 — Instructions must include human oversight measures and technical measures for output interpretation",
                              
                         },
                         "draggable": false,
@@ -1232,7 +1232,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 13.1 — explainability_capability — il sistema ha capacità tecniche di spiegare il proprio output",
+                            "label": "CF 13.1 — explainability_capability — ",
                              
                         },
                         "draggable": false,
@@ -1244,7 +1244,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 13.2 — target_deployer_profile — caratteristiche e competenze attese del deployer (es. medico radiologo)",
+                            "label": "CF 13.2 — target_deployer_profile — ",
                              
                         },
                         "draggable": false,
@@ -1256,7 +1256,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 13.3 — predetermined_changes — sono state predeterminate modifiche al sistema al momento della conformity assessment",
+                            "label": "CF 13.3 — predetermined_changes — ",
                              
                         },
                         "draggable": false,
@@ -1268,7 +1268,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-13",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 13.4 — specific_population_performance — il sistema ha performance differenziate per specifici gruppi di persone",
+                            "label": "CF 13.4 — specific_population_performance — ",
                              
                         },
                         "draggable": false,
@@ -1536,7 +1536,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 14.1 — level_of_autonomy — grado di autonomia del sistema (es. decision support vs autonomous decision)",
+                            "label": "CF 14.1 — level_of_autonomy — ",
                              
                         },
                         "draggable": false,
@@ -1548,7 +1548,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 14.2 — oversight_persons_profile — chi è assegnato alla supervisione umana (es. radiologo, patologo)",
+                            "label": "CF 14.2 — oversight_persons_profile — ",
                              
                         },
                         "draggable": false,
@@ -1560,7 +1560,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 14.3 — output_type — il sistema produce raccomandazioni per decisioni umane o decisioni dirette",
+                            "label": "CF 14.3 — output_type — ",
                              
                         },
                         "draggable": false,
@@ -1572,7 +1572,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 14.4 — annex_III_point_1a — il sistema rientra nel punto 1(a) Annex III (richiede doppia verifica)",
+                            "label": "CF 14.4 — annex_III_point_1a — ",
                              
                         },
                         "draggable": false,
@@ -1584,7 +1584,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 14.5 — stop_mechanism_feasibility — è tecnicamente feasible implementare un meccanismo di halt sicuro",
+                            "label": "CF 14.5 — stop_mechanism_feasibility — ",
                              
                         },
                         "draggable": false,
@@ -1795,7 +1795,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 15.1 — continuous_learning — il sistema continua ad apprendere dopo il deployment (cambia requisiti su feedback loops)",
+                            "label": "CF 15.1 — continuous_learning — ",
                              
                         },
                         "draggable": false,
@@ -1807,7 +1807,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 15.2 — accuracy_metrics_defined — sono già definite metriche di accuratezza specifiche per il sistema (es. sensibilità/specificità per diagnosi oncologica)",
+                            "label": "CF 15.2 — accuracy_metrics_defined — ",
                              
                         },
                         "draggable": false,
@@ -1819,7 +1819,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 15.3 — cybersecurity_threat_profile — tipologia di minacce cyber rilevanti per il contesto di deployment",
+                            "label": "CF 15.3 — cybersecurity_threat_profile — ",
                              
                         },
                         "draggable": false,
@@ -1831,7 +1831,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-15",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 15.4 — interaction_type — il sistema interagisce con persone naturali o altri sistemi (influenza requisiti di robustezza)",
+                            "label": "CF 15.4 — interaction_type — ",
                              
                         },
                         "draggable": false,
