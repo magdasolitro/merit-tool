@@ -60,6 +60,33 @@ export const mergeUnlockContributorHintsIntoFlatNodes = (flatNodes, contributorB
     });
 };
 
+const phaseOneSelectableContextFactorIds = new Set(
+    phaseOneInitialNodes
+        .filter((node) => node?.data?.isConnectable)
+        .map((node) => node.id)
+);
+
+const stripNamespace = (id) =>
+    typeof id === "string" && id.includes(":") ? id.split(":").pop() : id;
+
+/**
+ * Result view: show only the AI Act context factors actually selected in Phase 1.
+ * GDPR context-factor nodes are kept unchanged because they are not chosen in Phase 1.
+ */
+export const filterUnselectedPhaseOneContextFactorsFromFlatNodes = (flatNodes, selectedCfIds) => {
+    const selected = new Set(Array.isArray(selectedCfIds) ? selectedCfIds : []);
+    return (Array.isArray(flatNodes) ? flatNodes : []).filter((node) => {
+        if (node?.type !== "context-factor") {
+            return true;
+        }
+        const baseId = stripNamespace(node.id);
+        if (!phaseOneSelectableContextFactorIds.has(baseId)) {
+            return true;
+        }
+        return selected.has(baseId);
+    });
+};
+
 export const flattenTreeNodes = (treeNodes) => {
     const flatNodes = [];
     const getChildren = (node) => Array.isArray(node?.children) ? node.children : [];
@@ -465,10 +492,12 @@ export function filterEliminatedGoalsFromVisibleTree(forestRoots, eliminatedGoal
 export function buildReactFlowGraphFromVisibleTree(visibleTree, phaseOneSelectedNodeIds, goalEliminatedIds = []) {
     const eliminatedSet = new Set(Array.isArray(goalEliminatedIds) ? goalEliminatedIds : []);
     const contributorByTargetId = buildUnlockContributorLabelsByTargetId(phaseOneSelectedNodeIds);
-    const baseNodes = mergeUnlockContributorHintsIntoFlatNodes(
+    const visibleFlatNodes = filterUnselectedPhaseOneContextFactorsFromFlatNodes(
         flattenTreeNodes(visibleTree),
-        contributorByTargetId
-    ).map((n) => ({
+        phaseOneSelectedNodeIds
+    );
+    const hintedNodes = mergeUnlockContributorHintsIntoFlatNodes(visibleFlatNodes, contributorByTargetId);
+    const baseNodes = hintedNodes.map((n) => ({
         ...n,
         data: {
             ...n.data,

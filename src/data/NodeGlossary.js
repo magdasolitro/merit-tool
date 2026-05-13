@@ -39,7 +39,35 @@ export const NodeGlossary = [
             "cf-15-4": "Indicates whether the system is exposed to model poisoning, typically due to the use of potentially compromised third-party foundation models.",    
             "cf-15-5": "Indicates whether the system is exposed to adversarial examples, i.e. inputs crafted to deceive the model (especially relevant in computer vision and NLP).", 
             "cf-15-6": "Indicates whether the system is exposed to extraction of the model or sensitive data through remote interfaces (APIs, cloud SaaS).", 
-            "cf-15-7": "Indicates whether the model is subject to intrinsic flaws (overfitting, training bias, drift): typically true for any ML model."
+            "cf-15-7": "Indicates whether the model is subject to intrinsic flaws (overfitting, training bias, drift): typically true for any ML model.",
+
+            "gdpr-cf-9-1": "",
+            "gdpr-cf-9-2": "",
+            "gdpr-cf-9-3": "",
+            "gdpr-cf-9-4": "",
+            "gdpr-cf-9-5": "",
+            "gdpr-cf-9-6": "",
+            "gdpr-cf-9-7": "",
+            "gdpr-cf-35-1": "",
+            "gdpr-cf-35-2": "",
+            "gdpr-cf-35-3": "",
+            "gdpr-cf-35-4": "",
+            "gdpr-cf-35-5": "",
+            "gdpr-cf-35-6": "",
+            "gdpr-cf-35-7": "",
+            "gdpr-cf-35-8": "",
+            "gdpr-cf-25-1": "",
+            "gdpr-cf-25-2": "",
+            "gdpr-cf-25-3": "",
+            "gdpr-cf-25-4": "",
+            "gdpr-cf-25-5": "",
+            "gdpr-cf-25-6": "",
+            "gdpr-cf-89-1": "",
+            "gdpr-cf-89-2": "",
+            "gdpr-cf-89-3": "",
+            "gdpr-cf-89-4": "",
+            "gdpr-cf-89-5": "",
+            "gdpr-cf-89-6": ""
         }
     }, {
         type: "goal", glossary: {

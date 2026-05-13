@@ -6,12 +6,18 @@ const HINT_BG = "#ffba00";
  * Shows which Phase 1 context factors (via unlocks) contributed to making this node visible.
  * Rendered below the node body (sibling), not inside the shaped clip/outline.
  */
-export default function UnlockContributorHint({labels, compact = false}) {
+export default function UnlockContributorHint({
+    labels,
+    compact = false,
+    compactPrefix = "CF: ",
+    heading = "Unlocked by CF:",
+    compactSeparator,
+}) {
     if (!Array.isArray(labels) || labels.length === 0) {
         return null;
     }
 
-    const text = compact ? labels.join(" · ") : labels.join("\n");
+    const text = compact ? labels.join(compactSeparator ?? " · ") : labels.join("\n");
     const title = labels.join("\n");
 
     const boxStyle = {
@@ -36,7 +42,7 @@ export default function UnlockContributorHint({labels, compact = false}) {
     if (compact) {
         return (
             <div style={boxStyle} title={title}>
-                <span style={{fontWeight: 800}}>CF: </span>
+                <span style={{fontWeight: 800}}>{compactPrefix}</span>
                 {text}
             </div>
         );
@@ -44,7 +50,7 @@ export default function UnlockContributorHint({labels, compact = false}) {
 
     return (
         <div style={boxStyle} title={title}>
-            <span style={{fontWeight: 800}}>Unlocked by CF:</span>
+            <span style={{fontWeight: 800}}>{heading}</span>
             <br/>
             {text}
         </div>
