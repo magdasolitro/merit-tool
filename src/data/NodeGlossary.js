@@ -18,9 +18,77 @@ export const NodeGlossary = [
             "data-quality": "It requires the maintenance of secure, high-integrity data pipelines from training to inference."
         }
     },{
-        // TODO LIVIA: inserire descrizione context factors
         type: "context-factor", glossary: {
-            "cf-9-1": "blablabla"
+            "cf-9-1": "Indicates whether the system has already been placed on the market and is in commercial use, or is still in pre-market development.",
+            "cf-9-2": "Indicates whether there are reasonably foreseeable misuse scenarios that the provider should anticipate during risk analysis.", 
+            "cf-9-3": "Indicates whether the system may impact minors or other vulnerable groups (patients, the elderly, people with disabilities).", 
+            "cf-9-4": "Indicates whether the system is already subject to a risk management system required by other EU legislation (e.g. MDR, Machinery Regulation).", 
+            "cf-10-1": "Indicates whether the provider trains the model on its own dataset, or relies on a pre-trained third-party model without in-house training.", 
+            "cf-10-2": "Indicates whether the system processes special categories of personal data under Art. 9 GDPR (health, biometric, genetic, ethnic data, etc.).", 
+            "cf-10-3": "Indicates whether the system is designed for a specific geographical, contextual, behavioural or functional setting rather than for generic use.", 
+            "cf-13-1": "Indicates whether the system provides technical capabilities to explain its outputs (heatmaps, saliency, feature importance, etc.).", 
+            "cf-13-2": "Indicates whether predetermined changes to the system have been declared at the time of conformity assessment (planned versions, periodic retraining).", 
+            "cf-13-3": "Indicates whether system performance varies in a documented way across specific groups (by age, ethnicity, gender, clinical subtype).", 
+            "cf-14-1": "Indicates whether the system output is a recommendation reviewed and validated by a human, or an automated decision executed without human intervention on the individual event.", 
+            "cf-14-2": "Indicates whether the system performs remote biometric identification in 1:N mode (recognising a person against a database), as per Annex III point 1(a) of the AI Act.", 
+            "cf-14-3": "Indicates whether the system is used by public authorities for law enforcement, migration, border control or asylum purposes.", 
+            "cf-14-4": "Indicates whether it is technically feasible to integrate a stop or suspension mechanism in the system without introducing risks greater than those it prevents.", 
+            "cf-15-1": "Indicates whether the system continues to learn after release (online learning, continuous fine-tuning, federated learning), or if the model is locked at deployment.", 
+            "cf-15-2": "Indicates whether the system is exposed to data poisoning, i.e. the injection of malicious data into the training or update process.", 
+            "cf-15-3": "Indicates whether the system is exposed to data poisoning, i.e. the injection of malicious data into the training or update process.", 
+            "cf-15-4": "Indicates whether the system is exposed to model poisoning, typically due to the use of potentially compromised third-party foundation models.",    
+            "cf-15-5": "Indicates whether the system is exposed to adversarial examples, i.e. inputs crafted to deceive the model (especially relevant in computer vision and NLP).", 
+            "cf-15-6": "Indicates whether the system is exposed to extraction of the model or sensitive data through remote interfaces (APIs, cloud SaaS).", 
+            "cf-15-7": "Indicates whether the model is subject to intrinsic flaws (overfitting, training bias, drift): typically true for any ML model."
         }
-    },
+    }, {
+        type: "goal", glossary: {
+            "goal-9": "",
+            "goal-10": "",
+            "goal-11": "",
+            "goal-12": "",
+            "goal-13": "",
+            "goal-14": "",
+            "goal-15": "",
+        }
+    }, {
+        type: "subgoal", glossary: {
+            "subgoal-9-1": "",
+            "subgoal-9-2": "",
+            "subgoal-9-3": "",
+            "subgoal-9-4": "",
+            "subgoal-9-5": "",
+            "subgoal-9-6": "",
+
+            "subgoal-10-1": "",
+            "subgoal-10-2": "",
+            "subgoal-10-3": "",
+            "subgoal-10-4": "",
+            "subgoal-10-5": "",
+            "subgoal-10-6": "",
+
+            "subgoal-13-1": "",
+            "subgoal-13-2": "",
+            "subgoal-13-3": "",
+            "subgoal-13-4": "",
+            "subgoal-13-5": "",
+            "subgoal-13-6": "",
+            "subgoal-13-7": "",
+
+            "subgoal-14-1": "",
+            "subgoal-14-2": "",
+            "subgoal-14-3": "",
+            "subgoal-14-4": "",
+            "subgoal-14-5": "",
+            "subgoal-14-6": "",
+            "subgoal-14-7": "",
+            "subgoal-14-8": "",
+
+            "subgoal-15-1": "",
+            "subgoal-15-2": "",
+            "subgoal-15-3": "",
+            "subgoal-15-4": "",
+            "subgoal-15-5": ""
+        }
+    }
 ]

@@ -1,11 +1,13 @@
-import React, {useState} from "react";
+import React, {useMemo, useState} from "react";
 import {Handle, NodeToolbar, Position} from "reactflow";
 import Card from "../Card";
 import {getGlossary} from "../../utils/getGlossary.js";
 import {useSelector} from "react-redux";
 import UnlockContributorHint from "./UnlockContributorHint.jsx";
 
-const OvalNode = ({data, type: reactFlowType}) => {
+const GLOSSARY_FALLBACK = "Term not available.";
+
+const OvalNode = ({id, data, type: reactFlowType}) => {
     const goalSubgoalLabel = (() => {
         if (reactFlowType === "goal" || data.type === "goal") {
             return "Goal";
@@ -39,6 +41,13 @@ const OvalNode = ({data, type: reactFlowType}) => {
     const noTopHandle = data.top === "no";
     const [isVisible, setVisible] = useState(false);
     const {infoToggle} = useSelector((state) => state.phaseStatus);
+    const glossaryMessage = useMemo(() => {
+        const labelMatch = getGlossary(data.label);
+        if (labelMatch !== GLOSSARY_FALLBACK) {
+            return labelMatch;
+        }
+        return getGlossary(id);
+    }, [data.label, id]);
 
     const phaseFourEliminatedCross =
         data.goalEliminatedPhase4 && (reactFlowType === "goal" || data.type === "goal") ? (
@@ -89,7 +98,7 @@ const OvalNode = ({data, type: reactFlowType}) => {
                     <img src={"/assets/cross.png"} style={{position: "absolute"}} alt={"hidden"}/>
                 }
                 <NodeToolbar isVisible={isVisible} position={Position.Left}>
-                    <Card title={data.label} message={getGlossary(data.label)} width={data.width * 2 || 480}/>
+                    <Card title={data.label} message={glossaryMessage} width={data.width * 2 || 480}/>
                 </NodeToolbar>
                 {!noTopHandle && <Handle type="target" position={Position.Top} id={"oval_target_top"} isConnectable={false}/>}
                 {data.left && <Handle type="target" position={Position.Left} id={"oval_target_left"} isConnectable={false}/>}

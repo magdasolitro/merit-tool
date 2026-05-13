@@ -5,7 +5,6 @@ import phaseTwoReducer from "./slices/phaseTwoSlice.js";
 import phaseThreeReducer from "./slices/phaseThreeSlice.js";
 import phaseThreeNewReducer from "./slices/phaseThreeSlice_new.js";
 import phaseFourReducer from "./slices/phaseFourSlice.js";
-import phaseFiveReducer from "./slices/phaseFiveSlice.js";
 import resultGoalEliminationReducer from "./slices/resultGoalEliminationSlice.js";
 
 export const store = configureStore({
@@ -16,7 +15,6 @@ export const store = configureStore({
         phaseThree: phaseThreeReducer,
         phaseThreeNew: phaseThreeNewReducer,
         phaseFour: phaseFourReducer,
-        phaseFive: phaseFiveReducer,
         resultGoalElimination: resultGoalEliminationReducer,
     }
 })
