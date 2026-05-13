@@ -482,3 +482,45 @@ export function buildReactFlowGraphFromVisibleTree(visibleTree, phaseOneSelected
         edges: [...hierarchyEdges, ...linkEdges],
     };
 }
+
+/**
+ * JSON export: removes every goal with `goalEliminatedPhase4: true` and all descendant nodes
+ * (by `parentId` chain). Drops edges whose source or target is removed.
+ */
+export function filterGraphForExport(nodes, edges) {
+    const list = Array.isArray(nodes) ? nodes : [];
+    const edgeList = Array.isArray(edges) ? edges : [];
+    if (list.length === 0) {
+        return {nodes: [], edges: []};
+    }
+
+    const excluded = new Set();
+    for (const n of list) {
+        if (n?.type === "goal" && n.data?.goalEliminatedPhase4 === true) {
+            excluded.add(n.id);
+        }
+    }
+
+    let grew;
+    do {
+        grew = false;
+        for (const n of list) {
+            if (excluded.has(n.id)) {
+                continue;
+            }
+            const pid = n?.parentId;
+            if (pid != null && excluded.has(String(pid))) {
+                excluded.add(n.id);
+                grew = true;
+            }
+        }
+    } while (grew);
+
+    const keptNodes = list.filter((n) => !excluded.has(n.id));
+    const keptIds = new Set(keptNodes.map((n) => n.id));
+    const keptEdges = edgeList.filter(
+        (e) => e && keptIds.has(e.source) && keptIds.has(e.target)
+    );
+
+    return {nodes: keptNodes, edges: keptEdges};
+}

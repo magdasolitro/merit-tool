@@ -7,6 +7,7 @@ import {Tooltip} from 'react-tooltip'
 import {Text} from "@arwes/react-text";
 import {setPhaseStatusState, toggleInfo} from "../../redux/slices/phaseStatusSlice.js";
 import {setPhaseOneState} from "../../redux/slices/phaseOneSlice.js";
+import {filterGraphForExport} from "../../pages/PhaseResult/resultVisibleTree.js";
 
 export default function MainLayout() {
     const navigate = useNavigate();
@@ -28,8 +29,9 @@ export default function MainLayout() {
 
     const downloadFinalPhaseGraphJson = () => {
         const snap = store.getState().phaseStatus.finalPhaseExportSnapshot;
-        const nodes = snap?.nodes ?? [];
-        const edges = snap?.edges ?? [];
+        const rawNodes = snap?.nodes ?? [];
+        const rawEdges = snap?.edges ?? [];
+        const {nodes, edges} = filterGraphForExport(rawNodes, rawEdges);
         const payload = {
             exportedAt: new Date().toISOString(),
             nodes,

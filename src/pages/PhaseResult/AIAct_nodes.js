@@ -301,6 +301,7 @@ export function normalizeTreePositions(forest) {
     return roots;
 }
 
+// TODO LIVIA: sistemare descrizione dei context factors (alcuni hanno ancora descrizione in italiano)  
 export const raw_AIActNodes = [
     {
         "id": "ai-act-compliance",
