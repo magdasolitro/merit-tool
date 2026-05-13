@@ -21,7 +21,6 @@ describe("computeVisibleResultTree", () => {
         const visibleTree = computeVisibleResultTree({
             hiddenPhaseOneLeafIds: new Set(),
             phaseOneSelectedNodeIds: ["cf-9-1"],
-            phaseThreeSelectedNodeIds: [],
         });
 
         const visibleIds = collectNodeIds(visibleTree);
@@ -37,12 +36,22 @@ describe("computeVisibleResultTree", () => {
         const visibleTree = computeVisibleResultTree({
             hiddenPhaseOneLeafIds: new Set(),
             phaseOneSelectedNodeIds: ["cf-15-5"],
-            phaseThreeSelectedNodeIds: [],
         });
 
         const visibleIds = collectNodeIds(visibleTree);
 
         expect(visibleIds.has("goal-15")).toBe(true);
         expect(visibleIds.has("goal-9")).toBe(false);
+    });
+
+    it("never shows GDPR nodes in the result tree", () => {
+        const visibleTree = computeVisibleResultTree({
+            hiddenPhaseOneLeafIds: new Set(),
+            phaseOneSelectedNodeIds: ["cf-9-1"],
+        });
+
+        const visibleIds = collectNodeIds(visibleTree);
+
+        expect([...visibleIds].some((id) => String(id).startsWith("gdpr:"))).toBe(false);
     });
 });

@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo} from "react";
+import {useEffect, useMemo} from "react";
 import ReactFlow, {Background, Controls, MiniMap} from "reactflow";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -6,7 +6,6 @@ import {
     setFinalPhaseExportSnapshot,
     setNextPhaseEnabled,
 } from "../../redux/slices/phaseStatusSlice.js";
-import {toggleEliminatedGoal} from "../../redux/slices/resultGoalEliminationSlice.js";
 
 import "reactflow/dist/style.css";
 import OvalNode from "../../components/Shapes/OvalNode.jsx";
@@ -20,7 +19,6 @@ import {initialNodes as phaseOneInitialNodes} from "../PhaseOne/phaseOne_nodes.j
 import {
     buildReactFlowGraphFromVisibleTree,
     computeVisibleResultTree,
-    pruneEliminatedGoalSubtreesForPhaseFour,
 } from "./resultVisibleTree.js";
 
 const nodeTypes = {
@@ -37,8 +35,6 @@ export default function PhaseResult() {
     const dispatch = useDispatch();
     const phaseOneNodeState = useSelector((state) => state.phaseOne?.nodeState ?? []);
     const phaseOneSelectedNodeIds = useSelector((state) => state.phaseOne?.selectedNodeIds ?? []);
-    const phaseThreeSelectedNodeIds = useSelector((state) => state.phaseThreeNew?.selectedNodeIds ?? []);
-    const eliminatedGoalIds = useSelector((state) => state.resultGoalElimination?.eliminatedGoalIds ?? []);
 
     const hiddenPhaseOneLeafIds = useMemo(() => {
         const currentNodesById = new Map(phaseOneNodeState.map((node) => [node.id, node]));
@@ -58,33 +54,13 @@ export default function PhaseResult() {
             computeVisibleResultTree({
                 hiddenPhaseOneLeafIds,
                 phaseOneSelectedNodeIds,
-                phaseThreeSelectedNodeIds,
             }),
-        [hiddenPhaseOneLeafIds, phaseOneSelectedNodeIds, phaseThreeSelectedNodeIds]
-    );
-
-    const phaseFourDisplayTree = useMemo(
-        () => pruneEliminatedGoalSubtreesForPhaseFour(visibleTree, eliminatedGoalIds),
-        [visibleTree, eliminatedGoalIds]
+        [hiddenPhaseOneLeafIds, phaseOneSelectedNodeIds]
     );
 
     const graph = useMemo(
-        () =>
-            buildReactFlowGraphFromVisibleTree(
-                phaseFourDisplayTree,
-                phaseOneSelectedNodeIds,
-                eliminatedGoalIds
-            ),
-        [phaseFourDisplayTree, phaseOneSelectedNodeIds, eliminatedGoalIds]
-    );
-
-    const onNodeClick = useCallback(
-        (_, node) => {
-            if (node?.type === "goal") {
-                dispatch(toggleEliminatedGoal(node.id));
-            }
-        },
-        [dispatch]
+        () => buildReactFlowGraphFromVisibleTree(visibleTree, phaseOneSelectedNodeIds),
+        [visibleTree, phaseOneSelectedNodeIds]
     );
 
     useEffect(() => {
@@ -112,7 +88,6 @@ export default function PhaseResult() {
                 fitView
                 maxZoom={1.5}
                 minZoom={0.18}
-                onNodeClick={onNodeClick}
             >
                 <Controls/>
                 <MiniMap pannable zoomable/>

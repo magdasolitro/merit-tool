@@ -11,22 +11,62 @@ const RegulationOval = ({id, data}) => {
         height: data.height || 100,
         borderRadius: "50%",
         padding: "8px 16px",
-        backgroundColor: "#bae6fd",
-        color: "black",
+        backgroundColor: data.background === "black" ? "#111827" : "#bae6fd",
+        color: data.background === "black" ? "white" : "black",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        position: "relative",
+        boxSizing: "border-box",
+        cursor: data.isConnectable ? "pointer" : "default",
     };
     const noTopHandle = data.top === "no";
     const [isVisible, setVisible] = useState(false);
     const {infoToggle} = useSelector((state) => state.phaseStatus);
 
+    const hiddenCross = data.isHidden ? (
+        <div
+            aria-hidden
+            style={{
+                position: "absolute",
+                inset: 0,
+                borderRadius: "inherit",
+                zIndex: 4,
+                pointerEvents: "none",
+                background: "rgba(185, 28, 28, 0.18)",
+                overflow: "hidden",
+            }}
+        >
+            <div
+                style={{
+                    position: "absolute",
+                    left: "50%",
+                    top: "50%",
+                    width: "145%",
+                    height: 7,
+                    background: "#dc2626",
+                    boxShadow: "0 0 3px rgba(127, 29, 29, 0.9)",
+                    transform: "translate(-50%, -50%) rotate(45deg)",
+                }}
+            />
+            <div
+                style={{
+                    position: "absolute",
+                    left: "50%",
+                    top: "50%",
+                    width: "145%",
+                    height: 7,
+                    background: "#dc2626",
+                    boxShadow: "0 0 3px rgba(127, 29, 29, 0.9)",
+                    transform: "translate(-50%, -50%) rotate(-45deg)",
+                }}
+            />
+        </div>
+    ) : null;
+
     return (
         <div style={nodeStyle} onMouseEnter={() => infoToggle && setVisible(true)}
              onMouseLeave={() => infoToggle && setVisible(false)}>
-            {data.isHidden &&
-                <img src={"/assets/cross.png"} style={{position: "absolute"}} alt={"hidden"}/>
-            }
             <NodeToolbar isVisible={isVisible} position={Position.Left}>
                 <Card title={data.label} message={getGlossary(glossaryKey) || getGlossary(data.label)} width={data.width * 2 || 480}/>
             </NodeToolbar>
@@ -46,6 +86,7 @@ const RegulationOval = ({id, data}) => {
                     <br/>
                 </p>
             </div>
+            {hiddenCross}
             <Handle type="source" position={Position.Bottom} id={"principles_oval_source_bottom"} className={"custom-handle"}
                     isConnectable={false}
             />

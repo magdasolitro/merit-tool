@@ -111,7 +111,7 @@ export default function PhaseThree() {
                             <strong>What are regulatory frameworks?</strong> <br/>Each node represents a regulation (e.g. GDPR, EU AI Act, MDR). Move your mouse over a node to see its description.
                         </p>
                         <p style={{margin: 0, fontSize: 14}}>
-                            <strong>How to select the relevant regulations?</strong> <br/>The EU AI Act is always included. You may deselect GDPR or MDR by clicking them: a red cross indicates they will be excluded from the final analysis.
+                            <strong>How to select the relevant regulations?</strong> <br/>The EU AI Act is always included in the final analysis. GDPR is pre-excluded and shown with a red cross, so it cannot be selected.
                         </p>
                     </div>
                 )}

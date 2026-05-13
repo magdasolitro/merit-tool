@@ -1,12 +1,7 @@
 import {
-    estimateNodeSize,
     normalizeTreePositions as normalizeAIActTreePositions,
     raw_AIActNodes,
 } from "./AIAct_nodes.js";
-import {
-    normalizeTreePositions as normalizeGDPRTreePositions,
-    raw_GDPRNodes,
-} from "../../data/GDPR_nodes.js";
 import {initialNodes as phaseOneInitialNodes} from "../PhaseOne/phaseOne_nodes.js";
 
 /** Maps AI Act / regulation tree node id → distinct CF labels that list it in unlocks (Phase 1 selection). */
@@ -148,82 +143,6 @@ export const collectEdgesFromFlatNodes = (flatNodes) => (
         }))
 );
 
-const namespaceTree = (treeNodes, prefix) => {
-    const walk = (node) => {
-        const namespacedId = `${prefix}${node.id}`;
-        const namespacedParentId = node.parentId ? `${prefix}${node.parentId}` : undefined;
-        return {
-            ...node,
-            id: namespacedId,
-            ...(namespacedParentId ? {parentId: namespacedParentId} : {}),
-            children: Array.isArray(node.children) ? node.children.map(walk) : node.children,
-        };
-    };
-    return treeNodes.map(walk);
-};
-
-const GDPR_REGULATION_ROOT_ID = "gdpr-regulation-root";
-const GDPR_ROOT_TO_GOALS_GAP_PX = 1000;
-
-const deepCloneForestRoots = (roots) => JSON.parse(JSON.stringify(roots ?? []));
-
-const collectForestBounds = (forestRoots) => {
-    let minX = Infinity;
-    let maxX = -Infinity;
-    let minY = Infinity;
-    let maxY = -Infinity;
-    const visit = (node) => {
-        if (!node) {
-            return;
-        }
-        const x = Number(node?.position?.x ?? 0);
-        const y = Number(node?.position?.y ?? 0);
-        const {width, height} = estimateNodeSize(node);
-        minX = Math.min(minX, x);
-        maxX = Math.max(maxX, x + width);
-        minY = Math.min(minY, y);
-        maxY = Math.max(maxY, y + height);
-        (Array.isArray(node.children) ? node.children : []).forEach(visit);
-    };
-    (Array.isArray(forestRoots) ? forestRoots : []).forEach(visit);
-    return {minX, maxX, minY, maxY};
-};
-
-const buildGdprForestWithRegulationRoot = (visibleGdprGoalRoots) => {
-    const goals = deepCloneForestRoots(visibleGdprGoalRoots);
-    if (goals.length === 0) {
-        return null;
-    }
-    goals.forEach((goalRoot) => {
-        goalRoot.parentId = GDPR_REGULATION_ROOT_ID;
-    });
-
-    const metaRoot = {
-        id: GDPR_REGULATION_ROOT_ID,
-        type: "root",
-        data: {
-            isHidden: false,
-            label: "GDPR",
-            top: "no",
-        },
-        draggable: false,
-        children: goals,
-    };
-
-    const {minX, maxX, minY} = collectForestBounds(goals);
-    if (Number.isFinite(minX) && Number.isFinite(minY)) {
-        const rootSize = estimateNodeSize(metaRoot);
-        const centerX = (minX + maxX) / 2;
-        metaRoot.position = {
-            x: centerX - rootSize.width / 2,
-            y: minY - GDPR_ROOT_TO_GOALS_GAP_PX - rootSize.height,
-        };
-    }
-
-    const namespaced = namespaceTree([metaRoot], "gdpr:");
-    return namespaced[0] ?? null;
-};
-
 const collectDescendantsByType = (node, type, acc = []) => {
     if (!node || !Array.isArray(node.children)) {
         return acc;
@@ -300,52 +219,6 @@ const buildVisibleAIActTree = (hiddenPhaseOneLeafIds) => {
         });
 
     return normalizeAIActTreePositions(baseTree);
-};
-
-const GDPR_GAP_BELOW_AI_ACT_CM = 10;
-const CM_TO_CSS_PX = 96 / 2.54;
-
-const collectForestMaxBottomY = (forestRoots) => {
-    let maxBottom = -Infinity;
-    const walk = (node) => {
-        const y = Number(node?.position?.y ?? 0);
-        const {height} = estimateNodeSize(node);
-        maxBottom = Math.max(maxBottom, y + height);
-        (Array.isArray(node.children) ? node.children : []).forEach(walk);
-    };
-    (Array.isArray(forestRoots) ? forestRoots : []).forEach((root) => walk(root));
-    return Number.isFinite(maxBottom) ? maxBottom : 0;
-};
-
-const shiftSubtreeBy = (node, dx, dy) => {
-    if (!node) {
-        return;
-    }
-    node.position = {
-        x: Number(node?.position?.x ?? 0) + dx,
-        y: Number(node?.position?.y ?? 0) + dy,
-    };
-    (Array.isArray(node.children) ? node.children : []).forEach((ch) => shiftSubtreeBy(ch, dx, dy));
-};
-
-const positionGdprForestBelowAiAct = (gdprForestRoots, aiActForestRoots, gapPx) => {
-    const roots = Array.isArray(gdprForestRoots) ? gdprForestRoots : [];
-    if (roots.length === 0) {
-        return;
-    }
-    const aiBottom = collectForestMaxBottomY(aiActForestRoots);
-    let minRootTopY = Infinity;
-    roots.forEach((root) => {
-        minRootTopY = Math.min(minRootTopY, Number(root?.position?.y ?? 0));
-    });
-    if (!Number.isFinite(minRootTopY)) {
-        return;
-    }
-    const deltaY = aiBottom + gapPx - minRootTopY;
-    if (deltaY <= 0) {
-        return;
-    }
-    roots.forEach((root) => shiftSubtreeBy(root, 0, deltaY));
 };
 
 const getContextFactorVisibilityRules = (selectedPhaseOneNodeIds) => {
@@ -425,14 +298,12 @@ const filterTreeByHiddenNodeIds = (treeNodes, hiddenNodeIds) => {
 };
 
 /**
- * Same forest as PhaseResult `visibleTree` useMemo (AI Act + optional GDPR meta root).
+ * Same forest as PhaseResult `visibleTree` useMemo (AI Act only).
  */
 export function computeVisibleResultTree({
     hiddenPhaseOneLeafIds,
     phaseOneSelectedNodeIds,
-    phaseThreeSelectedNodeIds,
 }) {
-    const showGDPR = phaseThreeSelectedNodeIds.includes("gdpr");
     const baseVisibleAIActTree = buildVisibleAIActTree(hiddenPhaseOneLeafIds);
     const hiddenGoalIdsWithoutSelectedContextFactors =
         collectGoalIdsWithoutSelectedPhaseOneContextFactors(phaseOneSelectedNodeIds);
@@ -445,24 +316,7 @@ export function computeVisibleResultTree({
             ...[...blockedIdsWithDescendants].filter((nodeId) => !unlockedIdsWithDescendants.has(nodeId)),
         ]
     );
-    const visibleAIActTree = filterTreeByHiddenNodeIds(baseVisibleAIActTree, effectiveHiddenNodeIds);
-
-    if (!showGDPR) {
-        return visibleAIActTree;
-    }
-
-    const visibleGDPRTree = normalizeGDPRTreePositions(raw_GDPRNodes);
-    const gdprTreeWithRoot = buildGdprForestWithRegulationRoot(visibleGDPRTree);
-    if (!gdprTreeWithRoot) {
-        return visibleAIActTree;
-    }
-    positionGdprForestBelowAiAct(
-        [gdprTreeWithRoot],
-        visibleAIActTree,
-        GDPR_GAP_BELOW_AI_ACT_CM * CM_TO_CSS_PX
-    );
-
-    return [...visibleAIActTree, gdprTreeWithRoot];
+    return filterTreeByHiddenNodeIds(baseVisibleAIActTree, effectiveHiddenNodeIds);
 }
 
 /**
@@ -572,6 +426,9 @@ export function filterGraphForExport(nodes, edges) {
     const excluded = new Set();
     for (const n of list) {
         if (n?.type === "goal" && n.data?.goalEliminatedPhase4 === true) {
+            excluded.add(n.id);
+        }
+        if (n?.data?.excludeFromExport === true) {
             excluded.add(n.id);
         }
     }

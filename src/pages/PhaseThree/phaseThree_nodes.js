@@ -4,7 +4,7 @@ export const initialNodes3 = [
             id: "gdpr",
             type: "regulation",
             position: {x: 1800, y: 800},
-            data: {label: "GDPR", background: "black", isConnectable: true, isChosen: false},
+            data: {label: "GDPR", background: "black", isConnectable: false, isChosen: false, isHidden: true},
             draggable: false
         },
         {
