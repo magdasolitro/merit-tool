@@ -909,31 +909,31 @@ export const raw_AIActNodes = [
                         },
                         "draggable": false,
                         "children": null
-                    },
-                    {
-                        "id": "cf-10-4",
-                        "type": "context-factor",
-                        "parentId": "goal-10",
-                        "data": {
-                            "isHidden": false,
-                            "label": "CF 10.4 — deployment_context",
-                             
-                        },
-                        "draggable": false,
-                        "children": null
-                    },
-                    {
-                        "id": "cf-10-5",
-                        "type": "context-factor",
-                        "parentId": "goal-10",
-                        "data": {
-                            "isHidden": false,
-                            "label": "CF 10.5 — target_population",
-                             
-                        },
-                        "draggable": false,
-                        "children": null
                     }
+                    // {
+                    //     "id": "cf-10-4",
+                    //     "type": "context-factor",
+                    //     "parentId": "goal-10",
+                    //     "data": {
+                    //         "isHidden": false,
+                    //         "label": "CF 10.4 — deployment_context",
+                             
+                    //     },
+                    //     "draggable": false,
+                    //     "children": null
+                    // },
+                    // {
+                    //     "id": "cf-10-5",
+                    //     "type": "context-factor",
+                    //     "parentId": "goal-10",
+                    //     "data": {
+                    //         "isHidden": false,
+                    //         "label": "CF 10.5 — target_population",
+                             
+                    //     },
+                    //     "draggable": false,
+                    //     "children": null
+                    // }
                 ],
                 "parentId": "ai-act-compliance"
             },
@@ -1263,18 +1263,18 @@ export const raw_AIActNodes = [
                         "draggable": false,
                         "children": null
                     },
-                    {
-                        "id": "cf-13-4",
-                        "type": "context-factor",
-                        "parentId": "goal-13",
-                        "data": {
-                            "isHidden": false,
-                            "label": "CF 13.4 — specific_population_performance",
+                    // {
+                    //     "id": "cf-13-4",
+                    //     "type": "context-factor",
+                    //     "parentId": "goal-13",
+                    //     "data": {
+                    //         "isHidden": false,
+                    //         "label": "CF 13.4 — specific_population_performance",
                              
-                        },
-                        "draggable": false,
-                        "children": null
-                    }
+                    //     },
+                    //     "draggable": false,
+                    //     "children": null
+                    // }
                 ],
                 "parentId": "ai-act-compliance"
             },
@@ -1579,18 +1579,18 @@ export const raw_AIActNodes = [
                         "draggable": false,
                         "children": null
                     },
-                    {
-                        "id": "cf-14-5",
-                        "type": "context-factor",
-                        "parentId": "goal-14",
-                        "data": {
-                            "isHidden": false,
-                            "label": "CF 14.5 — stop_mechanism_feasibility — è tecnicamente feasible implementare un meccanismo di halt sicuro",
+                    // {
+                    //     "id": "cf-14-5",
+                    //     "type": "context-factor",
+                    //     "parentId": "goal-14",
+                    //     "data": {
+                    //         "isHidden": false,
+                    //         "label": "CF 14.5 — stop_mechanism_feasibility — è tecnicamente feasible implementare un meccanismo di halt sicuro",
                              
-                        },
-                        "draggable": false,
-                        "children": null
-                    }
+                    //     },
+                    //     "draggable": false,
+                    //     "children": null
+                    // }
                 ],
                 "parentId": "ai-act-compliance"
             },
@@ -1833,6 +1833,42 @@ export const raw_AIActNodes = [
                         "data": {
                             "isHidden": false,
                             "label": "CF 15.4 — interaction_type",
+                             
+                        },
+                        "draggable": false,
+                        "children": null
+                    },
+                    {
+                        "id": "cf-15-5",
+                        "type": "context-factor",
+                        "parentId": "goal-15",
+                        "data": {
+                            "isHidden": false,
+                            "label": "CF 15.5 — threat_adversarial",
+                             
+                        },
+                        "draggable": false,
+                        "children": null
+                    },
+                    {
+                        "id": "cf-15-6",
+                        "type": "context-factor",
+                        "parentId": "goal-15",
+                        "data": {
+                            "isHidden": false,
+                            "label": "CF 15.6 — threat_confidentiality",
+                             
+                        },
+                        "draggable": false,
+                        "children": null
+                    },
+                    {
+                        "id": "cf-15-7",
+                        "type": "context-factor",
+                        "parentId": "goal-15",
+                        "data": {
+                            "isHidden": false,
+                            "label": "CF 15.7 — threat_model_flaws",
                              
                         },
                         "draggable": false,

@@ -239,6 +239,47 @@ const collectDescendantsByType = (node, type, acc = []) => {
     return acc;
 };
 
+const buildSelectablePhaseOneContextFactorIdsByGoalId = (treeNodes) => {
+    const map = new Map();
+
+    const walk = (node) => {
+        if (!node) {
+            return;
+        }
+
+        if (node.type === "goal") {
+            const selectableCfIds = collectDescendantsByType(node, "context-factor")
+                .map((cfNode) => cfNode.id)
+                .filter((id) => phaseOneSelectableContextFactorIds.has(id));
+
+            if (selectableCfIds.length > 0) {
+                map.set(node.id, selectableCfIds);
+            }
+        }
+
+        (Array.isArray(node.children) ? node.children : []).forEach(walk);
+    };
+
+    (Array.isArray(treeNodes) ? treeNodes : []).forEach(walk);
+    return map;
+};
+
+const selectablePhaseOneContextFactorIdsByGoalId = buildSelectablePhaseOneContextFactorIdsByGoalId(raw_AIActNodes);
+
+const collectGoalIdsWithoutSelectedPhaseOneContextFactors = (selectedPhaseOneNodeIds) => {
+    const selectedIds = new Set(Array.isArray(selectedPhaseOneNodeIds) ? selectedPhaseOneNodeIds : []);
+    const hiddenGoalIds = new Set();
+
+    selectablePhaseOneContextFactorIdsByGoalId.forEach((cfIds, goalId) => {
+        const hasSelectedRelatedContextFactor = cfIds.some((cfId) => selectedIds.has(cfId));
+        if (!hasSelectedRelatedContextFactor) {
+            hiddenGoalIds.add(goalId);
+        }
+    });
+
+    return hiddenGoalIds;
+};
+
 const buildVisibleAIActTree = (hiddenPhaseOneLeafIds) => {
     const baseTree = hiddenPhaseOneLeafIds.size === 0
         ? raw_AIActNodes
@@ -393,11 +434,16 @@ export function computeVisibleResultTree({
 }) {
     const showGDPR = phaseThreeSelectedNodeIds.includes("gdpr");
     const baseVisibleAIActTree = buildVisibleAIActTree(hiddenPhaseOneLeafIds);
+    const hiddenGoalIdsWithoutSelectedContextFactors =
+        collectGoalIdsWithoutSelectedPhaseOneContextFactors(phaseOneSelectedNodeIds);
     const {blockedRootIds, unlockedRootIds} = getContextFactorVisibilityRules(phaseOneSelectedNodeIds);
     const blockedIdsWithDescendants = collectSubtreeIdsByRootIds(baseVisibleAIActTree, blockedRootIds);
     const unlockedIdsWithDescendants = collectSubtreeIdsByRootIds(baseVisibleAIActTree, unlockedRootIds);
     const effectiveHiddenNodeIds = new Set(
-        [...blockedIdsWithDescendants].filter((nodeId) => !unlockedIdsWithDescendants.has(nodeId))
+        [
+            ...hiddenGoalIdsWithoutSelectedContextFactors,
+            ...[...blockedIdsWithDescendants].filter((nodeId) => !unlockedIdsWithDescendants.has(nodeId)),
+        ]
     );
     const visibleAIActTree = filterTreeByHiddenNodeIds(baseVisibleAIActTree, effectiveHiddenNodeIds);
 
