@@ -1537,7 +1537,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 14.1 — level_of_autonomy — grado di autonomia del sistema (es. decision support vs autonomous decision)",
+                            "label": "CF 14.1 — level_of_autonomy",
                              
                         },
                         "draggable": false,
@@ -1549,7 +1549,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 14.2 — oversight_persons_profile — chi è assegnato alla supervisione umana (es. radiologo, patologo)",
+                            "label": "CF 14.2 — oversight_persons_profile",
                              
                         },
                         "draggable": false,
@@ -1561,7 +1561,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 14.3 — output_type — il sistema produce raccomandazioni per decisioni umane o decisioni dirette",
+                            "label": "CF 14.3 — output_type",
                              
                         },
                         "draggable": false,
@@ -1573,7 +1573,7 @@ export const raw_AIActNodes = [
                         "parentId": "goal-14",
                         "data": {
                             "isHidden": false,
-                            "label": "CF 14.4 — annex_III_point_1a — il sistema rientra nel punto 1(a) Annex III (richiede doppia verifica)",
+                            "label": "CF 14.4 — annex_III_point_1a",
                              
                         },
                         "draggable": false,

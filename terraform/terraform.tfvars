@@ -13,7 +13,7 @@ allowed_cidr_blocks = [
 
 # Port 22 (SSH): admin access only — YOUR IP only, never participant IPs.
 admin_cidr_blocks = [
-  "217.77.82.234/32" # TODO cambiare IP 
+  "93.34.233.26/32" # TODO cambiare IP 
 ]
 
 # ─── VM Sizing ───────────────────────────────────────────────────────────────

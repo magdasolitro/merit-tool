@@ -254,7 +254,7 @@ const rawInitialNodes = [
             id: "cf-14-1",
             type: "context-factor",
             position: {x: 5900, y: 500},
-            data: {label: "CF 14.3 - output_is_reccomendation", background: "white", isConnectable: true, isChosen: false},
+            data: {label: "CF 14.1 - output_is_reccomendation", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["subgoal-14-4", "qc-14-3"],
             unlocks: ["subgoal-14-4", "qc-14-3"]

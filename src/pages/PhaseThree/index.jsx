@@ -108,10 +108,10 @@ export default function PhaseThree() {
                             <strong>What will I do in this phase?</strong><br/> In this phase you choose which regulatory frameworks to include in the final analysis.
                         </p>
                         <p style={{margin: "0 0 8px 0", fontSize: 14}}>
-                            <strong>What are regulatory frameworks?</strong> <br/>Each node represents a regulation (e.g. GDPR, EU AI Act, MDR). Move your mouse over a node to see its description.
+                            <strong>What are regulatory frameworks?</strong> <br/>Each node represents a regulation (e.g. GDPR, EU AI Act). Move your mouse over a node to see its description.
                         </p>
                         <p style={{margin: 0, fontSize: 14}}>
-                            <strong>How to select the relevant regulations?</strong> <br/>The EU AI Act is always included in the final analysis. GDPR is pre-excluded and shown with a red cross, so it cannot be selected.
+                            <strong>How to select the relevant regulations?</strong> <br/>The EU AI Act is always included in the final analysis. For the purposes of this demo,<span style={{color: "#ef4444"}}> GDPR is not selectable</span>.
                         </p>
                     </div>
                 )}
