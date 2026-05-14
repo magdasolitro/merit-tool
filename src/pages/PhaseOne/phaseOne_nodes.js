@@ -301,32 +301,32 @@ const rawInitialNodes = [
             position: {x: 6900, y: 500},
             data: {label: "CF 15.2 - threat_data_poisoning", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
-            blocks: ["dc-14-9"],
-            unlocks: ["dc-14-9"]
+            blocks: ["dc-15-6"],
+            unlocks: ["dc-15-6"]
         },
         {
             id: "cf-15-3",
             type: "context-factor",
             position: {x: 7100, y: 500},
-            data: {label: "CF 15.3 - threat_data_poisoning", background: "white", isConnectable: true, isChosen: false},
-            draggable: false,
-            blocks: ["dc-15-6"],
-            unlocks: ["dc-15-6"]
-        },
-        {
-            id: "cf-15-4",
-            type: "context-factor",
-            position: {x: 7300, y: 500},
-            data: {label: "CF 15.4 - threat_model_poisoning", background: "white", isConnectable: true, isChosen: false},
+            data: {label: "CF 15.3 - threat_model_poisoning", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["dc-15-6"],
             unlocks: ["dc-15-6"]
         },
         {   
+            id: "cf-15-4",
+            type: "context-factor",
+            position: {x: 7300, y: 500},
+            data: {label: "CF 15.4 - threat_adversarial", background: "white", isConnectable: true, isChosen: false},
+            draggable: false,
+            blocks: ["dc-15-6"],
+            unlocks: ["dc-15-6"]
+        },
+        {
             id: "cf-15-5",
             type: "context-factor",
             position: {x: 7500, y: 500},
-            data: {label: "CF 15.5 - threat_adversarial", background: "white", isConnectable: true, isChosen: false},
+            data: {label: "CF 15.5 - threat_confidentiality", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["dc-15-6"],
             unlocks: ["dc-15-6"]
@@ -335,16 +335,7 @@ const rawInitialNodes = [
             id: "cf-15-6",
             type: "context-factor",
             position: {x: 7700, y: 500},
-            data: {label: "CF 15.6 - threat_confidentiality", background: "white", isConnectable: true, isChosen: false},
-            draggable: false,
-            blocks: ["dc-15-6"],
-            unlocks: ["dc-15-6"]
-        },
-        {
-            id: "cf-15-7",
-            type: "context-factor",
-            position: {x: 7900, y: 500},
-            data: {label: "CF 15.7 - threat_model_flaws", background: "white", isConnectable: true, isChosen: false},
+            data: {label: "CF 15.6 - threat_model_flaws", background: "white", isConnectable: true, isChosen: false},
             draggable: false,
             blocks: ["dc-15-6"],
             unlocks: ["dc-15-6"]
